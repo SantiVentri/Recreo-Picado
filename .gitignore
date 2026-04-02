@@ -1,0 +1,31 @@
+# --- Java ---
+*.class
+*.jar
+*.war
+*.ear
+/bin/
+/target/
+
+# --- Eclipse ---
+.metadata/
+.recommenders/
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+
+# --- Archivos de configuración de Eclipse ---
+.project
+.classpath
+
+# --- Sistema ---
+.DS_Store
+Thumbs.db
+
+# --- Logs ---
+*.log
