@@ -48,20 +48,20 @@ public abstract class Entidad implements IEntidad {
 		this.itemsEquipados = new ArrayList<Item>();
 	}
 
-	private int calcularDaño(int daño) {
-		int dañoReal = Math.max(1, (int)(daño * (100.0 / (100 + this.defensa))));
+	private int calcularDano(int daño) {
+		int danoReal = Math.max(1, (int)(daño * (100.0 / (100 + this.defensa))));
 		
 		if (this.defendiendo == true) {
-			dañoReal = (int) (dañoReal * 0.2);
+			danoReal = (int) (danoReal * 0.2);
 		}
 		
-		return dañoReal;
+		return danoReal;
 	}
 
 	@Override
-	public void recibirDaño(int daño) {
-		int dañoReal = calcularDaño(daño);
-		this.quitarVida(dañoReal);
+	public void recibirDano(int daño) {
+		int danoReal = calcularDano(daño);
+		this.quitarVida(danoReal);
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public abstract class Entidad implements IEntidad {
 	public void realizarAtaque(IEntidad objetivo) {
 		this.defendiendo = false;
 		this.energia -= 2;
-		objetivo.recibirDaño(this.ataque);
+		objetivo.recibirDano(this.ataque);
 	}
 
 	@Override

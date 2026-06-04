@@ -5,7 +5,7 @@ import modelo.*;
 import views.EntidadView;
 
 public interface IEntidad {
-	void recibirDaño(int daño);
+	void recibirDano(int daño);
 	boolean estaVivo();
 	
 	void realizarAtaque(IEntidad objetivo);
