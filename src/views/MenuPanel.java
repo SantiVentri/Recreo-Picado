@@ -26,47 +26,26 @@ public class MenuPanel extends JPanel {
     }
     
     private void configurarMenu(VentanaLayout ventana) {
-    	setLayout(null);
-    	
-        btnEmpezar = new JButton("");
-        btnEmpezar.setOpaque(false);
-        btnEmpezar.setContentAreaFilled(false);
-        btnEmpezar.setBorderPainted(false);
-        
-        btnEquipo = new JButton("");
-        btnEquipo.setOpaque(false);
-        btnEquipo.setContentAreaFilled(false);
-        btnEquipo.setBorderPainted(false);
-        
-        btnKiosko = new JButton("");
-        btnKiosko.setOpaque(false);
-        btnKiosko.setContentAreaFilled(false);
-        btnKiosko.setBorderPainted(false);
-        
-        btnSalir = new JButton("");
-        btnSalir.setOpaque(false);
-        btnSalir.setContentAreaFilled(false);
-        btnSalir.setBorderPainted(false);
+    	setLayout(null);        
         
         setLayout(new GridLayout(1, 4, 20, 0));
         setBorder(BorderFactory.createEmptyBorder(200, 120, 200, 120));
         
-        add(btnEmpezar);
-        add(btnEquipo);
-        add(btnKiosko);
-        add(btnSalir);
+        btnEmpezar = new JButton("");
+        btnEquipo = new JButton("");
+        btnKiosko = new JButton("");
+        btnSalir = new JButton("");
         
-        // Cambiar cursor
-        btnEmpezar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnEquipo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnKiosko.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JButton[] buttons = {btnEmpezar, btnEquipo, btnKiosko, btnSalir};
         
-        // Eventos Hover
-        configurarEventoHover(btnEmpezar);
-        configurarEventoHover(btnEquipo);
-        configurarEventoHover(btnKiosko);
-        configurarEventoHover(btnSalir);
+        for (JButton button : buttons) {
+        	button.setOpaque(false);
+        	button.setContentAreaFilled(false);
+        	button.setBorderPainted(false);
+        	button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            configurarEventoHover(button);
+            add(button);
+        } 
         
         // Acción de navegación
         btnEmpezar.addActionListener(e -> ventana.verBatallas());
