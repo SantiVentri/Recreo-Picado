@@ -43,29 +43,24 @@ public class MyTeam extends JPanel {
 	     btnJugador3 = new JButton();
 	     btnJugador4 = new JButton();
 	     
-	     configurarBoton(btnJugador1);
-	     configurarBoton(btnJugador2);
-	     configurarBoton(btnJugador3);
-	     configurarBoton(btnJugador4);
 	     
 	     btnJugador1.setBounds(80, 180, 150, 300);
 	     btnJugador2.setBounds(290, 180, 150, 300);
 	     btnJugador3.setBounds(500, 180, 150, 300);
 	     btnJugador4.setBounds(710, 180, 150, 300);
 	     
-	     add(btnJugador1);
-	     add(btnJugador2);
-	     add(btnJugador3);
-	     add(btnJugador4);
+	     JButton[] buttons = {btnJugador1, btnJugador2, btnJugador3, btnJugador4};
 	     
-	     configurarEventoHover(btnJugador1);
-	     configurarEventoHover(btnJugador2);
-	     configurarEventoHover(btnJugador3);
-	     configurarEventoHover(btnJugador4);
+	     for (JButton button : buttons) {
+	    	 configurarBoton(button);
+	    	 configurarEventoHover(button);
+	    	 add(button);	    	 
+	     }
 	     
 	     btnJugador1.addActionListener(e -> ventana.verJugador1());
-	    
-	     
+	     // btnJugador2.addActionListener(e -> ventana.verJugador2());
+	     // btnJugador3.addActionListener(e -> ventana.verJugador3());
+	     // btnJugador4.addActionListener(e -> ventana.verJugador4());
 		
 	}
 	
