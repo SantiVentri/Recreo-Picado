@@ -1,21 +1,15 @@
 package modelo;
 
+import enums.EFECTOS;
+
 public class Efecto {
-
-    public enum TipoEfecto {
-        VENENO,           // quita vida turno a turno
-        ATAQUE_MULTIPLE,  // ataca a todos los enemigos
-        CURACION,         // regenera un % de la vida máxima
-        REGENERAR_ENERGIA // regenera un % de la energía máxima
-    }
-
     private String nombre;
     private String descripcion;
-    private TipoEfecto tipo;
+    private EFECTOS tipo;
     private int duracion;   // turnos que dura (relevante para VENENO)
     private int magnitud;   // % o valor fijo según el tipo
 
-    public Efecto(String nombre, String descripcion, TipoEfecto tipo, int duracion, int magnitud) {
+    public Efecto(String nombre, String descripcion, EFECTOS tipo, int duracion, int magnitud) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.tipo = tipo;
@@ -59,7 +53,7 @@ public class Efecto {
 
     public String getNombre() { return nombre; }
     public String getDescripcion() { return descripcion; }
-    public TipoEfecto getTipo() { return tipo; }
+    public EFECTOS getTipo() { return tipo; }
     public int getDuracion() { return duracion; }
     public int getMagnitud() { return magnitud; }
     public void setDuracion(int duracion) { this.duracion = duracion; }
