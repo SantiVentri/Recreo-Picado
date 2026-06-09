@@ -70,7 +70,7 @@ public class MenuPanel extends JPanel {
         
         // Acción de navegación
         btnEmpezar.addActionListener(e -> ventana.verBatallas());
-        // btnEquipo.addActionListener(e -> ventana.verEquipo());
+        btnEquipo.addActionListener(e -> ventana.verEquipo());
         // btnKiosko.addActionListener(e -> ventana.verKisoko());
         btnSalir.addActionListener(e -> ventana.volverAtras());
     }

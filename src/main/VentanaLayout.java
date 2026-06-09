@@ -5,12 +5,17 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import views.Jugador1;
 import views.MenuPanel;
+import views.MyTeam;
 import views.WelcomePanel;
+
+import utils.ReproductorMusica;
 
 public class VentanaLayout extends JFrame {
 	CardLayout cl;
 	JPanel mainPanel;
+	private ReproductorMusica musica;
 	
 	public VentanaLayout() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -19,6 +24,10 @@ public class VentanaLayout extends JFrame {
 		setResizable(false);
 		setLocationRelativeTo(null);
 		
+		//musicaMenu
+		musica = new ReproductorMusica();
+	    musica.reproducir("src/resources/himno-instrumental.wav");
+	    
 		cargarVentana();
 		
 		setVisible(true);
@@ -30,6 +39,8 @@ public class VentanaLayout extends JFrame {
 		
 		mainPanel.add(new WelcomePanel(this), "WELCOME");
 		mainPanel.add(new MenuPanel(this), "MENU");
+		mainPanel.add(new MyTeam(this), "MYTEAM");
+		mainPanel.add(new Jugador1(this), "JUGADOR1");
 		
 		cl.show(mainPanel, "WELCOME");
 		add(mainPanel);
@@ -45,5 +56,13 @@ public class VentanaLayout extends JFrame {
 	
 	public void verBatallas() {
 		cl.show(mainPanel, "BATALLAS");
+	}
+	
+	public void verEquipo() {
+		cl.show(mainPanel, "MYTEAM");
+	}
+	
+	public void verJugador1() {
+		cl.show(mainPanel, "JUGADOR1");
 	}
 }
