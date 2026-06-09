@@ -44,10 +44,10 @@ public class MyTeam extends JPanel {
 	     btnJugador4 = new JButton();
 	     
 	     
-	     btnJugador1.setBounds(80, 180, 150, 300);
-	     btnJugador2.setBounds(290, 180, 150, 300);
-	     btnJugador3.setBounds(500, 180, 150, 300);
-	     btnJugador4.setBounds(710, 180, 150, 300);
+	     btnJugador1.setBounds(130, 180, 150, 370);
+	     btnJugador2.setBounds(310, 180, 150, 370);
+	     btnJugador3.setBounds(520, 180, 130, 370);
+	     btnJugador4.setBounds(710, 180, 130, 370);
 	     
 	     JButton[] buttons = {btnJugador1, btnJugador2, btnJugador3, btnJugador4};
 	     
@@ -65,7 +65,6 @@ public class MyTeam extends JPanel {
 	}
 	
 	private void configurarBoton(JButton boton) {
-		
 		boton.setOpaque(false);
         boton.setContentAreaFilled(false);
         boton.setBorderPainted(false);
@@ -101,7 +100,7 @@ public class MyTeam extends JPanel {
 	            int anchoFlecha = 60;
 	            int altoFlecha = 60;
 
-	            int xCentrada = botonSeleccionado.getX() + (botonSeleccionado.getWidth() / 2 + 15) - (anchoFlecha / 2);
+	            int xCentrada = botonSeleccionado.getX() + (botonSeleccionado.getWidth() / 2 + 7) - (anchoFlecha / 2);
 	            
 	            int yArriba = botonSeleccionado.getY() - altoFlecha - 10;
 
