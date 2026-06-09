@@ -5,14 +5,7 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import views.Jugador1;
-import views.Jugador2;
-import views.Jugador3;
-import views.Jugador4;
-import views.MenuPanel;
-import views.MyTeam;
-import views.WelcomePanel;
-import views.PartidasPanel;
+import views.*;
 
 import utils.ReproductorMusica;
 
@@ -49,6 +42,7 @@ public class VentanaLayout extends JFrame {
 		mainPanel.add(new Jugador3(this), "JUGADOR3");
 		mainPanel.add(new Jugador4(this), "JUGADOR4");
 		mainPanel.add(new PartidasPanel(this), "PARTIDASPANEL");
+		mainPanel.add(new LevelsPanel(this), "NIVELES");
 		
 		cl.show(mainPanel, "WELCOME");
 		add(mainPanel);
@@ -59,6 +53,10 @@ public class VentanaLayout extends JFrame {
 	}
 	public void partidasPanel() {
 		cl.show(mainPanel, "PARTIDASPANEL");
+	}
+	
+	public void verNiveles() {
+		cl.show(mainPanel, "NIVELES");
 	}
 	
 	public void volverAtras() {
@@ -76,15 +74,19 @@ public class VentanaLayout extends JFrame {
 	public void verJugador1() {
 		cl.show(mainPanel, "JUGADOR1");
 	}
+	
 	public void verJugador2() {
 		cl.show(mainPanel, "JUGADOR2");
 	}
+	
 	public void verJugador3() {
 		cl.show(mainPanel, "JUGADOR3");
 	}
+	
 	public void verJugador4() {
 		cl.show(mainPanel, "JUGADOR4");
 	}
+	
 	public void volverMenu() {
 		cl.show(mainPanel, "MENU");
 	}
