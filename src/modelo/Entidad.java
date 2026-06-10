@@ -122,7 +122,7 @@ public abstract class Entidad implements IEntidad {
 	
 	@Override
 	public void aumentarVida(int cantidad) {
-		this.vida += cantidad;
+		this.vida = Math.min(this.vida + cantidad, this.vidaMax);
 	}
 	
 	@Override
