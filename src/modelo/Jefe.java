@@ -36,7 +36,7 @@ public class Jefe extends Entidad {
         objetivo.recibirDano(hab.getPotencia());
 
         if (hab.getEfecto() != null && objetivo instanceof Entidad) {
-            ((Entidad) objetivo).aplicarEfecto(hab.getEfecto());
+            ((Entidad) objetivo).aplicarEfecto(hab.getEfecto().copiar());
         }
     }
 }

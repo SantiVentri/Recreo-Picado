@@ -43,7 +43,7 @@ public class Curandera extends Entidad {
         this.aumentarVida(curacion);
  
         if (hab.getEfecto() != null) {
-            this.aplicarEfecto(hab.getEfecto());
+            this.aplicarEfecto(hab.getEfecto().copiar());
         }
     }
  

@@ -33,7 +33,7 @@ public class Guerrero extends Entidad {
         int dano = this.getHabilidad().getPotencia() + fuerza;
         objetivo.recibirDano(dano);
         if (this.getHabilidad().getEfecto() != null && objetivo instanceof Entidad) {
-            ((Entidad) objetivo).aplicarEfecto(this.getHabilidad().getEfecto());
+            objetivo.aplicarEfecto(this.getHabilidad().getEfecto().copiar());
         }
     }
 

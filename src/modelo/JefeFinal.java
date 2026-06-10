@@ -39,7 +39,7 @@ public class JefeFinal extends Entidad {
         objetivo.recibirDano(dano);
 
         if (hab.getEfecto() != null && objetivo instanceof Entidad) {
-            ((Entidad) objetivo).aplicarEfecto(hab.getEfecto());
+            objetivo.aplicarEfecto(hab.getEfecto().copiar());
         }
     }
 }

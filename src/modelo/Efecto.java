@@ -50,6 +50,10 @@ public class Efecto {
         duracion--;
         return duracion > 0;
     }
+    
+    public Efecto copiar() {
+    	return new Efecto(nombre, descripcion, tipo, duracion, magnitud);
+    }
 
     public String getNombre() { return nombre; }
     public String getDescripcion() { return descripcion; }
