@@ -67,8 +67,19 @@ public class EntidadView extends JPanel {
 
     private void cargarAnimaciones() {
         String pathIdle = "src/resources/sprites/" + nombre + "/" + nombre + "-idle.png";
-        if (nombre.equals("Mago")) {
-            animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
+        switch (nombre) {
+            case "Mago":
+                animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
+                break;
+            case "Arquero":
+                animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
+                break;
+            case "Curandera":
+                animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
+                break;
+            case "Guerrero":
+                animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
+                break;
         }
     }
 
