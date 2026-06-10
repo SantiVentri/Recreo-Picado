@@ -228,6 +228,10 @@ public abstract class Entidad implements IEntidad {
 		return habilidad;
 	}
 	
+	public List<Efecto> getEfectosActivos() {
+	    return efectosActivos;
+	}
+	
 	@Override
 	public EntidadView toView() {
 		return new EntidadView();
