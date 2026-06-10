@@ -38,7 +38,7 @@ public class WelcomePanel extends JPanel {
         btnEmpezar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         // Acción de navegación
-        btnEmpezar.addActionListener(e -> ventana.empezarJuego());
+        btnEmpezar.addActionListener(e -> ventana.partidasPanel());
         
         add(btnEmpezar);
 	}

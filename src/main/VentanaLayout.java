@@ -12,6 +12,7 @@ import views.Jugador4;
 import views.MenuPanel;
 import views.MyTeam;
 import views.WelcomePanel;
+import views.PartidasPanel;
 
 import utils.ReproductorMusica;
 
@@ -47,6 +48,7 @@ public class VentanaLayout extends JFrame {
 		mainPanel.add(new Jugador2(this), "JUGADOR2");
 		mainPanel.add(new Jugador3(this), "JUGADOR3");
 		mainPanel.add(new Jugador4(this), "JUGADOR4");
+		mainPanel.add(new PartidasPanel(this), "PARTIDASPANEL");
 		
 		cl.show(mainPanel, "WELCOME");
 		add(mainPanel);
@@ -54,6 +56,9 @@ public class VentanaLayout extends JFrame {
 	
 	public void empezarJuego() {
 		cl.show(mainPanel, "MENU");
+	}
+	public void partidasPanel() {
+		cl.show(mainPanel, "PARTIDASPANEL");
 	}
 	
 	public void volverAtras() {
