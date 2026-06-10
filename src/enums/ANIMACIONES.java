@@ -1,0 +1,10 @@
+package enums;
+
+public enum ANIMACIONES {
+	IDLE,
+	ATACAR,
+	ATACADO,
+	DEFENDER,
+	USAR_HABILIDAD,
+	MUERTO
+}
