@@ -57,10 +57,33 @@ public class MyTeam extends JPanel {
 	    	 add(button);	    	 
 	     }
 	     
+	     //boton para volver al menu 
+	     ImageIcon iconoOriginal = new ImageIcon("src/resources/Volver-atras.png");
+	    	
+	    	Image imageEscalada = iconoOriginal.getImage().getScaledInstance(90, 70, Image.SCALE_SMOOTH);
+	    	
+	    	ImageIcon iconoExit = new ImageIcon(imageEscalada);
+	    	
+	    	JButton botonExit = new JButton(iconoExit);
+	    	
+	    	//posición y tamaño del boton
+	    	
+	    	botonExit.setBounds(700, 15, 90, 70);
+	    	
+	    	//Sacar borde y fondo
+	    	botonExit.setBorderPainted(false);
+	    	botonExit.setContentAreaFilled(false);
+	    	botonExit.setFocusPainted(false);
+	    	
+	    	//Accion al hacer click
+	    	botonExit.addActionListener(e -> ventana.volverMenu());
+	    	
+	    	add(botonExit);
+	     
 	     btnJugador1.addActionListener(e -> ventana.verJugador1());
-	     // btnJugador2.addActionListener(e -> ventana.verJugador2());
-	     // btnJugador3.addActionListener(e -> ventana.verJugador3());
-	     // btnJugador4.addActionListener(e -> ventana.verJugador4());
+	     btnJugador2.addActionListener(e -> ventana.verJugador2());
+	     btnJugador3.addActionListener(e -> ventana.verJugador3());
+	     btnJugador4.addActionListener(e -> ventana.verJugador4());
 		
 	}
 	
@@ -86,6 +109,7 @@ public class MyTeam extends JPanel {
 	            }
 	    });
 	}
+	
 	
 	   @Override
 	    protected void paintComponent(Graphics g) {

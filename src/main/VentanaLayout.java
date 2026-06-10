@@ -6,6 +6,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import views.Jugador1;
+import views.Jugador2;
+import views.Jugador3;
+import views.Jugador4;
 import views.MenuPanel;
 import views.MyTeam;
 import views.WelcomePanel;
@@ -41,6 +44,9 @@ public class VentanaLayout extends JFrame {
 		mainPanel.add(new MenuPanel(this), "MENU");
 		mainPanel.add(new MyTeam(this), "MYTEAM");
 		mainPanel.add(new Jugador1(this), "JUGADOR1");
+		mainPanel.add(new Jugador2(this), "JUGADOR2");
+		mainPanel.add(new Jugador3(this), "JUGADOR3");
+		mainPanel.add(new Jugador4(this), "JUGADOR4");
 		
 		cl.show(mainPanel, "WELCOME");
 		add(mainPanel);
@@ -64,5 +70,21 @@ public class VentanaLayout extends JFrame {
 	
 	public void verJugador1() {
 		cl.show(mainPanel, "JUGADOR1");
+	}
+	public void verJugador2() {
+		cl.show(mainPanel, "JUGADOR2");
+	}
+	public void verJugador3() {
+		cl.show(mainPanel, "JUGADOR3");
+	}
+	public void verJugador4() {
+		cl.show(mainPanel, "JUGADOR4");
+	}
+	public void volverMenu() {
+		cl.show(mainPanel, "MENU");
+	}
+	
+	public void volverJugadores() {
+		cl.show(mainPanel, "MYTEAM");
 	}
 }

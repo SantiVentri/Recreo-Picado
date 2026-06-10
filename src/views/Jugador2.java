@@ -8,14 +8,14 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import main.VentanaLayout;
 
-public class Jugador1 extends JPanel {
+public class Jugador2 extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	private Image imagenFondo;
 	
 
 
-    public Jugador1(VentanaLayout ventana) {
+    public Jugador2(VentanaLayout ventana) {
     	
     	try {
 			imagenFondo= new ImageIcon("src/resources/Inventario-batalla.jpg.jpeg"
