@@ -46,7 +46,7 @@ public class Partida {
 		this.inventario.remove(item);
 	}
 
-		public void cargarBatallas() {
+	public void cargarBatallas() {
 		batallas.add(BatallaFactory.crearNivel1());
 		batallas.add(BatallaFactory.crearNivel2());
 		batallas.add(BatallaFactory.crearNivel3());
