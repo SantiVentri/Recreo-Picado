@@ -19,7 +19,6 @@ public class LevelsPanel extends JPanel {
     private JButton[] botones;
 
     private JButton nivelSeleccionado = null;
-
     private List<Batalla> batallas;
 
     public LevelsPanel(VentanaLayout ventana, List<Batalla> batallas) {
@@ -68,20 +67,13 @@ public class LevelsPanel extends JPanel {
             add(button);
         }
 
-        btn1.addActionListener(e -> {
-            if (batallas.get(0).getEstado() != ESTADO_BATALLA.BLOQUEADA) { }
-        });
-        btn2.addActionListener(e -> {
-            if (batallas.get(1).getEstado() != ESTADO_BATALLA.BLOQUEADA) { }
-        });
-        btn3.addActionListener(e -> {
-            if (batallas.get(2).getEstado() != ESTADO_BATALLA.BLOQUEADA) { }
-        });
-        btn4.addActionListener(e -> {
-            if (batallas.get(3).getEstado() != ESTADO_BATALLA.BLOQUEADA) { }
-        });
+        // Al clickear un nivel desbloqueado, configurar el Orquestador y navegar
+        btn1.addActionListener(e -> irABatalla(ventana, 0));
+        btn2.addActionListener(e -> irABatalla(ventana, 1));
+        btn3.addActionListener(e -> irABatalla(ventana, 2));
+        btn4.addActionListener(e -> irABatalla(ventana, 3));
 
-        // --- BOTÓN VOLVER ---
+        // Botón volver
         ImageIcon iconoOriginal = new ImageIcon("src/resources/Volver-atras.png");
         Image imageEscalada = iconoOriginal.getImage().getScaledInstance(90, 70, Image.SCALE_SMOOTH);
         JButton botonExit = new JButton(new ImageIcon(imageEscalada));
@@ -91,6 +83,12 @@ public class LevelsPanel extends JPanel {
         botonExit.setFocusPainted(false);
         botonExit.addActionListener(e -> ventana.verMenu());
         add(botonExit);
+    }
+
+    private void irABatalla(VentanaLayout ventana, int indice) {
+        if (batallas.get(indice).getEstado() != ESTADO_BATALLA.BLOQUEADA) {
+            ventana.empezarBatalla(batallas.get(indice));
+        }
     }
 
     private void configurarEventoHover(JButton boton, int indice) {
@@ -119,7 +117,6 @@ public class LevelsPanel extends JPanel {
             g.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
         }
 
-        // Candados y checks
         int anchoImagen = 80;
         int altoImagen  = 80;
 
@@ -141,7 +138,6 @@ public class LevelsPanel extends JPanel {
             }
         }
 
-        // Flecha hover
         if (imagenFlecha != null && nivelSeleccionado != null) {
             int anchoFlecha = 60;
             int altoFlecha  = 60;
