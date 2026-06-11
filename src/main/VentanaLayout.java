@@ -5,13 +5,14 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import modelo.Partida;
 import views.*;
 
 import utils.ReproductorMusica;
 
 public class VentanaLayout extends JFrame {
-	CardLayout cl;
-	JPanel mainPanel;
+	private CardLayout cl;
+	private JPanel mainPanel;
 	private ReproductorMusica musica;
 	
 	public VentanaLayout() {
@@ -34,41 +35,36 @@ public class VentanaLayout extends JFrame {
 		cl = new CardLayout();
 		mainPanel = new JPanel(cl);
 		
-		mainPanel.add(new WelcomePanel(this), "WELCOME");
+		Partida p = new Partida();
+		
+		mainPanel.add(new WelcomePanel(this), "INICIO");
+		mainPanel.add(new PartidasPanel(this), "PARTIDAS");
 		mainPanel.add(new MenuPanel(this), "MENU");
-		mainPanel.add(new MyTeam(this), "MYTEAM");
+		mainPanel.add(new MyTeam(this), "EQUIPO");
 		mainPanel.add(new Jugador1(this), "JUGADOR1");
 		mainPanel.add(new Jugador2(this), "JUGADOR2");
 		mainPanel.add(new Jugador3(this), "JUGADOR3");
 		mainPanel.add(new Jugador4(this), "JUGADOR4");
-		mainPanel.add(new PartidasPanel(this), "PARTIDASPANEL");
-		mainPanel.add(new LevelsPanel(this), "NIVELES");
+		mainPanel.add(new LevelsPanel(this, p.getBatallas()), "NIVELES");
 		
-		cl.show(mainPanel, "WELCOME");
+		cl.show(mainPanel, "INICIO");
 		add(mainPanel);
 	}
 	
-	public void empezarJuego() {
-		cl.show(mainPanel, "MENU");
+	public void verPartidas() {
+		cl.show(mainPanel, "PARTIDAS");
 	}
-	public void partidasPanel() {
-		cl.show(mainPanel, "PARTIDASPANEL");
+	
+	public void verMenu() {
+		cl.show(mainPanel, "MENU");
 	}
 	
 	public void verNiveles() {
 		cl.show(mainPanel, "NIVELES");
 	}
 	
-	public void volverAtras() {
-		cl.show(mainPanel, "WELCOME");
-	}
-	
-	public void verBatallas() {
-		cl.show(mainPanel, "BATALLAS");
-	}
-	
 	public void verEquipo() {
-		cl.show(mainPanel, "MYTEAM");
+		cl.show(mainPanel, "EQUIPO");
 	}
 	
 	public void verJugador1() {
@@ -85,13 +81,5 @@ public class VentanaLayout extends JFrame {
 	
 	public void verJugador4() {
 		cl.show(mainPanel, "JUGADOR4");
-	}
-	
-	public void volverMenu() {
-		cl.show(mainPanel, "MENU");
-	}
-	
-	public void volverJugadores() {
-		cl.show(mainPanel, "MYTEAM");
 	}
 }

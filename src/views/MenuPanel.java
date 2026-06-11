@@ -48,10 +48,10 @@ public class MenuPanel extends JPanel {
         } 
         
         // Acción de navegación
-        btnEmpezar.addActionListener(e -> ventana.verBatallas());
+        btnEmpezar.addActionListener(e -> ventana.verNiveles());
         btnEquipo.addActionListener(e -> ventana.verEquipo());
         // btnKiosko.addActionListener(e -> ventana.verKisoko());
-        btnSalir.addActionListener(e -> ventana.volverAtras());
+        btnSalir.addActionListener(e -> ventana.verPartidas());
     }
     
     private void configurarEventoHover(JButton boton) {

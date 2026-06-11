@@ -80,7 +80,7 @@ public class MyTeam extends JPanel {
 		botonExit.setBorderPainted(false);
 		botonExit.setContentAreaFilled(false);
 		botonExit.setFocusPainted(false);
-		botonExit.addActionListener(e -> ventana.volverMenu());
+		botonExit.addActionListener(e -> ventana.verMenu());
 		add(botonExit);
 
 		btnJugador1.addActionListener(e -> ventana.verJugador1());

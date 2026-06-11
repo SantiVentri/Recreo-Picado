@@ -39,7 +39,7 @@ public class Jugador4 extends JPanel {
         botonExit.setBorderPainted(false);
         botonExit.setContentAreaFilled(false);
         botonExit.setFocusPainted(false);
-        botonExit.addActionListener(e -> ventana.volverJugadores());
+        botonExit.addActionListener(e -> ventana.verEquipo());
 
         add(botonExit);
     }

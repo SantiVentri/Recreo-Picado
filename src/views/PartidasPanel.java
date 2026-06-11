@@ -42,7 +42,7 @@ private static final long serialVersionUID = 1L;
     	botonPartidaNueva.setFocusPainted(false);
     	
     	//Accion al hacer click
-    	botonPartidaNueva.addActionListener(e -> ventana.volverMenu());
+    	botonPartidaNueva.addActionListener(e -> ventana.verMenu());
     	
     	add(botonPartidaNueva);
     	
@@ -63,7 +63,7 @@ private static final long serialVersionUID = 1L;
     	botonPartidaCargada.setFocusPainted(false);
     	
     	//Accion al hacer click 
-    	botonPartidaCargada.addActionListener(e -> ventana.volverMenu());
+    	botonPartidaCargada.addActionListener(e -> ventana.verMenu());
     	
     	add(botonPartidaCargada);
     	
