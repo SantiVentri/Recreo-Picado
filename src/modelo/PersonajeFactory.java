@@ -1,6 +1,7 @@
 package modelo;
 
 public class PersonajeFactory {
+	// Alumnos
     public static Mago crearMago() {
         Habilidad habilidad = new Habilidad("Lanzar Gogo", "Lanza gogos mágicos a todos los enemigos", 25, 22, EfectoFactory.crearAtaqueMultiple());
         return new Mago("Mago", 80, 150, 8, 8, 3, habilidad, 18);
@@ -19,5 +20,11 @@ public class PersonajeFactory {
     public static Guerrero crearGuerrero() {
         Habilidad habilidad = new Habilidad("Golpe Aplastante", "Lastima a todos los enemigos que tenga cerca", 20, 25, EfectoFactory.crearAtaqueMultiple());
         return new Guerrero("Guerrero", 120, 100, 5, 14, 8, habilidad, 20);
+    }
+    
+    // Jefes y Secuaces
+    public static Jefe crearJefe1() {
+        Habilidad habilidad = new Habilidad("Botellazo químico", "Lanza un producto de limpieza y envenena al objetivo", 20, 18, EfectoFactory.crearVeneno());
+        return new Jefe("Jefa del Baño", 110, 80, 6, 13, 5, habilidad);
     }
 }
