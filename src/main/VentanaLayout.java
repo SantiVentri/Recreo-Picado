@@ -5,7 +5,9 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import modelo.Batalla;
 import modelo.Partida;
+import orquestador.Orquestador;
 import views.*;
 
 import utils.ReproductorMusica;
@@ -53,6 +55,7 @@ public class VentanaLayout extends JFrame {
 		add(mainPanel);
 	}
 	
+	// Navegación
 	public void verPartidas() {
 		cl.show(mainPanel, "PARTIDAS");
 	}
@@ -84,6 +87,12 @@ public class VentanaLayout extends JFrame {
 	public void verJugador4() {
 		cl.show(mainPanel, "JUGADOR4");
 	}
+	
+	// Empezar batalla
+	public void empezarBatalla(Batalla batalla) {
+        Orquestador.getInstance().iniciarBatalla(partidaActual.getAlumnos(), batalla);
+        cl.show(mainPanel, "BATALLA");
+    }
 	
 	// Getter
     public Partida getPartida() {
