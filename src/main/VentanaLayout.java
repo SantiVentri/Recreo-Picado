@@ -14,6 +14,7 @@ public class VentanaLayout extends JFrame {
 	private CardLayout cl;
 	private JPanel mainPanel;
 	private ReproductorMusica musica;
+	private Partida partidaActual;
 	
 	public VentanaLayout() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -35,7 +36,7 @@ public class VentanaLayout extends JFrame {
 		cl = new CardLayout();
 		mainPanel = new JPanel(cl);
 		
-		Partida p = new Partida();
+		partidaActual = new Partida();
 		
 		mainPanel.add(new WelcomePanel(this), "INICIO");
 		mainPanel.add(new PartidasPanel(this), "PARTIDAS");
@@ -45,7 +46,8 @@ public class VentanaLayout extends JFrame {
 		mainPanel.add(new Jugador2(this), "JUGADOR2");
 		mainPanel.add(new Jugador3(this), "JUGADOR3");
 		mainPanel.add(new Jugador4(this), "JUGADOR4");
-		mainPanel.add(new LevelsPanel(this, p.getBatallas()), "NIVELES");
+		mainPanel.add(new LevelsPanel(this, partidaActual.getBatallas()), "NIVELES");
+		mainPanel.add(new BatallaPanel(this), "BATALLA");
 		
 		cl.show(mainPanel, "INICIO");
 		add(mainPanel);
@@ -82,4 +84,10 @@ public class VentanaLayout extends JFrame {
 	public void verJugador4() {
 		cl.show(mainPanel, "JUGADOR4");
 	}
+	
+	// Getter
+    public Partida getPartida() {
+    	return partidaActual;
+    }
+
 }
