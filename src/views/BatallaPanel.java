@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import java.util.List;
 import modelo.Entidad;
+import modelo.Partida;
 import orquestador.Orquestador;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -59,7 +60,7 @@ public class BatallaPanel extends JPanel {
                 );
                 if (respuesta == JOptionPane.YES_OPTION) {
                 	Orquestador.getInstance().reiniciar();
-                    ventana.verNiveles();
+                	ventana.verNiveles();
                 }
 			}
 		});

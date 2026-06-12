@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import modelo.Batalla;
 import modelo.Partida;
+import modelo.Repositorio;
 import orquestador.Orquestador;
 import views.*;
 
@@ -29,6 +30,8 @@ public class VentanaLayout extends JFrame {
 		//musicaMenu
 		musica = new ReproductorMusica();
 	    musica.reproducir("src/resources/himno-instrumental.wav");
+		
+		Repositorio.getInstance().crearPartida();
 	    
 		cargarVentana();
 		
@@ -39,7 +42,7 @@ public class VentanaLayout extends JFrame {
 		cl = new CardLayout();
 		mainPanel = new JPanel(cl);
 		
-		partidaActual = new Partida();
+		partidaActual = Repositorio.getInstance().getPartidaActual();
 		
 		mainPanel.add(new WelcomePanel(this), "INICIO");
 		mainPanel.add(new PartidasPanel(this), "PARTIDAS");

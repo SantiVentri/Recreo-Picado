@@ -8,6 +8,7 @@ import interfaces.IOrquestador;
 import modelo.Batalla;
 import modelo.Entidad;
 import modelo.Equipo;
+import modelo.Repositorio;
 
 public class Orquestador implements IOrquestador {
     private static Orquestador instancia;
@@ -98,5 +99,11 @@ public class Orquestador implements IOrquestador {
     
     public List<Entidad> getTurnos() {
     	return turnos;
+	}
+
+	public void terminarBatalla() {
+		Batalla batallaJugada = this.batalla;
+		reiniciar();
+		Repositorio.getInstance().getPartidaActual().desbloquearProximaBatalla(batallaJugada);
 	}
 }
