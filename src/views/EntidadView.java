@@ -146,6 +146,11 @@ public class EntidadView extends JPanel {
         repaint();
     }
 
+    public void setMostrarHUD(boolean mostrarHUD) {
+        this.mostrarHUD = mostrarHUD;
+        repaint();
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

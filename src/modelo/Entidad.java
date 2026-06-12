@@ -234,6 +234,6 @@ public abstract class Entidad implements IEntidad {
 	
 	@Override
 	public EntidadView toView() {
-		return new EntidadView();
+		return new EntidadView(this.nombre, this.vida, this.vidaMax, this.energia, this.energiaMax);
 	}
 }
