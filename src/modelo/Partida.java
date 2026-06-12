@@ -6,12 +6,16 @@ import java.util.List;
 import enums.ESTADO_BATALLA;
 
 public class Partida {
+	private static int contador = 0;
+	
+	private final int id;
 	private int pesos;
 	private Equipo alumnos;
 	private List<Item> inventario;
 	private List<Batalla> batallas;
 	
 	public Partida() {
+		this.id = contador++;
 		this.pesos = 0;
 		this.inventario = new ArrayList<Item>();
 		
@@ -20,6 +24,10 @@ public class Partida {
 		
 		this.batallas = new ArrayList<Batalla>();
 		cargarBatallas();
+	}
+	
+	public int getId() {
+		return id;
 	}
 
 	public int getPesos() {
@@ -86,5 +94,16 @@ public class Partida {
 		}
 		
 		return null;
+	}
+	
+	public void desbloquearProximaBatalla(Batalla batallaJugada) {
+		batallaJugada.setEstado(ESTADO_BATALLA.VICTORIA);
+		
+		for (Batalla b : batallas) {
+			if (b.getEstado() == ESTADO_BATALLA.BLOQUEADA) {
+				b.setEstado(ESTADO_BATALLA.PENDIENTE);
+				return;
+			}
+		}
 	}
 }
