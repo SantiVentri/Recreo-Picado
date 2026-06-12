@@ -4,16 +4,18 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import java.util.List;
 import modelo.Entidad;
 import orquestador.Orquestador;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import main.VentanaLayout;
-import orquestador.Orquestador;
 
 public class BatallaPanel extends JPanel {
     private VentanaLayout ventana; 
@@ -45,10 +47,23 @@ public class BatallaPanel extends JPanel {
         
         JButton btnHuir = new JButton("Huir");
         btnHuir.setPreferredSize(new Dimension(120, 42));
-        btnHuir.addActionListener(e -> {
-            Orquestador.getInstance().reiniciar();
-            ventana.verNiveles();
-        });
+        btnHuir.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int respuesta = JOptionPane.showConfirmDialog(
+                        ventana, 
+                        "¿Estás seguro de que querés huir? Vas a perder el progreso", 
+                        "Confirmar acción",
+                        JOptionPane.YES_NO_OPTION, 
+                        JOptionPane.WARNING_MESSAGE
+                );
+                if (respuesta == JOptionPane.YES_OPTION) {
+                	Orquestador.getInstance().reiniciar();
+                    ventana.verNiveles();
+                }
+			}
+		});
+		
         panelBotones.add(btnHuir);
 
     	// Calcular la posición del panel
@@ -81,7 +96,7 @@ public class BatallaPanel extends JPanel {
         int evAncho = 220;
         int evAlto = 360;
 
-        // ALUMNOS — índice 0 arriba-centro, los siguientes bajan y van a la izquierda
+        // ALUMNOS
         for (int i = 0; i < alumnos.size(); i++) {
             EntidadView ev = alumnos.get(i).toView();
             ev.setMostrarHUD(true);
@@ -90,7 +105,7 @@ public class BatallaPanel extends JPanel {
             add(ev);
         }
 
-        // ENEMIGOS — índice 0 arriba-centro, los siguientes bajan y van a la derecha
+        // ENEMIGOS
         for (int i = 0; i < enemigos.size(); i++) {
             EntidadView ev = enemigos.get(i).toView();
             ev.setMostrarHUD(true);
