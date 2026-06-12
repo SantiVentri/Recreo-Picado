@@ -62,6 +62,11 @@ public class Partida {
 		alumnos.agregarEntidad(PersonajeFactory.crearGuerrero());
 	}
 
+	public void resetearEquipo() {
+		this.alumnos = new Equipo();
+		cargarEquipo();
+	}
+
 	public void cargarBatallas() {
 		batallas.add(BatallaFactory.crearNivel1());
 		batallas.add(BatallaFactory.crearNivel2());

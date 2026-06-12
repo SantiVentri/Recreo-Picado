@@ -92,6 +92,7 @@ public class VentanaLayout extends JFrame {
 	
 	// Empezar batalla
 	public void empezarBatalla(Batalla batalla) {
+        partidaActual.resetearEquipo();
         Orquestador.getInstance().iniciarBatalla(partidaActual.getAlumnos(), batalla);
         batallaPanel.removeAll();
         batallaPanel.cargarPanel();
