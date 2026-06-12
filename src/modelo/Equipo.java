@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Equipo {
 	private List<Entidad> entidades;
-	private final int cantidadMaxima = 3;
+	private final int cantidadMaxima = 4;
 	
 	public Equipo() {
 		entidades = new ArrayList<Entidad>();
