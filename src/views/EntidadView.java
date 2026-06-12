@@ -66,7 +66,8 @@ public class EntidadView extends JPanel {
     }
 
     private void cargarAnimaciones() {
-        String pathIdle = "src/resources/sprites/" + nombre + "/" + nombre + "-idle.png";
+    	String nombreFormateado = nombre.toLowerCase().replace(" ", "_");
+        String pathIdle = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-idle.png";
         switch (nombre) {
             case "Mago":
                 animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
@@ -78,6 +79,9 @@ public class EntidadView extends JPanel {
                 animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
                 break;
             case "Guerrero":
+                animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
+                break;
+            case "Jefa del Baño":
                 animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
                 break;
         }
