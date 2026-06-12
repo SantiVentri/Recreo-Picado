@@ -17,6 +17,7 @@ public class VentanaLayout extends JFrame {
 	private JPanel mainPanel;
 	private ReproductorMusica musica;
 	private Partida partidaActual;
+	private BatallaPanel batallaPanel;
 	
 	public VentanaLayout() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -49,7 +50,8 @@ public class VentanaLayout extends JFrame {
 		mainPanel.add(new Jugador3(this), "JUGADOR3");
 		mainPanel.add(new Jugador4(this), "JUGADOR4");
 		mainPanel.add(new LevelsPanel(this, partidaActual.getBatallas()), "NIVELES");
-		mainPanel.add(new BatallaPanel(this), "BATALLA");
+		batallaPanel = new BatallaPanel(this);
+		mainPanel.add(batallaPanel, "BATALLA");
 		
 		cl.show(mainPanel, "INICIO");
 		add(mainPanel);
@@ -91,6 +93,9 @@ public class VentanaLayout extends JFrame {
 	// Empezar batalla
 	public void empezarBatalla(Batalla batalla) {
         Orquestador.getInstance().iniciarBatalla(partidaActual.getAlumnos(), batalla);
+        batallaPanel.removeAll();
+        batallaPanel.cargarPanel();
+        batallaPanel.cargarEntidades();
         cl.show(mainPanel, "BATALLA");
     }
 	
