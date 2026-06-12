@@ -6,6 +6,8 @@ import javax.swing.Timer;
 import enums.ANIMACIONES;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,8 +15,19 @@ import javax.imageio.ImageIO;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class EntidadView extends JPanel {
+
+    public interface ClickListener {
+        void onClick(EntidadView origen, int clickX);
+    }
+
+    public interface HoverListener {
+        void onEnter();
+        void onExit();
+    }
+
+    private ClickListener clickListener;
+    private HoverListener hoverListener;
     private String nombre;
     private int vida;
     private int vidaMax;
@@ -45,6 +58,20 @@ public class EntidadView extends JPanel {
 
         this.animaciones = new HashMap<>();
         cargarAnimaciones();
+
+        addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (clickListener != null) {
+                    clickListener.onClick(EntidadView.this, e.getX());
+                }
+            }
+            public void mouseEntered(MouseEvent e) {
+                if (hoverListener != null) hoverListener.onEnter();
+            }
+            public void mouseExited(MouseEvent e) {
+                if (hoverListener != null) hoverListener.onExit();
+            }
+        });
 
         animTimer = new Timer(100, e -> actualizarFrame());
         animTimer.start();
@@ -144,6 +171,14 @@ public class EntidadView extends JPanel {
     public void setEscala(float escala) {
         this.escala = escala;
         repaint();
+    }
+
+    public void setClickListener(ClickListener listener) {
+        this.clickListener = listener;
+    }
+
+    public void setHoverListener(HoverListener listener) {
+        this.hoverListener = listener;
     }
 
     public void setMostrarHUD(boolean mostrarHUD) {
