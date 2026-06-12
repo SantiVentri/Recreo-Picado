@@ -74,6 +74,14 @@ public class Orquestador implements IOrquestador {
     public boolean alumnosGanaron() {
         return batalla.getEnemigos().getEntidades().stream().noneMatch(Entidad::estaVivo);
     }
+    
+    @Override
+    public void reiniciar() {
+        this.alumnos = null;
+        this.batalla = null;
+        this.turnos.clear();
+        this.turnoActual = 0;
+    }
 
     // Getters
     public Equipo getAlumnos() {

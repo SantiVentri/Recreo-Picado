@@ -1,6 +1,7 @@
 package interfaces;
 
 import modelo.*;
+import orquestador.Orquestador;
 
 public interface IOrquestador {
     void iniciarBatalla(Equipo alumnos, Batalla batalla);
@@ -9,4 +10,5 @@ public interface IOrquestador {
     void proximoTurno();
     boolean batallaTerminada();
     boolean alumnosGanaron();
+	void reiniciar();
 }
