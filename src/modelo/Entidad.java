@@ -15,10 +15,6 @@ public abstract class Entidad implements IEntidad {
 	private int velocidad;
 	private boolean defendiendo;
 	
-	// Atributos de nivel
-	private int nivel;
-	private int xp;
-	
 	// Atributos de batalla
 	private int ataque;
 	private int defensa;
@@ -40,9 +36,6 @@ public abstract class Entidad implements IEntidad {
 		this.ataque = ataque;
 		this.defensa = defensa;
 		this.habilidad = habilidad;
-		
-		this.nivel = 1;
-		this.xp = 0;
 		
 		this.efectosActivos = new ArrayList<Efecto>();
 		this.itemsEquipados = new ArrayList<Item>();
@@ -130,16 +123,6 @@ public abstract class Entidad implements IEntidad {
 		this.vida -= cantidad;
 	}
 	
-	@Override
-	public void recibirXp(int xp) {
-		this.xp += xp;
-		
-		while (this.xp >= 100) {
-			this.xp -= 100;
-			subirNivel(); 
-		}
-	}
-	
 	// Getters y setters
 	public String getNombre() {
 		return nombre;
@@ -187,25 +170,6 @@ public abstract class Entidad implements IEntidad {
 	
 	public void setDefendiendo(boolean estado) {
 		this.defendiendo = estado;
-	}
-
-	public int getNivel() {
-		return nivel;
-	}
-
-	public void setNivel(int nivel) {
-		this.nivel = nivel;
-	}
-
-	public int getXp() {
-		return xp;
-	}
-
-	private void subirNivel() {
-	    this.nivel++;
-	    this.ataque += 3;
-	    this.defensa += 2;
-	    this.vidaMax += 10;
 	}
 
 	public int getAtaque() {

@@ -3,6 +3,9 @@ package modelo;
 import interfaces.IEntidad;
  
 public class Curandera extends Entidad {
+	// Atributos de nivel
+	private int nivel;
+	private int xp;
  
     private int amistad;
  
@@ -10,6 +13,8 @@ public class Curandera extends Entidad {
                      int ataque, int defensa, Habilidad habilidad, int amistad) {
         super(nombre, vidaMax, energiaMax, velocidad, ataque, defensa, habilidad);
         this.amistad = amistad;
+		this.nivel = 1;
+		this.xp = 0;
     }
  
     @Override
@@ -46,6 +51,34 @@ public class Curandera extends Entidad {
             this.aplicarEfecto(hab.getEfecto().copiar());
         }
     }
+    
+	private void subirNivel() {
+	    this.nivel++;
+	    this.setAtaque(getAtaque() + 3);
+	    this.setDefensa(getDefensa() + 2);;
+	    this.setVidaMax(getVidaMax() + 10);;
+	}
+    
+	public void recibirXp(int xp) {
+		this.xp += xp;
+		
+		while (this.xp >= 100) {
+			this.xp -= 100;
+			subirNivel(); 
+		}
+	}
+	
+	public int getNivel() {
+		return nivel;
+	}
+
+	public void setNivel(int nivel) {
+		this.nivel = nivel;
+	}
+
+	public int getXp() {
+		return xp;
+	}
  
     public int getAmistad() { return amistad; }
     public void setAmistad(int amistad) { this.amistad = amistad; }

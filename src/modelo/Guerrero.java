@@ -7,6 +7,9 @@ import interfaces.IEntidad;
 import orquestador.Orquestador;
 
 public class Guerrero extends Entidad {
+	// Atributos de nivel
+	private int nivel;
+	private int xp;
 
     private int fuerza;
 
@@ -14,6 +17,8 @@ public class Guerrero extends Entidad {
                     int ataque, int defensa, Habilidad habilidad, int fuerza) {
         super(nombre, vidaMax, energiaMax, velocidad, ataque, defensa, habilidad);
         this.fuerza = fuerza;
+		this.nivel = 1;
+		this.xp = 0;
     }
 
     @Override
@@ -49,6 +54,34 @@ public class Guerrero extends Entidad {
             }
         }
     }
+    
+	private void subirNivel() {
+	    this.nivel++;
+	    this.setAtaque(getAtaque() + 3);
+	    this.setDefensa(getDefensa() + 2);;
+	    this.setVidaMax(getVidaMax() + 10);;
+	}
+    
+	public void recibirXp(int xp) {
+		this.xp += xp;
+		
+		while (this.xp >= 100) {
+			this.xp -= 100;
+			subirNivel(); 
+		}
+	}
+	
+	public int getNivel() {
+		return nivel;
+	}
+
+	public void setNivel(int nivel) {
+		this.nivel = nivel;
+	}
+
+	public int getXp() {
+		return xp;
+	}
 
     public int getFuerza() { return fuerza; }
     public void setFuerza(int fuerza) { this.fuerza = fuerza; }

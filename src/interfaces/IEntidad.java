@@ -18,7 +18,6 @@ public interface IEntidad {
 	void quitarEfecto(Efecto efecto);
 	void aumentarVida(int cantidad);
 	void quitarVida(int cantidad);	
-	void recibirXp(int xp);	
 	
 	EntidadView toView();
 }
