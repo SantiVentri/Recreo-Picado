@@ -86,7 +86,8 @@ public class LevelsPanel extends JPanel {
     }
 
     private void irABatalla(VentanaLayout ventana, int indice) {
-        if (batallas.get(indice).getEstado() != ESTADO_BATALLA.BLOQUEADA) {
+    	ESTADO_BATALLA estado = batallas.get(indice).getEstado();
+        if (estado == ESTADO_BATALLA.PENDIENTE) {
             ventana.empezarBatalla(batallas.get(indice));
         }
     }
@@ -95,7 +96,7 @@ public class LevelsPanel extends JPanel {
         boton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                if (batallas.get(indice).getEstado() != ESTADO_BATALLA.BLOQUEADA) {
+                if (batallas.get(indice).getEstado() == ESTADO_BATALLA.PENDIENTE) {
                     nivelSeleccionado = boton;
                     repaint();
                 }
