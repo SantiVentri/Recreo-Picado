@@ -43,7 +43,7 @@ public class Efecto {
                 entidad.setEnergia(Math.min(entidad.getEnergiaMax(), entidad.getEnergia() + energia));
                 break;
             case ATAQUE_MULTIPLE:
-                // El Orquestador es responsable de repartir el daño a todos los enemigos.
+                // Se ejecuta directamente en usarHabilidad(), no por turno.
                 break;
         }
 

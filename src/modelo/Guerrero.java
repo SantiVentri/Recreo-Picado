@@ -1,6 +1,10 @@
 package modelo;
 
+import java.util.List;
+
+import enums.EFECTOS;
 import interfaces.IEntidad;
+import orquestador.Orquestador;
 
 public class Guerrero extends Entidad {
 
@@ -31,9 +35,18 @@ public class Guerrero extends Entidad {
         if (this.getHabilidad() == null || !this.getHabilidad().sePuedeUsar(this)) return;
         this.setEnergia(this.getEnergia() - this.getHabilidad().getCostoEnergia());
         int dano = this.getHabilidad().getPotencia() + fuerza;
-        objetivo.recibirDano(dano);
-        if (this.getHabilidad().getEfecto() != null && objetivo instanceof Entidad) {
-            objetivo.aplicarEfecto(this.getHabilidad().getEfecto().copiar());
+        if (this.getHabilidad().getEfecto() != null && this.getHabilidad().getEfecto().getTipo() == EFECTOS.ATAQUE_MULTIPLE) {
+            List<Entidad> enemigos = Orquestador.getInstance().getBatalla().getEnemigos().getEntidades();
+            for (int i = 0; i < enemigos.size(); i++) {
+                if (enemigos.get(i).estaVivo()) {
+                    enemigos.get(i).recibirDano(dano);
+                }
+            }
+        } else {
+            objetivo.recibirDano(dano);
+            if (this.getHabilidad().getEfecto() != null && objetivo instanceof Entidad) {
+                objetivo.aplicarEfecto(this.getHabilidad().getEfecto().copiar());
+            }
         }
     }
 

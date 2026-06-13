@@ -1,6 +1,10 @@
 package modelo;
 
+import java.util.List;
+
+import enums.EFECTOS;
 import interfaces.IEntidad;
+import orquestador.Orquestador;
 
 public class Mago extends Entidad {
 
@@ -26,12 +30,6 @@ public class Mago extends Entidad {
         this.setEnergia(this.getEnergiaMax());
     }
 
-    /**
-     * Usa la habilidad del Mago sobre el objetivo.
-     * Consume energía según el costo definido en la Habilidad.
-     * El daño se calcula con la potencia de la habilidad + bonus de inteligencia.
-     * Si la habilidad tiene un Efecto asociado, también se lo aplica al objetivo.
-     */
     @Override
     public void usarHabilidad(IEntidad objetivo) {
         Habilidad hab = this.getHabilidad();
@@ -41,10 +39,19 @@ public class Mago extends Entidad {
         this.setEnergia(this.getEnergia() - hab.getCostoEnergia());
 
         int dano = hab.getPotencia() + inteligencia;
-        objetivo.recibirDano(dano);
 
-        if (hab.getEfecto() != null && objetivo instanceof Entidad) {
-            objetivo.aplicarEfecto(hab.getEfecto().copiar());
+        if (hab.getEfecto() != null && hab.getEfecto().getTipo() == EFECTOS.ATAQUE_MULTIPLE) {
+            List<Entidad> enemigos = Orquestador.getInstance().getBatalla().getEnemigos().getEntidades();
+            for (int i = 0; i < enemigos.size(); i++) {
+                if (enemigos.get(i).estaVivo()) {
+                    enemigos.get(i).recibirDano(dano);
+                }
+            }
+        } else {
+            objetivo.recibirDano(dano);
+            if (hab.getEfecto() != null && objetivo instanceof Entidad) {
+                objetivo.aplicarEfecto(hab.getEfecto().copiar());
+            }
         }
     }
 
