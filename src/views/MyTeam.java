@@ -18,8 +18,8 @@ public class MyTeam extends JPanel {
 	private Image imagenFondo;
 	private Image imagenFlecha;
 	private JButton btnJugador1, btnJugador2, btnJugador3, btnJugador4;
-	private JButton botonSeleccionado = null;
-
+	private EntidadView entidadSeleccionada = null;
+	
 	public MyTeam (VentanaLayout ventana) {
 
 		try {
@@ -33,83 +33,67 @@ public class MyTeam extends JPanel {
 	}
 
 	private void configurarPantalla(VentanaLayout ventana) {
+	    setLayout(null);
 
-		setLayout(null);
+	    EntidadView vistaJugador1 = new EntidadView("Mago", 100, 100, 100, 100, false, 1.6f);
+	    EntidadView vistaJugador2 = new EntidadView("Arquero", 100, 100, 100, 100, false, 1.5f);
+	    EntidadView vistaJugador3 = new EntidadView("Curandera", 100, 100, 100, 100, false, 1.6f);
+	    EntidadView vistaJugador4 = new EntidadView("Guerrero", 100, 100, 100, 100, false, 1.6f);
 
-		EntidadView vistaJugador1 = new EntidadView("Mago", 100, 100, 100, 100, false, 1.6f);
-		EntidadView vistaJugador2 = new EntidadView("Arquero", 100, 100, 100, 100, false, 1.5f);
-		EntidadView vistaJugador3 = new EntidadView("Curandera", 100, 100, 100, 100, false, 1.6f);
-		EntidadView vistaJugador4 = new EntidadView("Guerrero", 100, 100, 100, 100, false, 1.6f);
+	    vistaJugador1.setBounds(70, 120, 270, 440);
+	    vistaJugador2.setBounds(260, 150, 270, 440);
+	    vistaJugador3.setBounds(460, 120, 270, 440);
+	    vistaJugador4.setBounds(650, 120, 270, 440);
 
-		vistaJugador1.setBounds(70, 120, 270, 440);
-		vistaJugador2.setBounds(260, 150, 270, 440);
-		vistaJugador3.setBounds(460, 120, 270, 440);
-		vistaJugador4.setBounds(650, 120, 270, 440);
+	    configurarEventoHover(vistaJugador1);
+	    configurarEventoHover(vistaJugador2);
+	    configurarEventoHover(vistaJugador3);
+	    configurarEventoHover(vistaJugador4);
 
-		add(vistaJugador1);
-		add(vistaJugador2);
-		add(vistaJugador3);
-		add(vistaJugador4);
+	    vistaJugador1.addMouseListener(new MouseAdapter() {
+	        public void mouseClicked(MouseEvent e) { ventana.verJugador1(); }
+	    });
+	    vistaJugador2.addMouseListener(new MouseAdapter() {
+	        public void mouseClicked(MouseEvent e) { ventana.verJugador2(); }
+	    });
+	    vistaJugador3.addMouseListener(new MouseAdapter() {
+	        public void mouseClicked(MouseEvent e) { ventana.verJugador3(); }
+	    });
+	    vistaJugador4.addMouseListener(new MouseAdapter() {
+	        public void mouseClicked(MouseEvent e) { ventana.verJugador4(); }
+	    });
 
-		// --- BOTONES INVISIBLES (se agregan DESPUÉS para quedar encima y recibir los clicks) ---
-		btnJugador1 = new JButton();
-		btnJugador2 = new JButton();
-		btnJugador3 = new JButton();
-		btnJugador4 = new JButton();
+	    add(vistaJugador1);
+	    add(vistaJugador2);
+	    add(vistaJugador3);
+	    add(vistaJugador4);
 
-		btnJugador1.setBounds(130, 180, 150, 370);
-		btnJugador2.setBounds(310, 180, 150, 370);
-		btnJugador3.setBounds(520, 180, 130, 370);
-		btnJugador4.setBounds(710, 180, 130, 370);
-
-		JButton[] buttons = {btnJugador1, btnJugador2, btnJugador3, btnJugador4};
-
-		for (JButton button : buttons) {
-			configurarBoton(button);
-			configurarEventoHover(button);
-			add(button);
-		}
-
-		// --- BOTÓN VOLVER AL MENÚ ---
-		ImageIcon iconoOriginal = new ImageIcon("src/resources/Volver-atras.png");
-		Image imageEscalada = iconoOriginal.getImage().getScaledInstance(90, 70, Image.SCALE_SMOOTH);
-		ImageIcon iconoExit = new ImageIcon(imageEscalada);
-
-		JButton botonExit = new JButton(iconoExit);
-		botonExit.setBounds(700, 15, 90, 70);
-		botonExit.setBorderPainted(false);
-		botonExit.setContentAreaFilled(false);
-		botonExit.setFocusPainted(false);
-		botonExit.addActionListener(e -> ventana.verMenu());
-		add(botonExit);
-
-		btnJugador1.addActionListener(e -> ventana.verJugador1());
-		btnJugador2.addActionListener(e -> ventana.verJugador2());
-		btnJugador3.addActionListener(e -> ventana.verJugador3());
-		btnJugador4.addActionListener(e -> ventana.verJugador4());
+	    // --- BOTÓN VOLVER AL MENÚ ---
+	    ImageIcon iconoOriginal = new ImageIcon("src/resources/Volver-atras.png");
+	    Image imageEscalada = iconoOriginal.getImage().getScaledInstance(90, 70, Image.SCALE_SMOOTH);
+	    JButton botonExit = new JButton(new ImageIcon(imageEscalada));
+	    botonExit.setBounds(700, 15, 90, 70);
+	    botonExit.setBorderPainted(false);
+	    botonExit.setContentAreaFilled(false);
+	    botonExit.setFocusPainted(false);
+	    botonExit.addActionListener(e -> ventana.verMenu());
+	    add(botonExit);
 	}
 
-	private void configurarBoton(JButton boton) {
-		boton.setOpaque(false);
-		boton.setContentAreaFilled(false);
-		boton.setBorderPainted(false);
-		boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-	}
+	private void configurarEventoHover(EntidadView vista) {
+	    vista.addMouseListener(new MouseAdapter() {
+	        @Override
+	        public void mouseEntered(MouseEvent e) {
+	        	entidadSeleccionada = vista;
+	            repaint();
+	        }
 
-	private void configurarEventoHover(JButton boton) {
-		boton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				botonSeleccionado = boton;
-				repaint();
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				botonSeleccionado = null;
-				repaint();
-			}
-		});
+	        @Override
+	        public void mouseExited(MouseEvent e) {
+	        	entidadSeleccionada = null;
+	            repaint();
+	        }
+	    });
 	}
 
 	@Override
@@ -120,11 +104,11 @@ public class MyTeam extends JPanel {
 			g.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
 		}
 
-		if (imagenFlecha != null && botonSeleccionado != null) {
+		if (imagenFlecha != null && entidadSeleccionada != null) {
 			int anchoFlecha = 60;
 			int altoFlecha = 60;
-			int xCentrada = botonSeleccionado.getX() + (botonSeleccionado.getWidth() / 2 + 7) - (anchoFlecha / 2);
-			int yArriba = botonSeleccionado.getY() - altoFlecha - 10;
+			int xCentrada = entidadSeleccionada.getX() + (entidadSeleccionada.getWidth() / 2 + 7) - (anchoFlecha / 2);
+			int yArriba = entidadSeleccionada.getY() - altoFlecha + 30;
 			g.drawImage(imagenFlecha, xCentrada, yArriba, anchoFlecha, altoFlecha, this);
 		}
 	}
