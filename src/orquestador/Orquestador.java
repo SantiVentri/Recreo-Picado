@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import enums.ACCIONES;
 import interfaces.IOrquestador;
 import modelo.Batalla;
 import modelo.Entidad;
@@ -107,13 +108,13 @@ public class Orquestador implements IOrquestador {
         }
     }
 
-    public void ejecutarTurno(String accion, Entidad objetivo, Item item) {
+    public void ejecutarTurno(ACCIONES accion, Entidad objetivo, Item item) {
         Entidad e = getEntidadActual();
-        if (accion.equals("Atacar")) {
+        if (accion.equals(ACCIONES.ATACAR)) {
             e.realizarAtaque(objetivo);
-        } else if (accion.equals("Defender")) {
+        } else if (accion.equals(ACCIONES.DEFENDER)) {
             e.realizarDefensa();
-        } else if (accion.equals("Usar habilidad")) {
+        } else if (accion.equals(ACCIONES.USAR_HABILIDAD)) {
             e.usarHabilidad(objetivo);
         }
     }

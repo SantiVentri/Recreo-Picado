@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import enums.ACCIONES;
 import main.VentanaLayout;
 import modelo.Entidad;
 import modelo.Item;
@@ -26,9 +27,9 @@ public class BatallaPanel extends JPanel {
     private VentanaLayout ventana;
 
     // Estado de selección de objetivo
-    private String accionPendiente    = null;
+    private ACCIONES accionPendiente = null;
     private boolean esperandoObjetivo = false;
-    private int indiceObjetivoActual  = 0;
+    private int indiceObjetivoActual = 0;
 
     // Referencias a EntidadViews
     private List<EntidadView> viewsAlumnos  = new ArrayList<EntidadView>();
@@ -64,7 +65,7 @@ public class BatallaPanel extends JPanel {
         btnAtacar.setPreferredSize(new Dimension(120, 42));
         btnAtacar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                activarSeleccionObjetivo("Atacar");
+                activarSeleccionObjetivo(ACCIONES.ATACAR);
             }
         });
         panelBotones.add(btnAtacar);
@@ -73,7 +74,7 @@ public class BatallaPanel extends JPanel {
         btnDefender.setPreferredSize(new Dimension(120, 42));
         btnDefender.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Orquestador.getInstance().ejecutarTurno("Defender", null, null);
+                Orquestador.getInstance().ejecutarTurno(ACCIONES.DEFENDER, null, null);
                 avanzarTurno();
             }
         });
@@ -83,7 +84,7 @@ public class BatallaPanel extends JPanel {
         btnHabilidad.setPreferredSize(new Dimension(140, 42));
         btnHabilidad.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                activarSeleccionObjetivo("Usar habilidad");
+                activarSeleccionObjetivo(ACCIONES.USAR_HABILIDAD);
             }
         });
         panelBotones.add(btnHabilidad);
@@ -231,7 +232,7 @@ public class BatallaPanel extends JPanel {
 
     // ─── SELECCIÓN DE OBJETIVO ────────────────────────────────────────────────
 
-    private void activarSeleccionObjetivo(String accion) {
+    private void activarSeleccionObjetivo(ACCIONES accion) {
         this.accionPendiente   = accion;
         this.esperandoObjetivo = true;
 
