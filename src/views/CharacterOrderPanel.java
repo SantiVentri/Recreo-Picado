@@ -78,13 +78,10 @@ public class CharacterOrderPanel extends JPanel {
 
         
 
-        int x = 30;
+        int x = 0;
         int y = 50;
 
-        int actualIndex =
-                Orquestador.getInstance().getTurnoActual();
-
-       
+        int actualIndex = Orquestador.getInstance().getTurnoActual();       
 
         for (int i = 0; i < orden.size(); i++) {
 
@@ -96,7 +93,7 @@ public class CharacterOrderPanel extends JPanel {
 
             int tamaño = (i == 0) ? 80 : 55;
 
-            g.drawImage(img, x, y, tamaño, tamaño, this);
+            g.drawImage(img, x, y, tamaño + 60, tamaño, this);
 
             if(i == 0) {
                 x += 70; // separación grande después del actual
