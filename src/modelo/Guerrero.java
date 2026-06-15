@@ -85,4 +85,6 @@ public class Guerrero extends Entidad {
 
     public int getFuerza() { return fuerza; }
     public void setFuerza(int fuerza) { this.fuerza = fuerza; }
+    
+    
 }

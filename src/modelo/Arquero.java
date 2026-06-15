@@ -81,4 +81,6 @@ public class Arquero extends Entidad {
 
     public int getPunteria() { return punteria; }
     public void setPunteria(int punteria) { this.punteria = punteria; }
+    
+   
 }

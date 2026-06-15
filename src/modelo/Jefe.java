@@ -39,4 +39,6 @@ public class Jefe extends Entidad {
             ((Entidad) objetivo).aplicarEfecto(hab.getEfecto().copiar());
         }
     }
+    
+
 }

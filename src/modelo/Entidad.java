@@ -200,4 +200,15 @@ public abstract class Entidad implements IEntidad {
 	public EntidadView toView() {
 		return new EntidadView(this.nombre, this.vida, this.vidaMax, this.energia, this.energiaMax);
 	}
+
+
+	
+	
+	
+	
+	
+
+	
+	
+	
 }

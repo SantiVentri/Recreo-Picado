@@ -23,7 +23,8 @@ import modelo.Item;
 import orquestador.Orquestador;
 
 public class BatallaPanel extends JPanel {
-
+	
+	private CharacterOrderPanel characterOrderPanel;
     private VentanaLayout ventana;
 
     // Estado de selección de objetivo
@@ -116,6 +117,16 @@ public class BatallaPanel extends JPanel {
             tamañoReal.height
         );
         add(panelBotones);
+        
+        characterOrderPanel = new CharacterOrderPanel();
+
+        characterOrderPanel.setBounds(
+                -15,
+                -35,
+                270,
+                190);
+
+        add(characterOrderPanel);
     }
 
     public void cargarEntidades() {
@@ -306,6 +317,7 @@ public class BatallaPanel extends JPanel {
         }
 
         Orquestador.getInstance().proximoTurno();
+        characterOrderPanel.repaint();
 
         if (Orquestador.getInstance().batallaTerminada()) {
             finalizarBatalla();
@@ -372,6 +384,7 @@ public class BatallaPanel extends JPanel {
         if (btnDefender  != null) btnDefender.setEnabled(habilitado);
         if (btnHabilidad != null) btnHabilidad.setEnabled(habilitado);
         if (!habilitado) ocultarFlechas();
+        if (characterOrderPanel != null) characterOrderPanel.repaint();
     }
 
     // ─── PINTAR ARENA ─────────────────────────────────────────────────────────

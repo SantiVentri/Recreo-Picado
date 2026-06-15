@@ -82,4 +82,6 @@ public class Curandera extends Entidad {
  
     public int getAmistad() { return amistad; }
     public void setAmistad(int amistad) { this.amistad = amistad; }
+    
+    
 }

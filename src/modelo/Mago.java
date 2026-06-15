@@ -90,4 +90,6 @@ public class Mago extends Entidad {
 
     public int getInteligencia() { return inteligencia; }
     public void setInteligencia(int inteligencia) { this.inteligencia = inteligencia; }
+    
+	
 }
