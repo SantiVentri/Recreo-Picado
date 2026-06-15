@@ -18,21 +18,23 @@ public class Orquestador implements IOrquestador {
     private Equipo alumnos;
     private Batalla batalla;
 
-    // Lista de alumnos ordenada por velocidad (solo alumnos)
+    // Lista de alumnos ordenada por velocidad (mayor velocidad = primero)
     private List<Entidad> turnosAlumnos;
     private int indiceAlumno;
 
-    // Índice rotativo de enemigos (para que en cada ronda ataque el siguiente)
+    // Lista de enemigos ordenada por velocidad (mayor velocidad = primero)
+    private List<Entidad> turnosEnemigos;
     private int indiceEnemigo;
 
     // true = turno de alumno, false = turno de enemigo
     private boolean turnoAlumno;
 
     private Orquestador() {
-        this.turnosAlumnos = new ArrayList<Entidad>();
-        this.indiceAlumno  = 0;
-        this.indiceEnemigo = 0;
-        this.turnoAlumno   = true;
+        this.turnosAlumnos  = new ArrayList<Entidad>();
+        this.turnosEnemigos = new ArrayList<Entidad>();
+        this.indiceAlumno   = 0;
+        this.indiceEnemigo  = 0;
+        this.turnoAlumno    = true;
     }
 
     public static Orquestador getInstance() {
@@ -50,21 +52,26 @@ public class Orquestador implements IOrquestador {
         this.indiceEnemigo = 0;
         this.turnoAlumno   = true;
 
+        // Ordenar alumnos por velocidad descendente
         turnosAlumnos.clear();
         turnosAlumnos.addAll(alumnos.getEntidades());
         turnosAlumnos.sort(Comparator.comparing(Entidad::getVelocidad).reversed());
+
+        // Ordenar enemigos por velocidad descendente
+        turnosEnemigos.clear();
+        turnosEnemigos.addAll(batalla.getEnemigos().getEntidades());
+        turnosEnemigos.sort(Comparator.comparing(Entidad::getVelocidad).reversed());
 
         // Avanzar al primer alumno vivo
         avanzarAlumnoVivo();
     }
 
-    // Devuelve la entidad que tiene el turno ahora
     @Override
     public Entidad getEntidadActual() {
         if (turnoAlumno) {
             return turnosAlumnos.get(indiceAlumno);
         } else {
-            return batalla.getEnemigos().getEntidades().get(indiceEnemigo);
+            return turnosEnemigos.get(indiceEnemigo);
         }
     }
 
@@ -73,15 +80,14 @@ public class Orquestador implements IOrquestador {
         return turnoAlumno;
     }
 
-    // Alterna: si era alumno pasa a enemigo, si era enemigo pasa al siguiente alumno
     @Override
     public void proximoTurno() {
         if (turnoAlumno) {
-            // Pasar al turno del enemigo: avanzar al siguiente enemigo vivo
+            // Después del alumno, le toca al siguiente enemigo vivo
             avanzarEnemigoVivo();
             turnoAlumno = false;
         } else {
-            // Pasar al turno del siguiente alumno vivo
+            // Después del enemigo, le toca al siguiente alumno vivo
             indiceAlumno = (indiceAlumno + 1) % turnosAlumnos.size();
             avanzarAlumnoVivo();
             turnoAlumno = true;
@@ -98,12 +104,12 @@ public class Orquestador implements IOrquestador {
     }
 
     private void avanzarEnemigoVivo() {
-        List<Entidad> enemigos = batalla.getEnemigos().getEntidades();
         int intentos = 0;
-        indiceEnemigo = (indiceEnemigo + 1) % enemigos.size();
-        while (!enemigos.get(indiceEnemigo).estaVivo()
-                && intentos < enemigos.size()) {
-            indiceEnemigo = (indiceEnemigo + 1) % enemigos.size();
+        // Avanzar al siguiente y buscar uno vivo
+        indiceEnemigo = (indiceEnemigo + 1) % turnosEnemigos.size();
+        while (!turnosEnemigos.get(indiceEnemigo).estaVivo()
+                && intentos < turnosEnemigos.size()) {
+            indiceEnemigo = (indiceEnemigo + 1) % turnosEnemigos.size();
             intentos++;
         }
     }
@@ -170,6 +176,7 @@ public class Orquestador implements IOrquestador {
         this.alumnos  = null;
         this.batalla  = null;
         this.turnosAlumnos.clear();
+        this.turnosEnemigos.clear();
         this.indiceAlumno  = 0;
         this.indiceEnemigo = 0;
         this.turnoAlumno   = true;
@@ -186,7 +193,49 @@ public class Orquestador implements IOrquestador {
     public Batalla getBatalla() { return batalla; }
     public int getTurnoActual() { return indiceAlumno; }
     public List<Entidad> getTurnos() { return turnosAlumnos; }
-    
+
+    /**
+     * Devuelve la lista completa de turnos intercalados (alumno, enemigo, alumno, enemigo...)
+     * comenzando desde la entidad que tiene el turno ahora.
+     * Útil para mostrar el panel de orden de turnos.
+     */
+    public List<Entidad> getTurnosCompletos() {
+        List<Entidad> resultado = new ArrayList<Entidad>();
+        if (turnosAlumnos.isEmpty()) return resultado;
+
+        int totalAlumnos  = turnosAlumnos.size();
+        int totalEnemigos = turnosEnemigos.size();
+        int maxPares = Math.max(totalAlumnos, totalEnemigos);
+
+        if (!turnoAlumno && totalEnemigos > 0) {
+            // Turno del enemigo: enemigo va primero
+            for (int i = 0; i < maxPares; i++) {
+                int idxE = (indiceEnemigo + i) % totalEnemigos;
+                Entidad enemigo = turnosEnemigos.get(idxE);
+                if (enemigo.estaVivo()) resultado.add(enemigo);
+
+                int idxA = (indiceAlumno + i) % totalAlumnos;
+                Entidad alumno = turnosAlumnos.get(idxA);
+                if (alumno.estaVivo()) resultado.add(alumno);
+            }
+        } else {
+            // Turno del alumno: alumno va primero
+            for (int i = 0; i < maxPares; i++) {
+                int idxA = (indiceAlumno + i) % totalAlumnos;
+                Entidad alumno = turnosAlumnos.get(idxA);
+                if (alumno.estaVivo()) resultado.add(alumno);
+
+                if (totalEnemigos > 0) {
+                    int idxE = (indiceEnemigo + 1 + i) % totalEnemigos;
+                    Entidad enemigo = turnosEnemigos.get(idxE);
+                    if (enemigo.estaVivo()) resultado.add(enemigo);
+                }
+            }
+        }
+
+        return resultado;
+    }
+
     public int getIndiceAlumnoActual() {
         if (!turnoAlumno || alumnos == null) return -1;
         Entidad actual = getEntidadActual();
@@ -197,11 +246,13 @@ public class Orquestador implements IOrquestador {
         return -1;
     }
 
-    /**
-     * Devuelve el índice del enemigo atacante en la lista de enemigos
-     * (el mismo orden que viewsEnemigos en BatallaPanel).
-     */
     public int getIndiceEnemigoActual() {
-        return indiceEnemigo;
+        if (turnoAlumno || batalla == null) return -1;
+        Entidad actual = getEntidadActual();
+        List<Entidad> lista = batalla.getEnemigos().getEntidades();
+        for (int i = 0; i < lista.size(); i++) {
+            if (lista.get(i) == actual) return i;
+        }
+        return -1;
     }
 }
