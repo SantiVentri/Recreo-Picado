@@ -6,6 +6,8 @@ import javax.swing.Timer;
 import enums.ANIMACIONES;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -43,6 +45,14 @@ public class EntidadView extends JPanel {
     private int frameActual = 0;
     private Timer animTimer;
 
+    // --- ANIMACIÓN DE ATAQUE (patrón del profe) ---
+    private Timer timerAtaque;
+    private long faseInicioMs;
+    private static final int DURACION_ATAQUE_MS = 750;
+
+    // Cuánto se expande el ancho durante el ataque (px extra)
+    private static final int EXTRA_ANCHO_ATAQUE = 180;
+
     // Constructor completo
     public EntidadView(String nombre, int vida, int vidaMax, int energia, int energiaMax, boolean mostrarHUD, float escala) {
         this.nombre = nombre;
@@ -56,7 +66,7 @@ public class EntidadView extends JPanel {
         this.setPreferredSize(new Dimension(320, 420));
         this.setOpaque(false);
 
-        this.animaciones = new HashMap<>();
+        this.animaciones = new HashMap();
         cargarAnimaciones();
 
         addMouseListener(new MouseAdapter() {
@@ -73,7 +83,11 @@ public class EntidadView extends JPanel {
             }
         });
 
-        animTimer = new Timer(100, e -> actualizarFrame());
+        animTimer = new Timer(100, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                actualizarFrame();
+            }
+        });
         animTimer.start();
     }
 
@@ -93,25 +107,68 @@ public class EntidadView extends JPanel {
     }
 
     private void cargarAnimaciones() {
-    	String nombreFormateado = nombre.toLowerCase().replace(" ", "_");
-        String pathIdle = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-idle.png";
-        switch (nombre) {
-            case "Mago":
-                animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
-                break;
-            case "Arquero":
-                animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
-                break;
-            case "Curandera":
-                animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
-                break;
-            case "Guerrero":
-                animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
-                break;
-            case "Jefa del Baño":
-                animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
-                break;
+        String nombreFormateado = nombre.toLowerCase().replace(" ", "_");
+        String pathIdle   = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-idle.png";
+        String pathAtaque = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-attack.png";
+
+        animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
+
+        // Usar sprite de ataque si existe; si no, usar el primer frame del idle
+        File archivoAtaque = new File(pathAtaque);
+        if (archivoAtaque.exists()) {
+            animaciones.put(ANIMACIONES.ATACAR, recortarSprite(pathAtaque, 1, 1));
+        } else {
+            animaciones.put(ANIMACIONES.ATACAR, recortarSprite(pathIdle, 1, 1));
         }
+    }
+
+    /**
+     * Inicia la animación de ataque.
+     * Expande los bounds del panel hacia el lado del enemigo durante el ataque
+     * y los restaura al terminar.
+     * BatallaPanel puede consultar estaAnimandoAtaque() para saber si terminó.
+     */
+    public void reproducirAnimacionAtaque() {
+        if (timerAtaque != null && timerAtaque.isRunning()) return;
+
+        // Guardar bounds originales
+        final int xOrig = getX();
+        final int yOrig = getY();
+        final int wOrig = getWidth();
+        final int hOrig = getHeight();
+
+        // Expandir hacia el lado del enemigo:
+        // - mira a la derecha (alumno): expandir hacia la derecha → x no cambia, w crece
+        // - mira a la izquierda (enemigo): expandir hacia la izquierda → x se corre, w crece
+        if (mirandoIzquierda) {
+            setBounds(xOrig - EXTRA_ANCHO_ATAQUE, yOrig, wOrig + EXTRA_ANCHO_ATAQUE, hOrig);
+        } else {
+            setBounds(xOrig, yOrig, wOrig + EXTRA_ANCHO_ATAQUE, hOrig);
+        }
+
+        setEstadoActual(ANIMACIONES.ATACAR);
+        faseInicioMs = System.currentTimeMillis();
+
+        timerAtaque = new Timer(16, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                long transcurrido = System.currentTimeMillis() - faseInicioMs;
+                if (transcurrido >= DURACION_ATAQUE_MS) {
+                    setEstadoActual(ANIMACIONES.IDLE);
+                    // Restaurar bounds originales
+                    setBounds(xOrig, yOrig, wOrig, hOrig);
+                    timerAtaque.stop();
+                }
+                repaint();
+            }
+        });
+        timerAtaque.start();
+    }
+
+    /**
+     * Devuelve true si la animación de ataque todavía está en curso.
+     */
+    public boolean estaAnimandoAtaque() {
+        return timerAtaque != null && timerAtaque.isRunning();
     }
 
     private BufferedImage[] recortarSprite(String ruta, int cantidadFrames, int columnas) {
@@ -232,26 +289,40 @@ public class EntidadView extends JPanel {
         // --- SPRITE Y SOMBRA ---
         int ySprite;
         if (mostrarHUD) {
-            int yVida   = inicioY + 10;
+            int yVida    = inicioY + 10;
             int yEnergia = yVida + altoBarras + 5;
             ySprite = yEnergia + altoBarras + 20;
         } else {
             ySprite = inicioY;
         }
 
-        // Tamaño base * escala
-        int anchoBase  = (this.nombre.equals("Jefe_1")) ? 400 : 300;
-        int altoBase   = anchoBase;
+        int anchoBase = (this.nombre.equals("Jefe_1")) ? 400 : 300;
+        int altoBase = anchoBase;
         int offsetSombra = (this.nombre.equals("Jefe_1")) ? 65 : 52;
 
         int anchoEscalado = (int) (anchoBase * escala);
-        int altoEscalado  = (int) (altoBase  * escala);
+        int altoEscalado = (int) (altoBase  * escala);
 
         if (this.nombre.equals("Jefe_1")) {
             ySprite -= (int) (80 * escala);
         }
 
-        int xSprite = centroX - (anchoEscalado / 2);
+        // Durante el ataque el sprite se ancla al borde interno
+        // (lado opuesto al enemigo) para que el contenido extra salga hacia el enemigo.
+        int xSprite;
+        if (estadoActual == ANIMACIONES.ATACAR) {
+            if (mirandoIzquierda) {
+                // Enemigo: mira izquierda, el panel se extendió hacia la izquierda.
+                // Anclar a la derecha del panel (borde interno).
+                xSprite = getWidth() - anchoEscalado;
+            } else {
+                // Alumno: mira derecha, el panel se extendió hacia la derecha.
+                // Anclar a la izquierda del panel (borde interno).
+                xSprite = 0;
+            }
+        } else {
+            xSprite = centroX - (anchoEscalado / 2);
+        }
 
         BufferedImage[] frames = animaciones.get(estadoActual);
 
@@ -259,7 +330,7 @@ public class EntidadView extends JPanel {
         int anchoSombraBase = (this.nombre.equals("Jefe_1")) ? 130 : 95;
         int anchoSombra = (int) (anchoSombraBase * escala);
         int altoSombra  = (int) (30 * escala);
-        int xSombra = centroX - (anchoSombra / 2);
+        int xSombra = xSprite + (anchoEscalado / 2) - (anchoSombra / 2);
         int ySombra = ySprite + altoEscalado - (int) (offsetSombra * escala);
 
         Graphics2D g2DSombra = (Graphics2D) g2D.create();

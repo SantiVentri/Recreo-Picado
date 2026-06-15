@@ -32,11 +32,11 @@ public class BatallaPanel extends JPanel {
     private int indiceObjetivoActual = 0;
 
     // Referencias a EntidadViews
-    private List<EntidadView> viewsAlumnos  = new ArrayList<EntidadView>();
-    private List<EntidadView> viewsEnemigos = new ArrayList<EntidadView>();
+    private List<EntidadView> viewsAlumnos  = new ArrayList();
+    private List<EntidadView> viewsEnemigos = new ArrayList();
 
     // Flechas flotantes sobre cada enemigo (una por enemigo, se muestran/ocultan)
-    private List<JLabel> flechasEnemigos = new ArrayList<JLabel>();
+    private List<JLabel> flechasEnemigos = new ArrayList();
 
     // Botones
     private JButton btnAtacar;
@@ -137,8 +137,8 @@ public class BatallaPanel extends JPanel {
         int evAncho = 140;
         int evAlto = 360;
 
-        // ALUMNOS
-        for (int i = 0; i < alumnos.size(); i++) {
+        // ALUMNOS — se agregan de atrás hacia adelante (índice mayor = más adelante = encima)
+        for (int i = alumnos.size() - 1; i >= 0; i--) {
             EntidadView ev = alumnos.get(i).toView();
             ev.setMostrarHUD(true);
             ev.setMirandoIzquierda(false);
@@ -146,19 +146,28 @@ public class BatallaPanel extends JPanel {
             viewsAlumnos.add(ev);
             add(ev);
         }
+        // Revertir la lista para que el índice coincida con el orden original de alumnos
+        java.util.Collections.reverse(viewsAlumnos);
 
         // ENEMIGOS + flechas
         Image imgFlecha = cargarFlecha();
 
+        // Primero crear todos los views de enemigos (en orden) para tener los listeners correctos,
+        // luego agregarlos al panel de atrás hacia adelante para el z-order correcto.
+        int[] evXArr = new int[enemigos.size()];
+        int[] evYArr = new int[enemigos.size()];
+        JLabel[] flechaArr = new JLabel[enemigos.size()];
+
         for (int i = 0; i < enemigos.size(); i++) {
             final int idx = i;
 
-            // EntidadView del enemigo
             EntidadView ev = enemigos.get(i).toView();
             ev.setMostrarHUD(true);
             ev.setMirandoIzquierda(true);
             int evX = enemigoBaseX + i * pasoX;
             int evY = baseY + i * pasoY;
+            evXArr[i] = evX;
+            evYArr[i] = evY;
             ev.setBounds(evX, evY, evAncho, evAlto);
 
             ev.setClickListener(new EntidadView.ClickListener() {
@@ -168,16 +177,27 @@ public class BatallaPanel extends JPanel {
                         .getBatalla().getEnemigos().getEntidades().get(idx);
                     if (!objetivo.estaVivo()) return;
 
-                    // Área clickeable: 80px centrados en el EntidadView
                     int centro = origen.getWidth() / 2;
                     if (clickX < centro - 40 || clickX > centro + 40) return;
 
                     ocultarFlechas();
                     indiceObjetivoActual = idx;
+
+                    int idxAtacante = Orquestador.getInstance().getIndiceAlumnoActual();
+                    final EntidadView viewAtacante = (idxAtacante >= 0 && idxAtacante < viewsAlumnos.size())
+                        ? viewsAlumnos.get(idxAtacante) : null;
+
                     Orquestador.getInstance().ejecutarTurno(accionPendiente, objetivo, null);
                     esperandoObjetivo = false;
                     accionPendiente   = null;
-                    avanzarTurno();
+                    setBotonesHabilitados(false);
+
+                    if (viewAtacante != null) {
+                        viewAtacante.reproducirAnimacionAtaque();
+                        esperarFinAnimacion(viewAtacante);
+                    } else {
+                        avanzarTurno();
+                    }
                 }
             });
 
@@ -187,23 +207,20 @@ public class BatallaPanel extends JPanel {
                     Entidad e = Orquestador.getInstance()
                         .getBatalla().getEnemigos().getEntidades().get(idx);
                     if (!e.estaVivo()) return;
-                    // Mostrar solo la flecha de este enemigo
                     ocultarFlechas();
                     flechasEnemigos.get(idx).setVisible(true);
                     indiceObjetivoActual = idx;
                 }
                 public void onExit() {
                     if (!esperandoObjetivo) return;
-                    // Volver a mostrar la flecha del objetivo por defecto
                     ocultarFlechas();
                     flechasEnemigos.get(indiceObjetivoActual).setVisible(true);
                 }
             });
 
             viewsEnemigos.add(ev);
-            add(ev);
 
-            // Flecha encima del enemigo (oculta por defecto)
+            // Preparar flecha
             JLabel lblFlecha = new JLabel();
             if (imgFlecha != null) {
                 Image flechaEscalada = imgFlecha.getScaledInstance(FLECHA_W, FLECHA_H, Image.SCALE_SMOOTH);
@@ -214,7 +231,13 @@ public class BatallaPanel extends JPanel {
             lblFlecha.setBounds(flechaX, flechaY, FLECHA_W, FLECHA_H);
             lblFlecha.setVisible(false);
             flechasEnemigos.add(lblFlecha);
-            add(lblFlecha);
+            flechaArr[i] = lblFlecha;
+        }
+
+        // Agregar al panel de atrás hacia adelante para z-order correcto
+        for (int i = enemigos.size() - 1; i >= 0; i--) {
+            add(viewsEnemigos.get(i));
+            add(flechaArr[i]);
         }
 
         revalidate();
@@ -230,13 +253,30 @@ public class BatallaPanel extends JPanel {
         }
     }
 
+    // ─── ESPERAR FIN DE ANIMACIÓN (patrón del profe) ──────────────────────────
+    //
+    // Timer de 16ms que chequea si la animación terminó.
+    // Cuando estaAnimandoAtaque() devuelve false, detiene el timer y avanza el turno.
+
+    private void esperarFinAnimacion(final EntidadView atacante) {
+        Timer timerEspera = new Timer(16, null);
+        timerEspera.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (!atacante.estaAnimandoAtaque()) {
+                    timerEspera.stop();
+                    avanzarTurno();
+                }
+            }
+        });
+        timerEspera.start();
+    }
+
     // ─── SELECCIÓN DE OBJETIVO ────────────────────────────────────────────────
 
     private void activarSeleccionObjetivo(ACCIONES accion) {
         this.accionPendiente   = accion;
         this.esperandoObjetivo = true;
 
-        // Mostrar flecha sobre el primer enemigo vivo por defecto
         List<Entidad> enemigos = Orquestador.getInstance()
             .getBatalla().getEnemigos().getEntidades();
         ocultarFlechas();
@@ -255,7 +295,7 @@ public class BatallaPanel extends JPanel {
         }
     }
 
-    // ─── FLUJO DE TURNOS (uno a uno) ──────────────────────────────────────────
+    // ─── FLUJO DE TURNOS ──────────────────────────────────────────────────────
 
     private void avanzarTurno() {
         actualizarVistas();
@@ -265,7 +305,6 @@ public class BatallaPanel extends JPanel {
             return;
         }
 
-        // Pasar al siguiente turno (alumno→enemigo o enemigo→alumno)
         Orquestador.getInstance().proximoTurno();
 
         if (Orquestador.getInstance().batallaTerminada()) {
@@ -274,19 +313,30 @@ public class BatallaPanel extends JPanel {
         }
 
         if (!Orquestador.getInstance().esTurnoDeAlumno()) {
-            // Turno del enemigo: deshabilitar botones, esperar 800ms y ejecutar
+            // Turno del enemigo: esperar 800ms, reproducir animación, luego avanzar
             setBotonesHabilitados(false);
-            Timer timer = new Timer(800, new ActionListener() {
+            Timer timerPreAtaque = new Timer(800, null);
+            timerPreAtaque.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
+                    timerPreAtaque.stop();
+
+                    int idxEnemigo = Orquestador.getInstance().getIndiceEnemigoActual();
+                    final EntidadView viewEnemigo = (idxEnemigo >= 0 && idxEnemigo < viewsEnemigos.size())
+                        ? viewsEnemigos.get(idxEnemigo) : null;
+
                     Orquestador.getInstance().ejecutarTurnoEnemigo();
-                    // Volver al turno del alumno
-                    avanzarTurno();
+
+                    if (viewEnemigo != null) {
+                        viewEnemigo.reproducirAnimacionAtaque();
+                        esperarFinAnimacion(viewEnemigo);
+                    } else {
+                        avanzarTurno();
+                    }
                 }
             });
-            timer.setRepeats(false);
-            timer.start();
+            timerPreAtaque.setRepeats(false);
+            timerPreAtaque.start();
         } else {
-            // Es turno del alumno: habilitar botones
             setBotonesHabilitados(true);
         }
     }
@@ -318,19 +368,10 @@ public class BatallaPanel extends JPanel {
     }
 
     private void setBotonesHabilitados(boolean habilitado) {
-        if (btnAtacar    != null) {
-        	btnAtacar.setEnabled(habilitado);
-        }
-        if (btnDefender  != null) {
-        	btnDefender.setEnabled(habilitado);
-        }
-        if (btnHabilidad != null) {
-        	btnHabilidad.setEnabled(habilitado);
-        }
-
-        if (!habilitado) {
-        	ocultarFlechas();
-        }
+        if (btnAtacar    != null) btnAtacar.setEnabled(habilitado);
+        if (btnDefender  != null) btnDefender.setEnabled(habilitado);
+        if (btnHabilidad != null) btnHabilidad.setEnabled(habilitado);
+        if (!habilitado) ocultarFlechas();
     }
 
     // ─── PINTAR ARENA ─────────────────────────────────────────────────────────

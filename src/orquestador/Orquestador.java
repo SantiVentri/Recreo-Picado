@@ -186,4 +186,22 @@ public class Orquestador implements IOrquestador {
     public Batalla getBatalla() { return batalla; }
     public int getTurnoActual() { return indiceAlumno; }
     public List<Entidad> getTurnos() { return turnosAlumnos; }
+    
+    public int getIndiceAlumnoActual() {
+        if (!turnoAlumno || alumnos == null) return -1;
+        Entidad actual = getEntidadActual();
+        List<Entidad> lista = alumnos.getEntidades();
+        for (int i = 0; i < lista.size(); i++) {
+            if (lista.get(i) == actual) return i;
+        }
+        return -1;
+    }
+
+    /**
+     * Devuelve el índice del enemigo atacante en la lista de enemigos
+     * (el mismo orden que viewsEnemigos en BatallaPanel).
+     */
+    public int getIndiceEnemigoActual() {
+        return indiceEnemigo;
+    }
 }
