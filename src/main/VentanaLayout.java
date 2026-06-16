@@ -54,7 +54,7 @@ public class VentanaLayout extends JFrame {
 		mainPanel.add(new Jugador3(this), "JUGADOR3");
 		mainPanel.add(new Jugador4(this), "JUGADOR4");
 		mainPanel.add(new LevelsPanel(this, partidaActual.getBatallas()), "NIVELES");
-		mainPanel.add(new Kiosko(this), "KIOSKO");
+		mainPanel.add(new KioskoPanel(this), "KIOSKO");
 		batallaPanel = new BatallaPanel(this);
 		mainPanel.add(batallaPanel, "BATALLA");
 		
