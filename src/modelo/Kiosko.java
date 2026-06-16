@@ -61,7 +61,7 @@ public class Kiosko extends JPanel {
         // Panel de inventario de tienda
         DefaultListModel<Item> modeloLista = new DefaultListModel<>();
         for (Item item : items) {
-            modeloLista.addElement(item); // Agregamos el objeto entero, no solo el texto
+            modeloLista.addElement(item); 
         }
         
         listaInventarioUI = new JList<>(modeloLista);
@@ -72,16 +72,16 @@ public class Kiosko extends JPanel {
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 
-                // Hacemos un Cast (conversión explícita de un tipo de dato a otro)
+                
                 Item item = (Item) value; 
                 
-                // Seteamos el texto
+                
                 label.setText(item.getNombre() + " - $" + item.getValor() + " (" + item.getDescripcion() + ")");
                 
-                // Intentamos cargar y escalar la imagen del ítem
+                
                 try {
                     ImageIcon iconoOriginal = new ImageIcon(item.getRutaImagen());
-                    // Escalamos la imagen a 32x32 píxeles para que no deforme la lista
+                    
                     Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
                     label.setIcon(new ImageIcon(imagenEscalada));
                 } catch (Exception e) {
@@ -95,7 +95,7 @@ public class Kiosko extends JPanel {
         JScrollPane scrollPane = new JScrollPane(listaInventarioUI);
         
         JPanel panelCentro = new JPanel();
-        panelCentro.setLayout(new BorderLayout()); // Para que el scroll ocupe todo el espacio
+        panelCentro.setLayout(new BorderLayout());
         panelCentro.add(scrollPane, BorderLayout.CENTER);
         this.add(panelCentro, BorderLayout.CENTER);
 
@@ -128,7 +128,7 @@ public class Kiosko extends JPanel {
         
         if (Repositorio.getInstance().getPartidaActual().getPesos() >= costoTotal) {
             
-            // BUG CORREGIDO: Se restaba 'cantidad' en vez de 'costoTotal'
+            
             Repositorio.getInstance().getPartidaActual().quitarPesos(costoTotal);
             Repositorio.getInstance().getPartidaActual().agregarItem(item);
             
@@ -143,7 +143,7 @@ public class Kiosko extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         
-        // Cuando tengas el fondo del kiosko, asegúrate de que la ruta sea correcta
+        // Falta agregar el fondo y corregir la ruta de la imagen
         Image imagenFondo = new ImageIcon("src/resources/fondos/fondo_kiosko.png").getImage();
         g.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
     }
