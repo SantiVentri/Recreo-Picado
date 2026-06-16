@@ -2,10 +2,11 @@ package modelo;
 
 public class Arma extends Item {
     private String tipo;
-    private int danioBase; 
+    private int danioBase;
 
-    public Arma(String nombre, String descripcion, int valor, String tipo, int danioBase) {
-        super(nombre, descripcion, valor);
+    // Constructor
+    public Arma(String nombre, String descripcion, int valor, String tipo, int danioBase, String rutaImagen) {
+        super(nombre, descripcion, valor, rutaImagen);
         this.tipo = tipo;
         this.danioBase = danioBase;
     }

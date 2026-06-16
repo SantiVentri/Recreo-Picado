@@ -1,13 +1,15 @@
 package modelo;
-import enums.EFECTOS; 
+
+import enums.EFECTOS;
 
 public class Pocion extends Item {
     private int cantidadCuracion;
     private int cantidadMana; 
-    private EFECTOS efecto; 
+    private EFECTOS efecto;
 
-    public Pocion(String nombre, String descripcion, int valor, int cantidadCuracion, int cantidadMana, EFECTOS efecto) {
-        super(nombre, descripcion, valor);
+    // Constructor
+    public Pocion(String nombre, String descripcion, int valor, int cantidadCuracion, int cantidadMana, EFECTOS efecto, String rutaImagen) {
+        super(nombre, descripcion, valor, rutaImagen);
         this.cantidadCuracion = cantidadCuracion;
         this.cantidadMana = cantidadMana;
         this.efecto = efecto;

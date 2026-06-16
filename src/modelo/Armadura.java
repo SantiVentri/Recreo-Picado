@@ -5,8 +5,9 @@ public class Armadura extends Item {
     private int vidaBonus;    
     private int defensaBonus; 
 
-    public Armadura(String nombre, String descripcion, int valor, String tipo, int vidaBonus, int defensaBonus) {
-        super(nombre, descripcion, valor);
+    // Constructor 
+    public Armadura(String nombre, String descripcion, int valor, String tipo, int vidaBonus, int defensaBonus, String rutaImagen) {
+        super(nombre, descripcion, valor, rutaImagen);
         this.tipo = tipo;
         this.vidaBonus = vidaBonus;
         this.defensaBonus = defensaBonus;
