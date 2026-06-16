@@ -6,16 +6,13 @@ import java.awt.*;
 
 public class Kiosko extends JPanel {
     
-    private Item[] items; 
-    private Equipo equipoJugador; 
-    
+    private Item[] items;    
     
     private JLabel lblPesos;
     private JList<String> listaInventarioUI;
     private JPanel panelPadre; 
 
-    public Kiosko(Equipo equipoJugador, JPanel panelPadre) {
-        this.equipoJugador = equipoJugador;
+    public Kiosko(JPanel panelPadre) {
         this.panelPadre = panelPadre;
         this.setLayout(new BorderLayout());
         
@@ -34,7 +31,7 @@ public class Kiosko extends JPanel {
 
         //Indicador de pesos del usuario
         JPanel panelSuperior = new JPanel();
-        lblPesos = new JLabel("Pesos de la Party: $" + equipoJugador.getPesos()); 
+        lblPesos = new JLabel("Pesos de la Party: $" + Repositorio.getInstance().getPartidaActual().getPesos()); 
         lblPesos.setFont(new Font("Arial", Font.BOLD, 24));
         panelSuperior.add(lblPesos);
         this.add(panelSuperior, BorderLayout.NORTH);
@@ -79,13 +76,13 @@ public class Kiosko extends JPanel {
     public void comprarItem(Item item, int cantidad) {
         int costoTotal = item.getValor() * cantidad;
         
-        if (equipoJugador.getPesos() >= costoTotal) {
+        if (Repositorio.getInstance().getPartidaActual().getPesos() >= costoTotal) {
             
             
-            equipoJugador.restarPesos(costoTotal); 
-            equipoJugador.agregarAlInventario(item);
+        	Repositorio.getInstance().getPartidaActual().quitarPesos(cantidad);
+        	Repositorio.getInstance().getPartidaActual().agregarItem(item);
             
-            lblPesos.setText("Pesos de la Party: $" + equipoJugador.getPesos());
+            lblPesos.setText("Pesos de la Party: $" + Repositorio.getInstance().getPartidaActual().getPesos());
             JOptionPane.showMessageDialog(this, "¡Compraste " + cantidad + " " + item.getNombre() + "!");
         } else {
             JOptionPane.showMessageDialog(this, "Pesos insuficientes.", "Error", JOptionPane.ERROR_MESSAGE);
