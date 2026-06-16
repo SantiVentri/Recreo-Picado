@@ -3,6 +3,7 @@ package modelo;
 import javax.swing.*;
 import main.VentanaLayout;
 import java.awt.*;
+import java.util.List;
 
 public class Kiosko extends JPanel {
     
@@ -52,7 +53,8 @@ public class Kiosko extends JPanel {
 
         // Indicador de pesos del usuario
         JPanel panelSuperior = new JPanel();
-        lblPesos = new JLabel("Pesos de la Party: $" + Repositorio.getInstance().getPartidaActual().getPesos()); 
+        Equipo equipoJugador = Repositorio.getInstance().getPartidaActual().getAlumnos();
+        lblPesos = new JLabel("Pesos de la Party: $" + equipoJugador.getPesos()); 
         lblPesos.setFont(new Font("Arial", Font.BOLD, 24));
         panelSuperior.add(lblPesos);
         this.add(panelSuperior, BorderLayout.NORTH);
@@ -104,8 +106,41 @@ public class Kiosko extends JPanel {
 
         btnComprar.addActionListener(e -> {
             Item itemSeleccionado = listaInventarioUI.getSelectedValue();
+            
             if (itemSeleccionado != null) {
-                comprarItem(itemSeleccionado, 1); 
+                //Buscama la lista de personajes del equipo
+                Equipo equipo = Repositorio.getInstance().getPartidaActual().getAlumnos();
+                List<Entidad> personajes = equipo.getEntidades();
+
+                String[] nombresPersonajes = new String[personajes.size()];
+                for (int i = 0; i < personajes.size(); i++) {
+                    nombresPersonajes[i] = personajes.get(i).getNombre(); 
+                }
+
+                String elegido = (String) JOptionPane.showInputDialog(
+                        this,
+                        "¿A quién le querés dar " + itemSeleccionado.getNombre() + "?",
+                        "Asignar Ítem",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        nombresPersonajes,
+                        nombresPersonajes[0]
+                );
+
+                if (elegido != null) {
+                    Entidad destinatario = null;
+                    // Busca cuál fue el objeto
+                    for (Entidad p : personajes) {
+                        if (p.getNombre().equals(elegido)) {
+                            destinatario = p;
+                            break;
+                        }
+                    }
+                    
+                    // Compra el item para el personaje seleccionado
+                    comprarItem(itemSeleccionado, destinatario);
+                }
+                
             } else {
                 JOptionPane.showMessageDialog(this, "Selecciona un ítem primero.");
             }
@@ -121,17 +156,21 @@ public class Kiosko extends JPanel {
     }
 
     // Métodos
-    public void comprarItem(Item item, int cantidad) {
-        int costoTotal = item.getValor() * cantidad;
+    public void comprarItem(Item item, Entidad destinatario) {
+        int costoTotal = item.getValor();
+        Equipo equipoJugador = Repositorio.getInstance().getPartidaActual().getAlumnos();
         
-        if (Repositorio.getInstance().getPartidaActual().getPesos() >= costoTotal) {
+        // Verificamos si la party tiene la plata suficiente
+        if (equipoJugador.getPesos() >= costoTotal) {
             
+            // Cobra la plata del pozo común del equipo
+            equipoJugador.restarPesos(costoTotal);
+            destinatario.agregarItem(item); 
             
-            Repositorio.getInstance().getPartidaActual().quitarPesos(costoTotal);
-            Repositorio.getInstance().getPartidaActual().agregarItem(item);
+            // Actualiza
+            lblPesos.setText("Pesos de la Party: $" + equipoJugador.getPesos());
+            JOptionPane.showMessageDialog(this, "¡" + destinatario.getNombre() + " recibió " + item.getNombre() + "!");
             
-            lblPesos.setText("Pesos de la Party: $" + Repositorio.getInstance().getPartidaActual().getPesos());
-            JOptionPane.showMessageDialog(this, "¡Compraste " + cantidad + " " + item.getNombre() + "!");
         } else {
             JOptionPane.showMessageDialog(this, "Pesos insuficientes.", "Error", JOptionPane.ERROR_MESSAGE);
         }
