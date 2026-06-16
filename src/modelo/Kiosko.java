@@ -9,7 +9,6 @@ public class Kiosko extends JPanel {
     private Item[] items;    
     
     private JLabel lblPesos;
-    // Cambiamos a JList<Item> para aprovechar la POO (Programación Orientada a Objetos)
     private JList<Item> listaInventarioUI; 
     private VentanaLayout ventana; 
 
@@ -66,7 +65,6 @@ public class Kiosko extends JPanel {
         
         listaInventarioUI = new JList<>(modeloLista);
         
-        // Usamos un CellRenderer para personalizar la UI (Interfaz de Usuario) de la lista
         listaInventarioUI.setCellRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
