@@ -214,7 +214,7 @@ public class Orquestador implements IOrquestador {
                 Entidad enemigo = turnosEnemigos.get(idxE);
                 if (enemigo.estaVivo()) resultado.add(enemigo);
 
-                int idxA = (indiceAlumno + i) % totalAlumnos;
+                int idxA = (indiceAlumno + 1 + i) % totalAlumnos;
                 Entidad alumno = turnosAlumnos.get(idxA);
                 if (alumno.estaVivo()) resultado.add(alumno);
             }
@@ -226,7 +226,7 @@ public class Orquestador implements IOrquestador {
                 if (alumno.estaVivo()) resultado.add(alumno);
 
                 if (totalEnemigos > 0) {
-                    int idxE = (indiceEnemigo + 1 + i) % totalEnemigos;
+                    int idxE = (indiceEnemigo + i) % totalEnemigos;
                     Entidad enemigo = turnosEnemigos.get(idxE);
                     if (enemigo.estaVivo()) resultado.add(enemigo);
                 }

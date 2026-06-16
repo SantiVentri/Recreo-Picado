@@ -46,7 +46,8 @@ public class CharacterOrderPanel extends JPanel {
         int x = 0;
         int y = 50;
 
-        for (int i = 0; i < orden.size(); i++) {
+        int cantidadAMostrar = Math.min(orden.size(), 4);
+        for (int i = 0; i < cantidadAMostrar; i++) {
             Entidad entidad = orden.get(i);
             Image img = obtenerImagen(entidad);
             if (img == null) continue;
