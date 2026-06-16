@@ -2,6 +2,9 @@ package modelo;
 
 import modelo.itemFactory;
 import javax.swing.*;
+
+import main.VentanaLayout;
+
 import java.awt.*;
 
 public class Kiosko extends JPanel {
@@ -10,10 +13,10 @@ public class Kiosko extends JPanel {
     
     private JLabel lblPesos;
     private JList<String> listaInventarioUI;
-    private JPanel panelPadre; 
+    private VentanaLayout ventana; 
 
-    public Kiosko(JPanel panelPadre) {
-        this.panelPadre = panelPadre;
+    public Kiosko(VentanaLayout ventana) {
+        this.ventana = ventana;
         this.setLayout(new BorderLayout());
         
         this.items = new Item[] {
@@ -63,8 +66,7 @@ public class Kiosko extends JPanel {
         });
 
         btnSalir.addActionListener(e -> {
-            CardLayout cl = (CardLayout) panelPadre.getLayout();
-            cl.show(panelPadre, "PANTALLA_MAPA"); // Cambiar por tu pantalla previa
+            ventana.verMenu();
         });
 
         panelInferior.add(btnComprar);
