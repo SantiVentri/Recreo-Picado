@@ -39,7 +39,7 @@ public class Kiosko {
         return itemsDisponibles;
     }
 
-    public boolean comprarItem(Item item, Entidad destinatario, Equipo equipo) {
+    public boolean comprarItem(Item item, Equipo equipo) {
         int costoTotal = item.getValor();
 
         //Valida si hay plata suficiente
@@ -48,8 +48,8 @@ public class Kiosko {
             //Descuenta la plata del pozo común
             equipo.restarPesos(costoTotal);
             
-            //Asigna el ítem al inventario del personaje seleccionado
-            equipo.asignarItemAEntidad(item, destinatario);
+            //Agrega el ítem al inventario general del equipo
+            equipo.agregarItem(item);
             
             // Compra exitosa
             return true;
