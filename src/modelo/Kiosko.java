@@ -42,14 +42,14 @@ public class Kiosko {
     public boolean comprarItem(Item item, Equipo equipo) {
         int costoTotal = item.getValor();
 
-        //Valida si hay plata suficiente
-        if (equipo.getPesos() >= costoTotal) {
+        // Valida si hay plata suficiente
+        if (Repositorio.getInstance().getPartidaActual().getPesos() >= costoTotal) {
             
-            //Descuenta la plata del pozo común
-            equipo.restarPesos(costoTotal);
+            // Descuenta los pesos de la partida
+        	Repositorio.getInstance().getPartidaActual().quitarPesos(costoTotal);
             
-            //Agrega el ítem al inventario general del equipo
-            equipo.agregarItem(item);
+            // Agrega el ítem al inventario de la partida
+            Repositorio.getInstance().getPartidaActual().agregarItem(item);
             
             // Compra exitosa
             return true;
