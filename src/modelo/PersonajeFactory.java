@@ -23,8 +23,44 @@ public class PersonajeFactory {
     }
     
     // Jefes y Secuaces
+    public static Secuaz crearSecuazBasico(int numeroBatalla) {
+    	String nombre;
+    	
+    	switch (numeroBatalla) {
+    		case 2:
+    			nombre = "Secuaz de la enfermería";
+    			break;
+    		case 3:
+    			nombre = "Secuaz del patio";
+    			break;
+    		case 4:
+    			nombre = "Secuaz del director";
+    			break;
+    		default:
+    			nombre = "Secuaz";
+    			break;
+    	}
+    	
+        return new Secuaz(nombre, 50, 40, 7, 9, 2, null);
+    }
+    
     public static Jefe crearJefe1() {
-        Habilidad habilidad = new Habilidad("Botellazo químico", "Lanza un producto de limpieza y envenena al objetivo", 20, 18, EfectoFactory.crearVeneno());
-        return new Jefe("Jefa del Baño", 110, 80, 6, 13, 5, habilidad);
+        Habilidad habilidad = new Habilidad("Botellazo químico", "Lanza un producto de limpieza y envenena al objetivo", 20, 24, EfectoFactory.crearVeneno());
+        return new Jefe("Jefa del Baño", 160, 90, 6, 16, 7, habilidad);
+    }
+
+    public static Jefe crearJefe2() {
+        Habilidad habilidad = new Habilidad("Inyección Dolorosa", "Aplica una inyección que envenena al objetivo", 20, 26, EfectoFactory.crearVeneno());
+        return new Jefe("Jefa de la Enfermería", 180, 100, 7, 17, 8, habilidad);
+    }
+
+    public static Jefe crearJefe3() {
+        Habilidad habilidad = new Habilidad("Patada Voladora", "Una patada que golpea con fuerza al objetivo", 20, 30, EfectoFactory.crearVeneno());
+        return new Jefe("Jefe del Patio", 210, 110, 8, 19, 9, habilidad);
+    }
+
+    public static JefeFinal crearJefeFinal() {
+        Habilidad habilidad = new Habilidad("Castigo Ejemplar", "Un castigo brutal que pone en jaque a todo el equipo", 25, 22, EfectoFactory.crearVeneno());
+        return new JefeFinal("Jefe Final", 260, 130, 9, 16, 10, habilidad);
     }
 }
