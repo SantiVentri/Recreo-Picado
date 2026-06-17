@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import modelo.Batalla;
+import modelo.Kiosko;
 import modelo.Partida;
 import modelo.Repositorio;
 import orquestador.Orquestador;
@@ -53,6 +54,7 @@ public class VentanaLayout extends JFrame {
 		mainPanel.add(new Jugador3(this), "JUGADOR3");
 		mainPanel.add(new Jugador4(this), "JUGADOR4");
 		mainPanel.add(new LevelsPanel(this, partidaActual.getBatallas()), "NIVELES");
+		mainPanel.add(new KioskoPanel(this), "KIOSKO");
 		batallaPanel = new BatallaPanel(this);
 		mainPanel.add(batallaPanel, "BATALLA");
 		
@@ -91,6 +93,10 @@ public class VentanaLayout extends JFrame {
 	
 	public void verJugador4() {
 		cl.show(mainPanel, "JUGADOR4");
+	}
+	
+	public void verKiosko() {
+		cl.show(mainPanel, "KIOSKO");
 	}
 	
 	// Empezar batalla
