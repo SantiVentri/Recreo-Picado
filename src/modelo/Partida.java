@@ -16,7 +16,7 @@ public class Partida {
 	
 	public Partida() {
 		this.id = contador++;
-		this.pesos = 0;
+		this.pesos = 200;
 		this.inventario = new ArrayList<Item>();
 		
 		this.alumnos = new Equipo();
