@@ -61,6 +61,6 @@ public class PersonajeFactory {
 
     public static JefeFinal crearJefeFinal() {
         Habilidad habilidad = new Habilidad("Castigo Ejemplar", "Un castigo brutal que pone en jaque a todo el equipo", 25, 22, EfectoFactory.crearVeneno());
-        return new JefeFinal("Jefe Final", 260, 130, 9, 16, 10, habilidad);
+        return new JefeFinal("Director", 260, 130, 9, 16, 10, habilidad);
     }
 }
