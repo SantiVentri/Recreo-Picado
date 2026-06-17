@@ -9,13 +9,7 @@ import modelo.Kiosko;
 import modelo.Equipo;
 import modelo.Repositorio;
 
-/**
- * KioskoPanel — flujo lineal por estados:
- *   CATALOGO → DETALLE_ITEM → (vuelve a CATALOGO)
- *
- * La compra impacta directo en el inventario general del Equipo
- * (no se asigna a un personaje puntual desde el kiosko).
- */
+
 public class KioskoPanel extends JPanel {
 
     private static final String VISTA_CATALOGO   = "catalogo";
@@ -37,9 +31,7 @@ public class KioskoPanel extends JPanel {
     private JPanel  panelDetalleItem;
     private JButton btnComprar;
 
-    // =========================================================================
-    // CONSTRUCTOR
-    // =========================================================================
+   
     public KioskoPanel(VentanaLayout ventana) {
         this.ventana       = ventana;
         this.kioskoLogico  = new Kiosko();
@@ -70,16 +62,14 @@ public class KioskoPanel extends JPanel {
         }
     }
 
-    // =========================================================================
-    // HUD
-    // =========================================================================
+   
     private JPanel crearHUD() {
         JPanel hud = new JPanel(new FlowLayout(FlowLayout.CENTER));
         hud.setOpaque(false);
         hud.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
 
         Equipo equipo = Repositorio.getInstance().getPartidaActual().getAlumnos();
-        lblPesos = new JLabel("💰 Pesos de la Party: $" + equipo.getPesos());
+        lblPesos = new JLabel("Pesos de la Party: $" + equipo.getPesos());
         lblPesos.setFont(new Font("Arial", Font.BOLD, 26));
         lblPesos.setForeground(Color.WHITE);
         hud.add(lblPesos);
@@ -87,10 +77,7 @@ public class KioskoPanel extends JPanel {
         return hud;
     }
 
-    // =========================================================================
-    // Rectángulo del modal dentro del panel vista (mx, my, mw, mh)
-    // El modal ocupa 75% ancho x 80% alto, centrado
-    // =========================================================================
+
     private int[] rectModal(int vw, int vh) {
         int mw = (int) (vw * 0.75);
         int mh = (int) (vh * 0.80);
@@ -99,9 +86,7 @@ public class KioskoPanel extends JPanel {
         return new int[]{mx, my, mw, mh};
     }
 
-    // =========================================================================
-    // VISTA 1 — CATÁLOGO
-    // =========================================================================
+    
     private JPanel crearVistaCatalogo() {
         JPanel vista = new JPanel(null) {
             @Override
@@ -115,15 +100,47 @@ public class KioskoPanel extends JPanel {
         };
         vista.setOpaque(false);
 
-        JPanel grilla = new JPanel(new GridLayout(5, 4, 8, 8));
-        grilla.setOpaque(false);
-        vista.add(grilla);
+       JPanel panelItems = new JPanel(null);
+       panelItems.setOpaque(false);
+       vista.add(panelItems);
+       
+       ItemView[] slots = new ItemView[20];
+       
+       for (int i = 0; i < 20; i++) {
+    	   Item item = ( i < todosLosItems.length)
+    			   ? todosLosItems[i]
+    				: null;
+    	   
+    	   slots[i] = crearSlotItem(item);
+    	   panelItems.add(slots[i]);
+       }
+     
+       double[][] posiciones = {
 
-        for (int i = 0; i < 20; i++) {
-            Item item = (i < todosLosItems.length) ? todosLosItems[i] : null;
-            grilla.add(crearSlotItem(item));
-        }
+    		    {0.28, 0.35}, //mielsita 
+    		    {0.40, 0.35}, //bagio
+    		    {0.53, 0.35},//tita
+    		    {0.65, 0.35},//alfajor
+    		    {0.78, 0.35},//cocaLata
 
+    		    {0.28, 0.52},//manaos
+    		    {0.40, 0.52},//Lapiz
+    		    {0.54, 0.52},//regla
+    		    {0.66, 0.52},//compas
+    		    {0.79, 0.52},//tijera
+
+    		    {0.25, 0.69},//gomera
+    		    {0.40, 0.67},//liqui
+    		    {0.54, 0.69},//Beyblade
+    		    {0.67, 0.69},//guantes
+    		    {0.80, 0.69},//zapatillas
+
+    		    {0.25, 0.86},//botines
+    		    {0.40, 0.86},//guardapolvo
+    		    {0.52, 0.86},//camiseta D&J
+    		    {0.67, 0.86},//camiseta argentina 
+    		    {0.82, 0.86}//egresados
+    		};
         JButton btnSalir = new JButton("Salir del Kiosko");
         btnSalir.setFont(new Font("Arial", Font.BOLD, 18));
         btnSalir.addActionListener(e -> ventana.verMenu());
@@ -139,26 +156,20 @@ public class KioskoPanel extends JPanel {
                 int[] r = rectModal(vw, vh);
                 int mx = r[0], my = r[1], mw = r[2], mh = r[3];
 
-                // --- AJUSTAR ESTOS 4 VALORES para alinear la grilla con los estantes ---
-                // Medir sobre la imagen del modal:
-                //   gx: cuánto % desde el borde izquierdo del modal hasta el primer slot
-                //   gy: cuánto % desde el borde superior del modal hasta el primer slot
-                //   gw: cuánto % del ancho del modal ocupa la grilla
-                //   gh: cuánto % del alto  del modal ocupa la grilla
-                double pLeft   = 0.140;   // margen izquierdo dentro del modal
-                double pTop    = 0.215;   // margen superior dentro del modal (debajo del letrero)
-                double pWidth  = 0.720;   // ancho de la grilla relativo al modal
-                double pHeight = 0.755;   // alto  de la grilla relativo al modal
+                
+            
+                panelItems.setBounds(mx, my, mw, mh);
+                for (int i = 0; i < slots.length; i++) {
 
-                int gx = mx + (int) (mw * pLeft);
-                int gy = my + (int) (mh * pTop);
-                int gw = (int) (mw * pWidth);
-                int gh = (int) (mh * pHeight);
-                grilla.setBounds(gx, gy, gw, gh);
-
+                    int x = (int)(mw * posiciones[i][0]);
+                    int y = (int)(mh * posiciones[i][1]);
+                    
+                    
+                    slots[i].setBounds(x - 40, y - 40, 80, 80);
+                }
                 int bw = 200, bh = 40;
                 btnSalir.setBounds((vw - bw) / 2, my + mh + 10, bw, bh);
-
+                
                 vista.repaint();
             }
         });
@@ -166,7 +177,7 @@ public class KioskoPanel extends JPanel {
         return vista;
     }
 
-    /** Slot individual de la grilla, usando ItemView */
+    /** vista visual de un item dentro del kiosco */
     private ItemView crearSlotItem(Item item) {
         ItemView slot = new ItemView(item, 64, 64, true);
         if (item != null) {
@@ -175,15 +186,12 @@ public class KioskoPanel extends JPanel {
         return slot;
     }
 
-    // =========================================================================
-    // VISTA 2 — DETALLE DEL ÍTEM
-    // =========================================================================
+   
     private JPanel crearVistaDetalle() {
         JPanel vista = new JPanel(new BorderLayout());
         vista.setOpaque(false);
 
-        // Contenedor donde se inserta el ItemView grande del ítem actual.
-        // Se reemplaza en cada irADetalle() porque ItemView no tiene setItem().
+        
         panelDetalleItem = new JPanel(new GridBagLayout());
         panelDetalleItem.setOpaque(false);
         vista.add(panelDetalleItem, BorderLayout.CENTER);
@@ -206,9 +214,7 @@ public class KioskoPanel extends JPanel {
         return vista;
     }
 
-    // =========================================================================
-    // NAVEGACIÓN ENTRE VISTAS
-    // =========================================================================
+    
     private void irACatalogo() {
         itemSeleccionado = null;
         cardLayout.show(contenedor, VISTA_CATALOGO);
@@ -229,9 +235,7 @@ public class KioskoPanel extends JPanel {
         cardLayout.show(contenedor, VISTA_DETALLE);
     }
 
-    // =========================================================================
-    // LÓGICA DE COMPRA
-    // =========================================================================
+
     private void ejecutarCompra() {
         if (itemSeleccionado == null) return;
 
@@ -257,9 +261,7 @@ public class KioskoPanel extends JPanel {
         irACatalogo();
     }
 
-    // =========================================================================
-    // UTILIDADES
-    // =========================================================================
+    
     private Image cargarImagen(String ruta) {
         try {
             return new ImageIcon(ruta).getImage();

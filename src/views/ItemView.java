@@ -61,7 +61,7 @@ public class ItemView extends JPanel {
 
     // --- Tamaño por defecto 64x64, con info ---
     public ItemView(Item item) {
-        this(item, 64, 64, true);
+        this(item, 94, 94, true);
     }
 
     private void cargarImagen() {
@@ -143,8 +143,10 @@ public class ItemView extends JPanel {
             int xPrecio = centroX - fmPrecio.stringWidth(precio) / 2;
             dibujarTextoConContorno(g2, precio, xPrecio, yPrecio, new Color(255, 215, 0));
         }
+        
 
         g2.dispose();
+        
     }
 
     /** Dibuja texto con un leve contorno oscuro para que se lea sobre cualquier fondo. */
