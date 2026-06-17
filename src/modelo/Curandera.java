@@ -1,6 +1,10 @@
 package modelo;
  
+import java.util.ArrayList;
+import java.util.List;
+
 import interfaces.IEntidad;
+import orquestador.Orquestador;
  
 public class Curandera extends Entidad {
 	// Atributos de nivel
@@ -32,9 +36,7 @@ public class Curandera extends Entidad {
     }
  
     /**
-     * Curación: se restaura vida a sí mismo usando la potencia de la habilidad + amistad.
-     * El parámetro objetivo es ignorado, el curandero siempre se cura a sí mismo.
-     * Si la habilidad tiene un efecto positivo, también se lo aplica.
+     * Curación: le restaura vida al objetivo alumno usando la potencia de la habilidad + amistad.
      */
     @Override
     public void usarHabilidad(IEntidad objetivo) {
@@ -43,12 +45,21 @@ public class Curandera extends Entidad {
  
         this.setDefendiendo(false);
         this.setEnergia(this.getEnergia() - hab.getCostoEnergia());
+        
+        // Se asigna un objetivo aleatorio entre los alumnos vivos
+        List<Entidad> alumnosVivos = new ArrayList<Entidad>();
+        for (Entidad a : Orquestador.getInstance().getAlumnos().getEntidades()) {
+            if (a.estaVivo()) alumnosVivos.add(a);
+        }
+        if (alumnosVivos.isEmpty()) return;
+
+        objetivo = alumnosVivos.get((int) (Math.random() * alumnosVivos.size()));
  
         int curacion = hab.getPotencia() + amistad;
-        this.aumentarVida(curacion);
+        objetivo.aumentarVida(curacion);
  
         if (hab.getEfecto() != null) {
-            this.aplicarEfecto(hab.getEfecto().copiar());
+            objetivo.aplicarEfecto(hab.getEfecto().copiar());
         }
     }
     
@@ -81,7 +92,5 @@ public class Curandera extends Entidad {
 	}
  
     public int getAmistad() { return amistad; }
-    public void setAmistad(int amistad) { this.amistad = amistad; }
-    
-    
+    public void setAmistad(int amistad) { this.amistad = amistad; }   
 }

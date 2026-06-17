@@ -64,6 +64,7 @@ public class Orquestador implements IOrquestador {
 
         // Avanzar al primer alumno vivo
         avanzarAlumnoVivo();
+        procesarEfectosTurnoActual();
     }
 
     @Override
@@ -91,6 +92,28 @@ public class Orquestador implements IOrquestador {
             indiceAlumno = (indiceAlumno + 1) % turnosAlumnos.size();
             avanzarAlumnoVivo();
             turnoAlumno = true;
+        }
+
+        procesarEfectosTurnoActual();
+    }
+
+    /**
+     * Aplica los efectos activos (veneno, regeneración, etc.) de la entidad
+     * a la que le toca actuar ahora. Si el efecto la mata (ej. veneno),
+     * se avanza al siguiente turno para no dejar actuar a una entidad muerta.
+     */
+    private void procesarEfectosTurnoActual() {
+        Entidad actual = getEntidadActual();
+        actual.procesarEfectos();
+
+        if (!actual.estaVivo()) {
+            if (turnoAlumno) {
+                avanzarAlumnoVivo();
+            } else {
+                avanzarEnemigoVivo();
+            }
+            // Si tras avanzar sigue sin haber nadie vivo, batallaTerminada() lo detectará
+            // en el chequeo correspondiente del ciclo de batalla.
         }
     }
 

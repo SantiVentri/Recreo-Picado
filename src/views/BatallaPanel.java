@@ -18,6 +18,7 @@ import javax.swing.Timer;
 
 import enums.ACCIONES;
 import main.VentanaLayout;
+import modelo.Curandera;
 import modelo.Entidad;
 import modelo.Item;
 import orquestador.Orquestador;
@@ -85,7 +86,14 @@ public class BatallaPanel extends JPanel {
         btnHabilidad.setPreferredSize(new Dimension(140, 42));
         btnHabilidad.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                activarSeleccionObjetivo(ACCIONES.USAR_HABILIDAD);
+                Entidad actual = Orquestador.getInstance().getEntidadActual();
+                if (actual instanceof Curandera) {
+                    // Como la Curandera cura a un alumno aleatorio de su propio equipo,
+                    // no requiere que el jugador seleccione un objetivo enemigo
+                    usarHabilidadSinObjetivo();
+                } else {
+                    activarSeleccionObjetivo(ACCIONES.USAR_HABILIDAD);
+                }
             }
         });
         panelBotones.add(btnHabilidad);
@@ -303,6 +311,24 @@ public class BatallaPanel extends JPanel {
     private void ocultarFlechas() {
         for (int i = 0; i < flechasEnemigos.size(); i++) {
             flechasEnemigos.get(i).setVisible(false);
+        }
+    }
+    
+    // ─── USAR HABILIDAD SIN SELECCIÓN DE OBJETIVO ───────────────────────────────
+    
+    private void usarHabilidadSinObjetivo() {
+        int idxAtacante = Orquestador.getInstance().getIndiceAlumnoActual();
+        final EntidadView viewAtacante = (idxAtacante >= 0 && idxAtacante < viewsAlumnos.size())
+            ? viewsAlumnos.get(idxAtacante) : null;
+
+        setBotonesHabilitados(false);
+        Orquestador.getInstance().ejecutarTurno(ACCIONES.USAR_HABILIDAD, null, null);
+
+        if (viewAtacante != null) {
+            viewAtacante.reproducirAnimacionAtaque();
+            esperarFinAnimacion(viewAtacante);
+        } else {
+            avanzarTurno();
         }
     }
 

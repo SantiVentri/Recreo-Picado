@@ -112,6 +112,22 @@ public abstract class Entidad implements IEntidad {
 			this.efectosActivos.remove(efecto);
 		}
 	}
+
+	/**
+	 * Procesa todos los efectos activos de esta entidad (veneno, curación, regeneración, etc.).
+	 * Se debe llamar al comienzo del turno de la entidad, antes de que actúe.
+	 * Los efectos que ya expiraron se eliminan de la lista.
+	 */
+	public void procesarEfectos() {
+		List<Efecto> aEliminar = new ArrayList<Efecto>();
+		for (Efecto efecto : efectosActivos) {
+			boolean sigueActivo = efecto.aplicarPorTurno(this);
+			if (!sigueActivo) {
+				aEliminar.add(efecto);
+			}
+		}
+		efectosActivos.removeAll(aEliminar);
+	}
 	
 	@Override
 	public void aumentarVida(int cantidad) {
@@ -200,15 +216,5 @@ public abstract class Entidad implements IEntidad {
 	public EntidadView toView() {
 		return new EntidadView(this.nombre, this.vida, this.vidaMax, this.energia, this.energiaMax);
 	}
-
-
-	
-	
-	
-	
-	
-
-	
-	
 	
 }
