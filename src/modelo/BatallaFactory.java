@@ -17,7 +17,7 @@ public class BatallaFactory {
 		enemigos.agregarEntidad(PersonajeFactory.crearJefe2());
 		// enemigos.agregarEntidad(PersonajeFactory.crearSecuazBasico(2));
 		
-		return new Batalla(enemigos, "enfermeria");
+		return new Batalla(enemigos, "Enfermeria");
 	}
 	
 	public static Batalla crearNivel3() {
@@ -36,6 +36,6 @@ public class BatallaFactory {
 		// enemigos.agregarEntidad(PersonajeFactory.crearSecuazBasico(4));
 		// enemigos.agregarEntidad(PersonajeFactory.crearSecuazBasico(4));
 		
-		return new Batalla(enemigos, "oficina");
+		return new Batalla(enemigos, "Direccion");
 	}
 }
