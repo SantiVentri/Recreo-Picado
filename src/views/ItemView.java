@@ -14,8 +14,6 @@ import java.io.IOException;
 
 /**
  * Panel reutilizable para mostrar un Item: ícono + (opcionalmente) nombre y precio.
- * Mismo patrón que EntidadView: encapsula carga de imagen, pintado y click,
- * para no repetir esa lógica en cada pantalla que necesite mostrar un ítem.
  */
 public class ItemView extends JPanel {
 
@@ -24,7 +22,9 @@ public class ItemView extends JPanel {
     }
 
     private final Item item;
-    private final boolean mostrarInfo;   // si se dibuja nombre + precio debajo del ícono
+    private final boolean mostrarInfo; // si se dibuja nombre + precio debajo del ícono
+    
+    // Tamaño icono
     private final int anchoIcono;
     private final int altoIcono;
 
@@ -95,18 +95,9 @@ public class ItemView extends JPanel {
         int altoDisponible  = getHeight();
         int centroX = anchoDisponible / 2;
 
-        // Reservar espacio para el texto (si corresponde) y centrar el ícono
-        // en lo que queda, en vez de usar coordenadas fijas. Así el ItemView
-        // se adapta al tamaño real que le da su contenedor (p. ej. un GridLayout).
-        // Espacio fijo para 2 líneas de texto (nombre + precio), independiente
-        // del tamaño del ícono — así un ItemView grande (detalle) no reserva
-        // de más y uno chico (catálogo) no se queda corto.
         int altoTexto = mostrarInfo ? 30 : 0;
         int altoParaIcono = altoDisponible - altoTexto;
 
-        // El ícono se dibuja cuadrado. Usa el tamaño pedido como referencia, pero
-        // puede crecer si la celda real le da más espacio (hasta 1.3x) o achicarse
-        // si el contenedor le da menos, para no recortar contra los bordes.
         int topeIcono = (int) (anchoIcono * 1.3);
         int ladoIcono = Math.min(topeIcono, Math.min(anchoDisponible - 8, altoParaIcono - 4));
         if (ladoIcono < 0) ladoIcono = 0;
@@ -149,7 +140,7 @@ public class ItemView extends JPanel {
         
     }
 
-    /** Dibuja texto con un leve contorno oscuro para que se lea sobre cualquier fondo. */
+    /** Dibuja texto con un contorno oscuro para que se lea sobre cualquier fondo. */
     private void dibujarTextoConContorno(Graphics2D g2, String texto, int x, int y, Color colorTexto) {
         g2.setColor(new Color(0, 0, 0, 200));
         g2.drawString(texto, x - 1, y);
