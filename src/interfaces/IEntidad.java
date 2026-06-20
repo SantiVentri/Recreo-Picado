@@ -17,7 +17,8 @@ public interface IEntidad {
 	void aplicarEfecto(Efecto efecto);
 	void quitarEfecto(Efecto efecto);
 	void aumentarVida(int cantidad);
-	void quitarVida(int cantidad);	
+	void quitarVida(int cantidad);
+	void procesarEfectos(); 
 	
 	EntidadView toView();
 }

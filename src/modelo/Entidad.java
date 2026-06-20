@@ -118,6 +118,7 @@ public abstract class Entidad implements IEntidad {
 	 * Se debe llamar al comienzo del turno de la entidad, antes de que actúe.
 	 * Los efectos que ya expiraron se eliminan de la lista.
 	 */
+	@Override
 	public void procesarEfectos() {
 		List<Efecto> aEliminar = new ArrayList<Efecto>();
 		for (Efecto efecto : efectosActivos) {
