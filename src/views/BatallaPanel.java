@@ -345,6 +345,8 @@ public class BatallaPanel extends JPanel {
         Orquestador.getInstance().proximoTurno();
         characterOrderPanel.repaint();
 
+        actualizarVistas();
+
         if (Orquestador.getInstance().batallaTerminada()) {
             finalizarBatalla();
             return;
