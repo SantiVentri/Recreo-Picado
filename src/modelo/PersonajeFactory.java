@@ -13,7 +13,9 @@ public class PersonajeFactory {
     }
 
     public static Curandera crearCurandera() {
-        Habilidad habilidad = new Habilidad("Curación", "Usa el turno para curar a un objetivo de su mismo equipo", 20, 28, EfectoFactory.crearCuracion());
+    	// El efecto es null porque la curación se realiza inmediatamente luego de usar la habilidad.
+    	// Si fuese un efecto, tendría que esperar al siguiente turno para aplicarse.
+        Habilidad habilidad = new Habilidad("Curación", "Usa el turno para curar a un objetivo de su mismo equipo", 20, 28, null);
         return new Curandera("Curandera", 95, 120, 7, 6, 5, habilidad, 22);
     }
 

@@ -66,10 +66,6 @@ public class Curandera extends Entidad {
  
         int curacion = hab.getPotencia() + amistad;
         objetivo.aumentarVida(curacion);
- 
-        if (hab.getEfecto() != null) {
-            objetivo.aplicarEfecto(hab.getEfecto().copiar());
-        }
     }
     
 	private void subirNivel() {
