@@ -249,7 +249,7 @@ public class EntidadView extends JPanel {
         Graphics2D g2D = (Graphics2D) g;
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        int centroX = getWidth() / 2;
+        int centroX = !this.mirandoIzquierda ? 70 : getWidth() - 70;
         int inicioY = 20;
         int anchoBarras = 120;
         int altoBarras = 10;
