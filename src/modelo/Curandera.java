@@ -51,9 +51,18 @@ public class Curandera extends Entidad {
         for (Entidad a : Orquestador.getInstance().getAlumnos().getEntidades()) {
             if (a.estaVivo()) alumnosVivos.add(a);
         }
+        
         if (alumnosVivos.isEmpty()) return;
 
-        objetivo = alumnosVivos.get((int) (Math.random() * alumnosVivos.size()));
+        // Empezamos asumiendo que el primer alumno es el que tiene menos vida
+        objetivo = alumnosVivos.get(0);
+
+        // Recorremos el resto para encontrar si hay alguno con menos vida aún
+        for (Entidad alumno : alumnosVivos) {
+            if (alumno.getVida() < ((Entidad) objetivo).getVida()) {
+                objetivo = alumno;
+            }
+        }
  
         int curacion = hab.getPotencia() + amistad;
         objetivo.aumentarVida(curacion);
