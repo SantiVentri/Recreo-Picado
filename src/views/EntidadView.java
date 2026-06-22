@@ -296,16 +296,12 @@ public class EntidadView extends JPanel {
             ySprite = inicioY;
         }
 
-        int anchoBase = (this.nombre.equals("Jefe_1")) ? 400 : 300;
+        int anchoBase = 300;
         int altoBase = anchoBase;
-        int offsetSombra = (this.nombre.equals("Jefe_1")) ? 65 : 52;
+        int offsetSombra = 52;
 
         int anchoEscalado = (int) (anchoBase * escala);
         int altoEscalado = (int) (altoBase  * escala);
-
-        if (this.nombre.equals("Jefe_1")) {
-            ySprite -= (int) (80 * escala);
-        }
 
         // Durante el ataque el sprite se ancla al borde interno
         // (lado opuesto al enemigo) para que el contenido extra salga hacia el enemigo.
@@ -327,7 +323,7 @@ public class EntidadView extends JPanel {
         BufferedImage[] frames = animaciones.get(estadoActual);
 
         // SOMBRA
-        int anchoSombraBase = (this.nombre.equals("Jefe_1")) ? 130 : 95;
+        int anchoSombraBase = 95;
         int anchoSombra = (int) (anchoSombraBase * escala);
         int altoSombra  = (int) (30 * escala);
         int xSombra = xSprite + (anchoEscalado / 2) - (anchoSombra / 2);
