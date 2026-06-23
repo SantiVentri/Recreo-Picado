@@ -108,9 +108,11 @@ public class EntidadView extends JPanel {
         String nombreFormateado = entidad != null ? entidad.getNombre().toLowerCase().replace(" ", "_") : nombreDisplay;
         String pathIdle   = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-idle.png";
         String pathAtaque = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-attack.png";
+        String pathMuerto = "src/resources/sprites/dead.png";
 
         animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
         animaciones.put(ANIMACIONES.ATACAR, recortarSprite(pathAtaque, 1, 1));
+        animaciones.put(ANIMACIONES.MUERTO, recortarSprite(pathMuerto, 1, 1));
     }
 
     /**
@@ -188,7 +190,12 @@ public class EntidadView extends JPanel {
     }
 
     private void actualizarFrame() {
+    	if (this.entidad != null && !entidad.estaVivo()) {
+        	this.setEstadoActual(ANIMACIONES.MUERTO);
+        }
+    	
         BufferedImage[] framesActuales = animaciones.get(estadoActual);
+        
         if (framesActuales != null && framesActuales.length > 0) {
             frameActual = (frameActual + 1) % framesActuales.length;
             repaint();
