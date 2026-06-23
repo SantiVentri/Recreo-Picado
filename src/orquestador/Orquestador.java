@@ -46,11 +46,11 @@ public class Orquestador implements IOrquestador {
 
     @Override
     public void iniciarBatalla(Equipo alumnos, Batalla batalla) {
-        this.alumnos  = alumnos;
-        this.batalla  = batalla;
-        this.indiceAlumno  = 0;
+        this.alumnos = alumnos;
+        this.batalla = batalla;
+        this.indiceAlumno = 0;
         this.indiceEnemigo = 0;
-        this.turnoAlumno   = true;
+        this.turnoAlumno = true;
 
         // Ordenar alumnos por velocidad descendente
         turnosAlumnos.clear();
@@ -83,12 +83,15 @@ public class Orquestador implements IOrquestador {
 
     @Override
     public void proximoTurno() {
+        Entidad actual = getEntidadActual();
+        if (actual.estaVivo()) {
+            actual.aumentarEnergia();
+        }
+
         if (turnoAlumno) {
-            // Después del alumno, le toca al siguiente enemigo vivo
             avanzarEnemigoVivo();
             turnoAlumno = false;
         } else {
-            // Después del enemigo, le toca al siguiente alumno vivo
             indiceAlumno = (indiceAlumno + 1) % turnosAlumnos.size();
             avanzarAlumnoVivo();
             turnoAlumno = true;

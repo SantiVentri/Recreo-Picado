@@ -36,7 +36,7 @@ public abstract class Entidad implements IEntidad {
 		this.vidaMax = vidaMax;
 		this.vida = vidaMax;
 		this.energiaMax = energiaMax;
-		this.energia = energiaMax;
+		this.energia = 10; // Energía inicial: 10 para poder atacar
 		this.velocidad = velocidad;
 		this.defendiendo = false;
 		
@@ -72,14 +72,14 @@ public abstract class Entidad implements IEntidad {
 	@Override
 	public void realizarAtaque(IEntidad objetivo) {
 		this.defendiendo = false;
-		this.energia -= 2;
+		this.energia -= 10;
 		objetivo.recibirDano(this.ataque);
 	}
 
 	@Override
 	public void realizarDefensa() {
 		this.defendiendo = true;
-		this.energia = this.energiaMax;
+		this.energia += 20;
 	}
 
 	@Override
@@ -153,6 +153,11 @@ public abstract class Entidad implements IEntidad {
         if (this.listener != null) {
             this.listener.onCurado();
         }
+	}
+	
+	@Override
+	public void aumentarEnergia() {
+		this.energia = Math.min(this.energia + 15, this.energiaMax);
 	}
 	
 	@Override

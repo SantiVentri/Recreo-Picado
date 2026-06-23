@@ -16,7 +16,7 @@ public class Jefe extends Entidad {
     public void realizarAtaque(IEntidad objetivo) {
         this.setDefendiendo(false);
         this.setEnergia(this.getEnergia() - 2);
-        int dano = (int)(this.getAtaque() * 1.2);
+        int dano = (int)(this.getAtaque() * 1.5);
         objetivo.recibirDano(dano);
     }
 
