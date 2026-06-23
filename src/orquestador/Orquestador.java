@@ -83,18 +83,21 @@ public class Orquestador implements IOrquestador {
 
     @Override
     public void proximoTurno() {
-        Entidad actual = getEntidadActual();
-        if (actual.estaVivo()) {
-            actual.aumentarEnergia();
+        if (turnoAlumno) {
+            indiceAlumno = (indiceAlumno + 1) % turnosAlumnos.size();
+            
+            turnoAlumno = false;
+            avanzarEnemigoVivo(); 
+        } else {
+            indiceEnemigo = (indiceEnemigo + 1) % turnosEnemigos.size();
+            
+            turnoAlumno = true;
+            avanzarAlumnoVivo();
         }
 
-        if (turnoAlumno) {
-            avanzarEnemigoVivo();
-            turnoAlumno = false;
-        } else {
-            indiceAlumno = (indiceAlumno + 1) % turnosAlumnos.size();
-            avanzarAlumnoVivo();
-            turnoAlumno = true;
+        Entidad siguiente = getEntidadActual();
+        if (siguiente != null && siguiente.estaVivo()) {
+            siguiente.aumentarEnergia();
         }
 
         procesarEfectosTurnoActual();
@@ -122,8 +125,7 @@ public class Orquestador implements IOrquestador {
 
     private void avanzarAlumnoVivo() {
         int intentos = 0;
-        while (!turnosAlumnos.get(indiceAlumno).estaVivo()
-                && intentos < turnosAlumnos.size()) {
+        while (!turnosAlumnos.get(indiceAlumno).estaVivo() && intentos < turnosAlumnos.size()) {
             indiceAlumno = (indiceAlumno + 1) % turnosAlumnos.size();
             intentos++;
         }
@@ -131,10 +133,7 @@ public class Orquestador implements IOrquestador {
 
     private void avanzarEnemigoVivo() {
         int intentos = 0;
-        // Avanzar al siguiente y buscar uno vivo
-        indiceEnemigo = (indiceEnemigo + 1) % turnosEnemigos.size();
-        while (!turnosEnemigos.get(indiceEnemigo).estaVivo()
-                && intentos < turnosEnemigos.size()) {
+        while (!turnosEnemigos.get(indiceEnemigo).estaVivo() && intentos < turnosEnemigos.size()) {
             indiceEnemigo = (indiceEnemigo + 1) % turnosEnemigos.size();
             intentos++;
         }
