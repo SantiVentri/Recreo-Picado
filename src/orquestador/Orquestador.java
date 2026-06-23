@@ -245,45 +245,27 @@ public class Orquestador implements IOrquestador {
     public int getTurnoActual() { return indiceAlumno; }
     public List<Entidad> getTurnos() { return turnosAlumnos; }
 
-    /**
-     * Devuelve la lista completa de turnos intercalados (alumno, enemigo, alumno, enemigo...)
-     * comenzando desde la entidad que tiene el turno ahora.
-     * Útil para mostrar el panel de orden de turnos.
-     */
     public List<Entidad> getTurnosCompletos() {
-        List<Entidad> resultado = new ArrayList<Entidad>();
-        if (turnosAlumnos.isEmpty()) return resultado;
-
-        int totalAlumnos  = turnosAlumnos.size();
+        List<Entidad> resultado = new ArrayList<>();
+        
+        int totalAlumnos = turnosAlumnos.size();
         int totalEnemigos = turnosEnemigos.size();
-        int maxPares = Math.max(totalAlumnos, totalEnemigos);
-
-        if (!turnoAlumno && totalEnemigos > 0) {
-            // Turno del enemigo: enemigo va primero
-            for (int i = 0; i < maxPares; i++) {
-                int idxE = (indiceEnemigo + i) % totalEnemigos;
-                Entidad enemigo = turnosEnemigos.get(idxE);
-                if (enemigo.estaVivo()) resultado.add(enemigo);
-
-                int idxA = (indiceAlumno + 1 + i) % totalAlumnos;
-                Entidad alumno = turnosAlumnos.get(idxA);
-                if (alumno.estaVivo()) resultado.add(alumno);
-            }
-        } else {
-            // Turno del alumno: alumno va primero
-            for (int i = 0; i < maxPares; i++) {
-                int idxA = (indiceAlumno + i) % totalAlumnos;
-                Entidad alumno = turnosAlumnos.get(idxA);
-                if (alumno.estaVivo()) resultado.add(alumno);
-
-                if (totalEnemigos > 0) {
-                    int idxE = (indiceEnemigo + i) % totalEnemigos;
-                    Entidad enemigo = turnosEnemigos.get(idxE);
-                    if (enemigo.estaVivo()) resultado.add(enemigo);
+        
+        for (int i = 0; i < 6; i++) {
+            if (turnoAlumno) {
+                if (i % 2 == 0) {
+                    resultado.add(turnosAlumnos.get((indiceAlumno + (i/2)) % totalAlumnos));
+                } else {
+                    resultado.add(turnosEnemigos.get((indiceEnemigo + (i/2)) % totalEnemigos));
+                }
+            } else {
+                if (i % 2 == 0) {
+                    resultado.add(turnosEnemigos.get((indiceEnemigo + (i/2)) % totalEnemigos));
+                } else {
+                    resultado.add(turnosAlumnos.get((indiceAlumno + (i/2)) % totalAlumnos));
                 }
             }
         }
-
         return resultado;
     }
 
