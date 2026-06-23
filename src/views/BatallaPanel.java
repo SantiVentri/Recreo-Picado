@@ -258,6 +258,8 @@ public class BatallaPanel extends JPanel {
             add(viewsEnemigos.get(i));
             add(flechaArr[i]);
         }
+        
+        setBotonesHabilitados(true);
 
         revalidate();
         repaint();
@@ -407,10 +409,38 @@ public class BatallaPanel extends JPanel {
     }
 
     private void setBotonesHabilitados(boolean habilitado) {
-        if (btnAtacar    != null) btnAtacar.setEnabled(habilitado);
-        if (btnDefender  != null) btnDefender.setEnabled(habilitado);
-        if (btnHabilidad != null) btnHabilidad.setEnabled(habilitado);
-        if (!habilitado) ocultarFlechas();
+        if (!habilitado) {
+            // Si hay que deshabilitar todo (turno enemigo o animación)
+            if (btnAtacar != null) btnAtacar.setEnabled(false);
+            if (btnDefender != null) btnDefender.setEnabled(false);
+            if (btnHabilidad != null) btnHabilidad.setEnabled(false);
+            ocultarFlechas();
+        } else {
+            // Si es el turno del alumno, habilitamos según su energía
+            Entidad actual = Orquestador.getInstance().getEntidadActual();
+            
+            if (actual != null) {
+                int energiaActual = actual.getEnergia();
+
+                if (btnAtacar != null) {
+                    btnAtacar.setEnabled(energiaActual >= 10);
+                }
+                
+                if (btnDefender != null) {
+                    btnDefender.setEnabled(true);
+                }
+                
+                if (btnHabilidad != null) {
+                    if (actual.getHabilidad() != null) {
+                        int costoHabilidad = actual.getHabilidad().getCostoEnergia();
+                        btnHabilidad.setEnabled(energiaActual >= costoHabilidad);
+                    } else {
+                        btnHabilidad.setEnabled(false);
+                    }
+                }
+            }
+        }
+
         if (characterOrderPanel != null) characterOrderPanel.repaint();
     }
 
