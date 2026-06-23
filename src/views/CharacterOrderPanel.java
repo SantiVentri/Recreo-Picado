@@ -11,16 +11,19 @@ import orquestador.Orquestador;
 
 public class CharacterOrderPanel extends JPanel {
 
-    private Image fondo, mago, arquero, guerrero, curandera, jefa1;
+    private Image fondo, mago, arquero, guerrero, curandera, jefa1, jefa2, jefe3, jefeFinal;
     
     public CharacterOrderPanel() {
         setOpaque(false);
-        fondo    = new ImageIcon(getClass().getResource("/resources/PanelDeOrdenDeTurnos.png")).getImage();
-        mago     = new ImageIcon(getClass().getResource("/resources/MagoPanel.png")).getImage();
-        arquero  = new ImageIcon(getClass().getResource("/resources/ArqueroPanel.png")).getImage();
-        guerrero = new ImageIcon(getClass().getResource("/resources/GuerreroPanel.png")).getImage();
-        curandera = new ImageIcon(getClass().getResource("/resources/CuranderaPanel.png")).getImage();
-        jefa1 = new ImageIcon(getClass().getResource("/resources/JefaDelBañoPanel.png")).getImage();
+        fondo = new ImageIcon(getClass().getResource("/resources/turnos/PanelDeOrdenDeTurnos.png")).getImage();
+        mago = new ImageIcon(getClass().getResource("/resources/turnos/MagoPanel.png")).getImage();
+        arquero = new ImageIcon(getClass().getResource("/resources/turnos/ArqueroPanel.png")).getImage();
+        guerrero = new ImageIcon(getClass().getResource("/resources/turnos/GuerreroPanel.png")).getImage();
+        curandera = new ImageIcon(getClass().getResource("/resources/turnos/CuranderaPanel.png")).getImage();
+        jefa1 = new ImageIcon(getClass().getResource("/resources/turnos/JefaDelBañoPanel.png")).getImage();
+        jefa2 = new ImageIcon(getClass().getResource("/resources/turnos/EnfermeraPanel.png")).getImage();
+        jefe3 = new ImageIcon(getClass().getResource("/resources/turnos/ProfesorEDPanel.png")).getImage();
+        jefeFinal = new ImageIcon(getClass().getResource("/resources/turnos/DirectorPanel.png")).getImage();
     }
 
     private Image obtenerImagen(Entidad entidad) {
@@ -32,6 +35,9 @@ public class CharacterOrderPanel extends JPanel {
         if (nombre.equalsIgnoreCase("Guerrero")) return guerrero;
         if (nombre.equalsIgnoreCase("Curandera")) return curandera;
         if (nombre.equalsIgnoreCase("Jefa del Baño")) return jefa1;
+        if (nombre.equalsIgnoreCase("Enfermera")) return jefa2;
+        if (nombre.equalsIgnoreCase("Profesor ED")) return jefe3;
+        if (nombre.equalsIgnoreCase("Director")) return jefeFinal;
         return null;
     }
 
