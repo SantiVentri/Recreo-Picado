@@ -2,8 +2,7 @@ package modelo;
 
 import java.util.*;
 
-import interfaces.*;
-import views.EntidadView;
+import interfaces.IEntidad;
 
 public abstract class Entidad implements IEntidad {
 	// Atributos básicos
@@ -213,9 +212,10 @@ public abstract class Entidad implements IEntidad {
 	    return efectosActivos;
 	}
 	
-	@Override
-	public EntidadView toView() {
-		return new EntidadView(this.nombre, this.vida, this.vidaMax, this.energia, this.energiaMax);
-	}
+	// Getters de valores visuales
+	public int getAnchoSprite() { return 300; }
+	public int getOffsetSombra() { return 52; }
+	public int getAnchoSombra() { return 95; }
+	public int getYOffsetSprite() { return 0; }
 	
 }

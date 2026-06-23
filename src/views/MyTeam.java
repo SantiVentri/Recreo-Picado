@@ -17,7 +17,6 @@ public class MyTeam extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private Image imagenFondo;
 	private Image imagenFlecha;
-	private JButton btnJugador1, btnJugador2, btnJugador3, btnJugador4;
 	private EntidadView entidadSeleccionada = null;
 	
 	public MyTeam (VentanaLayout ventana) {
@@ -35,10 +34,10 @@ public class MyTeam extends JPanel {
 	private void configurarPantalla(VentanaLayout ventana) {
 	    setLayout(null);
 
-	    EntidadView vistaJugador1 = new EntidadView("Mago", 100, 100, 100, 100, false, 1.6f);
-	    EntidadView vistaJugador2 = new EntidadView("Arquero", 100, 100, 100, 100, false, 1.5f);
-	    EntidadView vistaJugador3 = new EntidadView("Curandera", 100, 100, 100, 100, false, 1.6f);
-	    EntidadView vistaJugador4 = new EntidadView("Guerrero", 100, 100, 100, 100, false, 1.6f);
+	    EntidadView vistaJugador1 = new EntidadView("Mago", 1.8f);
+	    EntidadView vistaJugador2 = new EntidadView("Arquero", 1.7f);
+	    EntidadView vistaJugador3 = new EntidadView("Curandera", 1.8f);
+	    EntidadView vistaJugador4 = new EntidadView("Guerrero", 1.8f);
 
 	    vistaJugador1.setBounds(70, 120, 270, 440);
 	    vistaJugador2.setBounds(260, 150, 270, 440);

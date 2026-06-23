@@ -158,7 +158,7 @@ public class BatallaPanel extends JPanel {
 
         // ALUMNOS — se agregan de atrás hacia adelante (índice mayor = más adelante = encima)
         for (int i = alumnos.size() - 1; i >= 0; i--) {
-            EntidadView ev = alumnos.get(i).toView();
+        	EntidadView ev = new EntidadView(alumnos.get(i));
             ev.setMostrarHUD(true);
             ev.setMirandoIzquierda(false);
             ev.setBounds(alumnoBaseX - i * pasoX, baseY + i * pasoY, evAncho, evAlto);
@@ -180,7 +180,7 @@ public class BatallaPanel extends JPanel {
         for (int i = 0; i < enemigos.size(); i++) {
             final int idx = i;
 
-            EntidadView ev = enemigos.get(i).toView();
+        	EntidadView ev = new EntidadView(enemigos.get(i));
             ev.setMostrarHUD(true);
             ev.setMirandoIzquierda(true);
             int evX = enemigoBaseX + i * pasoX;
@@ -398,12 +398,11 @@ public class BatallaPanel extends JPanel {
         List<Entidad> enemigos = Orquestador.getInstance().getBatalla().getEnemigos().getEntidades();
 
         for (int i = 0; i < viewsAlumnos.size() && i < alumnos.size(); i++) {
-            viewsAlumnos.get(i).setVida(alumnos.get(i).getVida());
-            viewsAlumnos.get(i).setEnergia(alumnos.get(i).getEnergia());
+        	viewsAlumnos.get(i).repaint();
         }
         for (int i = 0; i < viewsEnemigos.size() && i < enemigos.size(); i++) {
-            viewsEnemigos.get(i).setVida(enemigos.get(i).getVida());
-            viewsEnemigos.get(i).setEnergia(enemigos.get(i).getEnergia());
+        	viewsEnemigos.get(i).repaint();
+
         }
     }
 

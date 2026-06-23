@@ -2,8 +2,6 @@ package interfaces;
 
 import modelo.*;
 
-import views.EntidadView;
-
 public interface IEntidad {
 	void recibirDano(int daño);
 	boolean estaVivo();
@@ -19,6 +17,4 @@ public interface IEntidad {
 	void aumentarVida(int cantidad);
 	void quitarVida(int cantidad);
 	void procesarEfectos(); 
-	
-	EntidadView toView();
 }

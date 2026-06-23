@@ -25,7 +25,7 @@ public class Jugador3 extends JPanel {
         setLayout(null);
 
         // --- ENTIDAD VIEW ---
-        entidadView = new EntidadView("Curandera", 100, 100, 100, 100, false, 2f);
+        entidadView = new EntidadView("Curandera", 2f);
         entidadView.setBounds(60, 80, 400, 500);
         add(entidadView);
 

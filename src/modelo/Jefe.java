@@ -40,5 +40,13 @@ public class Jefe extends Entidad {
         }
     }
     
-
+    // Getters de valores visuales
+    @Override
+    public int getAnchoSprite() { return 340; }
+    
+    @Override
+    public int getOffsetSombra() { return 58; }
+    
+    @Override
+    public int getAnchoSombra() { return 110; }
 }

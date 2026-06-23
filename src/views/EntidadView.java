@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import enums.ANIMACIONES;
+import modelo.Entidad;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -30,14 +31,14 @@ public class EntidadView extends JPanel {
 
     private ClickListener clickListener;
     private HoverListener hoverListener;
-    private String nombre;
-    private int vida;
-    private int vidaMax;
-    private int energia;
-    private int energiaMax;
+    
+    private Entidad entidad;
     private boolean mirandoIzquierda = false;
     private boolean mostrarHUD;
     private float escala;
+    
+    // Nombre de display en caso de no usar entidad
+    private String nombreDisplay = "";
 
     // --- VARIABLES DE ANIMACIÓN ---
     private Map<ANIMACIONES, BufferedImage[]> animaciones;
@@ -45,7 +46,7 @@ public class EntidadView extends JPanel {
     private int frameActual = 0;
     private Timer animTimer;
 
-    // --- ANIMACIÓN DE ATAQUE (patrón del profe) ---
+    // --- ANIMACIÓN DE ATAQUE ---
     private Timer timerAtaque;
     private long faseInicioMs;
     private static final int DURACION_ATAQUE_MS = 750;
@@ -54,12 +55,9 @@ public class EntidadView extends JPanel {
     private static final int EXTRA_ANCHO_ATAQUE = 180;
 
     // Constructor completo
-    public EntidadView(String nombre, int vida, int vidaMax, int energia, int energiaMax, boolean mostrarHUD, float escala) {
-        this.nombre = nombre;
-        this.vida = vida;
-        this.vidaMax = vidaMax;
-        this.energia = energia;
-        this.energiaMax = energiaMax;
+    public EntidadView(String nombreDisplay, Entidad entidad, boolean mostrarHUD, float escala) {
+    	this.nombreDisplay = nombreDisplay;
+        this.entidad = entidad;
         this.mostrarHUD = mostrarHUD;
         this.escala = escala;
 
@@ -91,35 +89,28 @@ public class EntidadView extends JPanel {
         animTimer.start();
     }
 
-    // Sin escala → default 1.0
-    public EntidadView(String nombre, int vida, int vidaMax, int energia, int energiaMax, boolean mostrarHUD) {
-        this(nombre, vida, vidaMax, energia, energiaMax, mostrarHUD, 1.0f);
+    // Contructor básico + control de HUD
+    public EntidadView(Entidad entidad, boolean mostrarHUD) {
+        this("", entidad, mostrarHUD, 1.0f);
     }
 
-    // Sin HUD ni escala → HUD activo, escala 1.0
-    public EntidadView(String nombre, int vida, int vidaMax, int energia, int energiaMax) {
-        this(nombre, vida, vidaMax, energia, energiaMax, true, 1.0f);
+    // Contructor básico
+    public EntidadView(Entidad entidad) {
+        this("", entidad, true, 1.0f);
     }
-
-    // Sin parámetros (compatibilidad con Entidad.toView())
-    public EntidadView() {
-        this("???", 100, 100, 100, 100, true, 1.0f);
+    
+    // Contructor sin entidad (Para mostrar en MyTeam.java)
+    public EntidadView(String nombre, float escala) {
+        this(nombre, null, false, escala);
     }
 
     private void cargarAnimaciones() {
-        String nombreFormateado = nombre.toLowerCase().replace(" ", "_");
+        String nombreFormateado = entidad != null ? entidad.getNombre().toLowerCase().replace(" ", "_") : nombreDisplay;
         String pathIdle   = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-idle.png";
         String pathAtaque = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-attack.png";
 
         animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
-
-        // Usar sprite de ataque si existe; si no, usar el primer frame del idle
-        File archivoAtaque = new File(pathAtaque);
-        if (archivoAtaque.exists()) {
-            animaciones.put(ANIMACIONES.ATACAR, recortarSprite(pathAtaque, 1, 1));
-        } else {
-            animaciones.put(ANIMACIONES.ATACAR, recortarSprite(pathIdle, 1, 1));
-        }
+        animaciones.put(ANIMACIONES.ATACAR, recortarSprite(pathAtaque, 1, 1));
     }
 
     /**
@@ -129,7 +120,7 @@ public class EntidadView extends JPanel {
      * BatallaPanel puede consultar estaAnimandoAtaque() para saber si terminó.
      */
     public void reproducirAnimacionAtaque() {
-        if (timerAtaque != null && timerAtaque.isRunning()) return;
+    	if (this.entidad.getVida() <= 0 || (timerAtaque != null && timerAtaque.isRunning())) return;
 
         // Guardar bounds originales
         final int xOrig = getX();
@@ -215,16 +206,6 @@ public class EntidadView extends JPanel {
         this.mirandoIzquierda = mirandoIzquierda;
     }
 
-    public void setVida(int vida) {
-        this.vida = vida;
-        repaint();
-    }
-
-    public void setEnergia(int energia) {
-        this.energia = energia;
-        repaint();
-    }
-
     public void setEscala(float escala) {
         this.escala = escala;
         repaint();
@@ -261,11 +242,11 @@ public class EntidadView extends JPanel {
             g2D.setFont(new Font("Arial", Font.BOLD, 14));
             g2D.setColor(Color.WHITE);
             FontMetrics fm = g2D.getFontMetrics();
-            g2D.drawString(nombre, centroX - (fm.stringWidth(nombre) / 2), inicioY);
+            g2D.drawString(entidad.getNombre(), centroX - (fm.stringWidth(entidad.getNombre()) / 2), inicioY);
 
             // BARRA DE VIDA
             int yVida = inicioY + 10;
-            double porcentajeVida = (double) vida / vidaMax;
+            double porcentajeVida = (double) entidad.getVida() / entidad.getVidaMax();
             g2D.setColor(new Color(50, 50, 50));
             g2D.fillRect(xBarras, yVida, anchoBarras, altoBarras);
             if (porcentajeVida > 0.5) g2D.setColor(Color.GREEN);
@@ -277,7 +258,7 @@ public class EntidadView extends JPanel {
 
             // BARRA DE ENERGÍA
             int yEnergia = yVida + altoBarras + 5;
-            double porcentajeEnergia = (double) energia / energiaMax;
+            double porcentajeEnergia = (double) entidad.getEnergia() / entidad.getEnergiaMax();
             g2D.setColor(new Color(50, 50, 50));
             g2D.fillRect(xBarras, yEnergia, anchoBarras, altoBarras);
             g2D.setColor(new Color(0, 190, 255));
