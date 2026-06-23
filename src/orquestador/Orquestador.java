@@ -137,18 +137,39 @@ public class Orquestador implements IOrquestador {
         }
     }
 
-    public void ejecutarTurno(ACCIONES accion, Entidad objetivo, Item item) {
+    public List<Entidad> ejecutarTurno(ACCIONES accion, Entidad objetivo, Item item) {
         Entidad e = getEntidadActual();
+        List<Entidad> afectados = new ArrayList<Entidad>();
+
         if (accion.equals(ACCIONES.ATACAR)) {
             e.realizarAtaque(objetivo);
+            if (objetivo != null) afectados.add((Entidad) objetivo);
+
         } else if (accion.equals(ACCIONES.DEFENDER)) {
             e.realizarDefensa();
+
         } else if (accion.equals(ACCIONES.USAR_HABILIDAD)) {
             e.usarHabilidad(objetivo);
+            // Si fue ataque múltiple, todos los enemigos vivos fueron afectados
+            if (objetivo == null || esHabilidadMultiple(e)) {
+                for (Entidad enemigo : batalla.getEnemigos().getEntidades()) {
+                    if (enemigo.estaVivo()) afectados.add(enemigo);
+                }
+            } else {
+                if (objetivo != null) afectados.add((Entidad) objetivo);
+            }
         }
+
+        return afectados;
     }
 
-    public void ejecutarTurnoEnemigo() {
+    private boolean esHabilidadMultiple(Entidad e) {
+        return e.getHabilidad() != null
+            && e.getHabilidad().getEfecto() != null
+            && e.getHabilidad().getEfecto().getTipo() == enums.EFECTOS.ATAQUE_MULTIPLE;
+    }
+
+    public List<Entidad> ejecutarTurnoEnemigo() {
         Entidad enemigo = getEntidadActual();
 
         List<Entidad> objetivosVivos = new ArrayList<Entidad>();
@@ -159,10 +180,15 @@ public class Orquestador implements IOrquestador {
             }
         }
 
-        if (objetivosVivos.isEmpty()) return;
+        if (objetivosVivos.isEmpty()) return new ArrayList<Entidad>();
 
         int indice = (int) (Math.random() * objetivosVivos.size());
-        enemigo.realizarAtaque(objetivosVivos.get(indice));
+        Entidad objetivo = objetivosVivos.get(indice);
+        enemigo.realizarAtaque(objetivo);
+
+        List<Entidad> atacados = new ArrayList<Entidad>();
+        atacados.add(objetivo);
+        return atacados;
     }
 
     @Override
