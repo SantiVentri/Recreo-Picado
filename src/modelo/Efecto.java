@@ -30,10 +30,10 @@ public class Efecto {
         if (duracion <= 0) return false;
 
         switch (tipo) {
-            case VENENO:
-                int dano = Math.max(1, entidad.getVidaMax() * magnitud / 100);
-                entidad.quitarVida(dano);
-                break;
+        	case VENENO:
+        		int dano = Math.max(1, entidad.getVidaMax() * magnitud / 100);
+        		entidad.recibirDanoVeneno(dano);
+        		break;
             case CURACION:
                 int curacion = Math.max(1, entidad.getVidaMax() * magnitud / 100);
                 entidad.aumentarVida(curacion);

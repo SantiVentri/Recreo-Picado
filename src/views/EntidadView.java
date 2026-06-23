@@ -80,6 +80,11 @@ public class EntidadView extends JPanel {
 				public void onAtacado() {
 					reproducirAnimacionAccion(ANIMACIONES.ATACADO);
 				}
+
+				@Override
+				public void onEnvenenado() {
+					reproducirAnimacionAccion(ANIMACIONES.ENVENENADO);
+				}
             });
         }
 
@@ -126,20 +131,26 @@ public class EntidadView extends JPanel {
 
     private void cargarAnimaciones() {
         String nombreFormateado = entidad != null ? entidad.getNombre().toLowerCase().replace(" ", "_") : nombreDisplay;
+        
         String pathIdle = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-idle.png";
-        String pathAtaque = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-attack.png";
-        String pathAtacado = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-hurt.png";
-        String pathMuerto = "src/resources/sprites/dead.png";
-        String pathCurado = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-heal.png";
-
         animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
+        
+        String pathAtaque = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-attack.png";
         animaciones.put(ANIMACIONES.ATACAR, recortarSprite(pathAtaque, 1, 1));
+        
+        String pathAtacado = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-hurt.png";
         animaciones.put(ANIMACIONES.ATACADO, recortarSprite(pathAtacado, 1, 1));
-        animaciones.put(ANIMACIONES.MUERTO, recortarSprite(pathMuerto, 1, 1));        
-    	
+        
+        String pathMuerto = "src/resources/sprites/dead.png";
+        animaciones.put(ANIMACIONES.MUERTO, recortarSprite(pathMuerto, 1, 1));
+        
+        String pathCurado = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-heal.png";
         if (entidad instanceof Alumno) {
         	animaciones.put(ANIMACIONES.CURADO, recortarSprite(pathCurado, 1, 1));
         }
+        
+        String pathEnvenenado = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-poison.png";
+        animaciones.put(ANIMACIONES.ENVENENADO, recortarSprite(pathEnvenenado, 1, 1));
     }
 
     /**

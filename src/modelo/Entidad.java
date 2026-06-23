@@ -26,6 +26,7 @@ public abstract class Entidad implements IEntidad {
 	public interface EntidadListener {
 		void onAtacado();
         void onCurado();
+        void onEnvenenado();
     }
 	
 	private transient EntidadListener listener;
@@ -153,6 +154,15 @@ public abstract class Entidad implements IEntidad {
             this.listener.onCurado();
         }
 	}
+	
+	@Override
+	public void recibirDanoVeneno(int cantidad) {
+        this.vida -= cantidad;
+        
+        if (this.listener != null) {
+            this.listener.onEnvenenado();
+        }
+    }
 	
 	// Getters y setters
 	public String getNombre() {
