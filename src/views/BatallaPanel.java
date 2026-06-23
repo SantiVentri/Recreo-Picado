@@ -17,10 +17,10 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import enums.ACCIONES;
+import enums.ANIMACIONES;
 import main.VentanaLayout;
 import modelo.Curandera;
 import modelo.Entidad;
-import modelo.Item;
 import orquestador.Orquestador;
 
 public class BatallaPanel extends JPanel {
@@ -34,11 +34,11 @@ public class BatallaPanel extends JPanel {
     private int indiceObjetivoActual = 0;
 
     // Referencias a EntidadViews
-    private List<EntidadView> viewsAlumnos  = new ArrayList();
-    private List<EntidadView> viewsEnemigos = new ArrayList();
+    private List<EntidadView> viewsAlumnos  = new ArrayList<>();
+    private List<EntidadView> viewsEnemigos = new ArrayList<>();
 
     // Flechas flotantes sobre cada enemigo (una por enemigo, se muestran/ocultan)
-    private List<JLabel> flechasEnemigos = new ArrayList();
+    private List<JLabel> flechasEnemigos = new ArrayList<>();
 
     // Botones
     private JButton btnAtacar;
@@ -212,7 +212,7 @@ public class BatallaPanel extends JPanel {
                     setBotonesHabilitados(false);
 
                     if (viewAtacante != null) {
-                        viewAtacante.reproducirAnimacionAtaque();
+                        viewAtacante.reproducirAnimacionAccion(ANIMACIONES.ATACAR);
                         esperarFinAnimacion(viewAtacante);
                     } else {
                         avanzarTurno();
@@ -272,7 +272,7 @@ public class BatallaPanel extends JPanel {
         }
     }
 
-    // ─── ESPERAR FIN DE ANIMACIÓN (patrón del profe) ──────────────────────────
+    // ─── ESPERAR FIN DE ANIMACIÓN ──────────────────────────
     //
     // Timer de 16ms que chequea si la animación terminó.
     // Cuando estaAnimandoAtaque() devuelve false, detiene el timer y avanza el turno.
@@ -281,7 +281,7 @@ public class BatallaPanel extends JPanel {
         Timer timerEspera = new Timer(16, null);
         timerEspera.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (!atacante.estaAnimandoAtaque()) {
+                if (!atacante.estaAnimandoAccion()) {
                     timerEspera.stop();
                     avanzarTurno();
                 }
@@ -325,7 +325,7 @@ public class BatallaPanel extends JPanel {
         Orquestador.getInstance().ejecutarTurno(ACCIONES.USAR_HABILIDAD, null, null);
 
         if (viewAtacante != null) {
-            viewAtacante.reproducirAnimacionAtaque();
+            viewAtacante.reproducirAnimacionAccion(ANIMACIONES.ATACAR);
             esperarFinAnimacion(viewAtacante);
         } else {
             avanzarTurno();
@@ -367,7 +367,7 @@ public class BatallaPanel extends JPanel {
                     Orquestador.getInstance().ejecutarTurnoEnemigo();
 
                     if (viewEnemigo != null) {
-                        viewEnemigo.reproducirAnimacionAtaque();
+                        viewEnemigo.reproducirAnimacionAccion(ANIMACIONES.ATACAR);
                         esperarFinAnimacion(viewEnemigo);
                     } else {
                         avanzarTurno();

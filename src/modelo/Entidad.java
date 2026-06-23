@@ -23,6 +23,13 @@ public abstract class Entidad implements IEntidad {
 	private List<Efecto> efectosActivos;
 	private List<Item> itemsEquipados;
 	
+	public interface EntidadListener {
+		void onAtacado();
+        void onCurado();
+    }
+	
+	private transient EntidadListener listener;
+	
 	public Entidad(String nombre, int vidaMax, int energiaMax, int velocidad, int ataque, int defensa, Habilidad habilidad) {
 		this.nombre = nombre;
 		this.vidaMax = vidaMax;
@@ -130,13 +137,21 @@ public abstract class Entidad implements IEntidad {
 	}
 	
 	@Override
-	public void aumentarVida(int cantidad) {
-		this.vida = Math.min(this.vida + cantidad, this.vidaMax);
+	public void quitarVida(int cantidad) {
+		this.vida -= cantidad;
+        
+        if (this.listener != null) {
+            this.listener.onAtacado();
+        }
 	}
 	
 	@Override
-	public void quitarVida(int cantidad) {
-		this.vida -= cantidad;
+	public void aumentarVida(int cantidad) {
+		this.vida = Math.min(this.vida + cantidad, this.vidaMax);
+        
+        if (this.listener != null) {
+            this.listener.onCurado();
+        }
 	}
 	
 	// Getters y setters
@@ -218,4 +233,8 @@ public abstract class Entidad implements IEntidad {
 	public int getAnchoSombra() { return 95; }
 	public int getYOffsetSprite() { return 0; }
 	
+	// Setter de Listener
+	public void setListener(EntidadListener listener) {
+        this.listener = listener;
+    }
 }

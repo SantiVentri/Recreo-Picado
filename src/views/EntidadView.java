@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import enums.ANIMACIONES;
+import modelo.Alumno;
 import modelo.Entidad;
 
 import java.awt.*;
@@ -46,10 +47,10 @@ public class EntidadView extends JPanel {
     private int frameActual = 0;
     private Timer animTimer;
 
-    // --- ANIMACIÓN DE ATAQUE ---
-    private Timer timerAtaque;
+    // Variables de animaciones de acciones (ataque, defensa y atacado)
+    private Timer timerAccion;
     private long faseInicioMs;
-    private static final int DURACION_ATAQUE_MS = 750;
+    private static final int DURACION_ATAQUE_MS = 500;
 
     // Cuánto se expande el ancho durante el ataque (px extra)
     private static final int EXTRA_ANCHO_ATAQUE = 180;
@@ -64,8 +65,23 @@ public class EntidadView extends JPanel {
         this.setPreferredSize(new Dimension(320, 420));
         this.setOpaque(false);
 
-        this.animaciones = new HashMap();
+        this.animaciones = new HashMap<ANIMACIONES, BufferedImage[]>();
         cargarAnimaciones();
+        
+        if (this.entidad != null) {
+            this.entidad.setListener(new Entidad.EntidadListener() {
+                @Override
+                public void onCurado() {
+                    // Cuando la entidad avisa que se curó, activamos el sprite
+                    reproducirAnimacionAccion(ANIMACIONES.CURADO);
+                }
+
+				@Override
+				public void onAtacado() {
+					reproducirAnimacionAccion(ANIMACIONES.ATACADO);
+				}
+            });
+        }
 
         addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -103,26 +119,36 @@ public class EntidadView extends JPanel {
     public EntidadView(String nombre, float escala) {
         this(nombre, null, false, escala);
     }
+    
+    public Entidad getEntidad() {
+    	return entidad;
+    }
 
     private void cargarAnimaciones() {
         String nombreFormateado = entidad != null ? entidad.getNombre().toLowerCase().replace(" ", "_") : nombreDisplay;
-        String pathIdle   = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-idle.png";
+        String pathIdle = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-idle.png";
         String pathAtaque = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-attack.png";
+        String pathAtacado = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-hurt.png";
         String pathMuerto = "src/resources/sprites/dead.png";
+        String pathCurado = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-heal.png";
 
         animaciones.put(ANIMACIONES.IDLE, recortarSprite(pathIdle, 22, 5));
         animaciones.put(ANIMACIONES.ATACAR, recortarSprite(pathAtaque, 1, 1));
-        animaciones.put(ANIMACIONES.MUERTO, recortarSprite(pathMuerto, 1, 1));
+        animaciones.put(ANIMACIONES.ATACADO, recortarSprite(pathAtacado, 1, 1));
+        animaciones.put(ANIMACIONES.MUERTO, recortarSprite(pathMuerto, 1, 1));        
+    	
+        if (entidad instanceof Alumno) {
+        	animaciones.put(ANIMACIONES.CURADO, recortarSprite(pathCurado, 1, 1));
+        }
     }
 
     /**
-     * Inicia la animación de ataque.
-     * Expande los bounds del panel hacia el lado del enemigo durante el ataque
-     * y los restaura al terminar.
-     * BatallaPanel puede consultar estaAnimandoAtaque() para saber si terminó.
+     * Inicia una animación de acción.
+     * Si es ATACAR, expande los bounds del panel.
+     * Si es ATACADO, solo reproduce el sprite en su lugar.
      */
-    public void reproducirAnimacionAtaque() {
-    	if (this.entidad.getVida() <= 0 || (timerAtaque != null && timerAtaque.isRunning())) return;
+    public void reproducirAnimacionAccion(ANIMACIONES accion) {
+    	if (this.entidad.getVida() <= 0 || (timerAccion != null && timerAccion.isRunning())) return;
 
         // Guardar bounds originales
         final int xOrig = getX();
@@ -130,38 +156,42 @@ public class EntidadView extends JPanel {
         final int wOrig = getWidth();
         final int hOrig = getHeight();
 
-        // Expandir hacia el lado del enemigo:
-        // - mira a la derecha (alumno): expandir hacia la derecha → x no cambia, w crece
-        // - mira a la izquierda (enemigo): expandir hacia la izquierda → x se corre, w crece
-        if (mirandoIzquierda) {
-            setBounds(xOrig - EXTRA_ANCHO_ATAQUE, yOrig, wOrig + EXTRA_ANCHO_ATAQUE, hOrig);
-        } else {
-            setBounds(xOrig, yOrig, wOrig + EXTRA_ANCHO_ATAQUE, hOrig);
+        // Expandir SOLAMENTE si la acción es ATACAR
+        if (accion == ANIMACIONES.ATACAR) {
+            if (mirandoIzquierda) {
+                setBounds(xOrig - EXTRA_ANCHO_ATAQUE, yOrig, wOrig + EXTRA_ANCHO_ATAQUE, hOrig);
+            } else {
+                setBounds(xOrig, yOrig, wOrig + EXTRA_ANCHO_ATAQUE, hOrig);
+            }
         }
 
-        setEstadoActual(ANIMACIONES.ATACAR);
+        setEstadoActual(accion);
         faseInicioMs = System.currentTimeMillis();
 
-        timerAtaque = new Timer(16, new ActionListener() {
+        timerAccion = new Timer(16, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 long transcurrido = System.currentTimeMillis() - faseInicioMs;
                 if (transcurrido >= DURACION_ATAQUE_MS) {
                     setEstadoActual(ANIMACIONES.IDLE);
-                    // Restaurar bounds originales
-                    setBounds(xOrig, yOrig, wOrig, hOrig);
-                    timerAtaque.stop();
+                    
+                    // Restaurar bounds originales SOLAMENTE si expandimos
+                    if (accion == ANIMACIONES.ATACAR) {
+                        setBounds(xOrig, yOrig, wOrig, hOrig);
+                    }
+                    
+                    timerAccion.stop();
                 }
                 repaint();
             }
         });
-        timerAtaque.start();
+        timerAccion.start();
     }
 
     /**
      * Devuelve true si la animación de ataque todavía está en curso.
      */
-    public boolean estaAnimandoAtaque() {
-        return timerAtaque != null && timerAtaque.isRunning();
+    public boolean estaAnimandoAccion() {
+        return timerAccion != null && timerAccion.isRunning();
     }
 
     private BufferedImage[] recortarSprite(String ruta, int cantidadFrames, int columnas) {
