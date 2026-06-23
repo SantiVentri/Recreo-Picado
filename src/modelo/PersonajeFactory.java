@@ -53,12 +53,12 @@ public class PersonajeFactory {
 
     public static Jefe crearJefe2() {
         Habilidad habilidad = new Habilidad("Inyección Dolorosa", "Aplica una inyección que envenena al objetivo", 20, 26, EfectoFactory.crearVeneno());
-        return new Jefe("Jefa de la Enfermería", 180, 100, 7, 17, 8, habilidad);
+        return new Jefe("Enfermera", 180, 100, 7, 17, 8, habilidad);
     }
 
     public static Jefe crearJefe3() {
         Habilidad habilidad = new Habilidad("Patada Voladora", "Una patada que golpea con fuerza al objetivo", 20, 30, EfectoFactory.crearVeneno());
-        return new Jefe("Jefe del Patio", 210, 110, 8, 19, 9, habilidad);
+        return new Jefe("Profesor ED", 210, 110, 8, 19, 9, habilidad);
     }
 
     public static JefeFinal crearJefeFinal() {
