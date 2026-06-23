@@ -7,7 +7,7 @@ public class BatallaFactory {
 		Equipo enemigos = new Equipo();
 		enemigos.agregarEntidad(PersonajeFactory.crearJefe1());
 		
-		Batalla nivel1 = new Batalla(enemigos, "baño");
+		Batalla nivel1 = new Batalla(enemigos, "Baño");
 		nivel1.setEstado(ESTADO_BATALLA.PENDIENTE);
 		return nivel1;
 	}
@@ -26,7 +26,7 @@ public class BatallaFactory {
 		// enemigos.agregarEntidad(PersonajeFactory.crearSecuazBasico(3));
 		// enemigos.agregarEntidad(PersonajeFactory.crearSecuazBasico(3));
 		
-		return new Batalla(enemigos, "patio");
+		return new Batalla(enemigos, "Patio");
 	}
 	
 	public static Batalla crearNivel4() {
