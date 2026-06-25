@@ -15,11 +15,8 @@ public class Mago extends Alumno {
     }
 
     @Override
-    public void realizarAtaque(IEntidad objetivo) {
-        this.setDefendiendo(false);
-        this.setEnergia(this.getEnergia() - 2);
-        int dano = this.getAtaque() + (inteligencia / 2);
-        objetivo.recibirDano(dano);
+    protected int calcularDanoAtaque() {
+        return this.getAtaque() + (inteligencia / 2);
     }
 
     @Override
@@ -45,8 +42,10 @@ public class Mago extends Alumno {
                 objetivo.aplicarEfecto(hab.getEfecto().copiar());
             }
         }
-    }
 
+        notificarUsandoHabilidad();
+    }
+    
     // Getters y setters
     public int getInteligencia() {
     	return inteligencia;

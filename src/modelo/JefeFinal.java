@@ -9,17 +9,13 @@ import interfaces.IEntidad;
  */
 public class JefeFinal extends Entidad {
 
-    public JefeFinal(String nombre, int vidaMax, int energiaMax, int velocidad,
-                     int ataque, int defensa, Habilidad habilidad) {
+    public JefeFinal(String nombre, int vidaMax, int energiaMax, int velocidad, int ataque, int defensa, Habilidad habilidad) {
         super(nombre, vidaMax, energiaMax, velocidad, ataque, defensa, habilidad);
     }
 
     @Override
-    public void realizarAtaque(IEntidad objetivo) {
-        this.setDefendiendo(false);
-        this.setEnergia(this.getEnergia() - 2);
-        int dano = (int)(this.getAtaque() * 2.0);
-        objetivo.recibirDano(dano);
+    protected int calcularDanoAtaque() {
+        return (int)(this.getAtaque() * 2.0);
     }
 
     @Override
@@ -35,5 +31,7 @@ public class JefeFinal extends Entidad {
         if (hab.getEfecto() != null && objetivo instanceof Entidad) {
             objetivo.aplicarEfecto(hab.getEfecto().copiar());
         }
+
+        notificarUsandoHabilidad();
     }
 }

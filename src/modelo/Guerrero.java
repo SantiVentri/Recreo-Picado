@@ -7,19 +7,16 @@ import interfaces.IEntidad;
 import orquestador.Orquestador;
 
 public class Guerrero extends Alumno {
-   private int fuerza;
+    private int fuerza;
 
-   public Guerrero(String nombre, int vidaMax, int energiaMax, int velocidad, int ataque, int defensa, Habilidad habilidad, int fuerza) {
-       super(nombre, vidaMax, energiaMax, velocidad, ataque, defensa, habilidad);
-       this.fuerza = fuerza;
-   }
+    public Guerrero(String nombre, int vidaMax, int energiaMax, int velocidad, int ataque, int defensa, Habilidad habilidad, int fuerza) {
+        super(nombre, vidaMax, energiaMax, velocidad, ataque, defensa, habilidad);
+        this.fuerza = fuerza;
+    }
 
     @Override
-    public void realizarAtaque(IEntidad objetivo) {
-        this.setDefendiendo(false);
-        this.setEnergia(this.getEnergia() - 2);
-        int dano = this.getAtaque() + (fuerza / 2);
-        objetivo.recibirDano(dano);
+    protected int calcularDanoAtaque() {
+        return this.getAtaque() + (fuerza / 2);
     }
 
     @Override
@@ -40,6 +37,8 @@ public class Guerrero extends Alumno {
                 objetivo.aplicarEfecto(this.getHabilidad().getEfecto().copiar());
             }
         }
+
+        notificarUsandoHabilidad();
     }
 
     // Getters y setters
@@ -50,6 +49,4 @@ public class Guerrero extends Alumno {
     public void setFuerza(int fuerza) {
     	this.fuerza = fuerza;
     }
-    
-    
 }

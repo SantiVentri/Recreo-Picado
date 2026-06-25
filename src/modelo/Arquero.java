@@ -11,11 +11,8 @@ public class Arquero extends Alumno {
     }
 
     @Override
-    public void realizarAtaque(IEntidad objetivo) {
-        this.setDefendiendo(false);
-        this.setEnergia(this.getEnergia() - 2);
-        int dano = this.getAtaque() + (punteria / 3);
-        objetivo.recibirDano(dano);
+    protected int calcularDanoAtaque() {
+        return this.getAtaque() + (punteria / 3);
     }
 
     /**
@@ -36,6 +33,8 @@ public class Arquero extends Alumno {
         if (hab.getEfecto() != null && objetivo instanceof Entidad) {
             objetivo.aplicarEfecto(hab.getEfecto().copiar());
         }
+
+        notificarUsandoHabilidad();
     }
     
     // Getters y setters

@@ -2,22 +2,15 @@ package modelo;
 
 import interfaces.IEntidad;
 
-/**
- * Enemigo intermedio. Tiene más stats que el Secuaz y puede recuperar vida al defenderse..
- */
 public class Jefe extends Entidad {
 
-    public Jefe(String nombre, int vidaMax, int energiaMax, int velocidad,
-                int ataque, int defensa, Habilidad habilidad) {
+    public Jefe(String nombre, int vidaMax, int energiaMax, int velocidad, int ataque, int defensa, Habilidad habilidad) {
         super(nombre, vidaMax, energiaMax, velocidad, ataque, defensa, habilidad);
     }
 
     @Override
-    public void realizarAtaque(IEntidad objetivo) {
-        this.setDefendiendo(false);
-        this.setEnergia(this.getEnergia() - 2);
-        int dano = (int)(this.getAtaque() * 1.5);
-        objetivo.recibirDano(dano);
+    protected int calcularDanoAtaque() {
+        return (int)(this.getAtaque() * 1.5);
     }
 
     @Override
@@ -32,15 +25,23 @@ public class Jefe extends Entidad {
         if (hab.getEfecto() != null && objetivo instanceof Entidad) {
             ((Entidad) objetivo).aplicarEfecto(hab.getEfecto().copiar());
         }
+
+        notificarUsandoHabilidad();
     }
-    
+
     // Getters de valores visuales
     @Override
-    public int getAnchoSprite() { return 340; }
-    
+    public int getAnchoSprite() {
+    	return 340;
+    }
+
     @Override
-    public int getOffsetSombra() { return 58; }
-    
+    public int getOffsetSombra() {
+    	return 58;
+    }
+
     @Override
-    public int getAnchoSombra() { return 110; }
+    public int getAnchoSombra() {
+    	return 110;
+    }
 }
