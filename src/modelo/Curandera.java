@@ -22,12 +22,6 @@ public class Curandera extends Alumno {
         objetivo.recibirDano(dano);
     }
  
-    @Override
-    public void realizarDefensa() {
-        this.setDefendiendo(true);
-        this.setEnergia(this.getEnergiaMax());
-    }
- 
     /**
      * Curación: le restaura vida al objetivo alumno usando la potencia de la habilidad + amistad.
      */

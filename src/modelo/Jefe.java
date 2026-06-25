@@ -21,12 +21,6 @@ public class Jefe extends Entidad {
     }
 
     @Override
-    public void realizarDefensa() {
-        this.setDefendiendo(true);
-        this.setEnergia(this.getEnergiaMax());
-    }
-
-    @Override
     public void usarHabilidad(IEntidad objetivo) {
         Habilidad hab = this.getHabilidad();
         if (hab == null || !hab.sePuedeUsar(this)) return;

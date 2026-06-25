@@ -18,12 +18,6 @@ public class Arquero extends Alumno {
         objetivo.recibirDano(dano);
     }
 
-    @Override
-    public void realizarDefensa() {
-        this.setDefendiendo(true);
-        this.setEnergia(this.getEnergiaMax());
-    }
-
     /**
      * Lluvia de flechas: potencia basada en la habilidad + puntería del arquero.
      * Si la habilidad tiene efecto (ej. sangrado), lo aplica al objetivo.

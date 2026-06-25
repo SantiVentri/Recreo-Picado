@@ -23,12 +23,6 @@ public class Guerrero extends Alumno {
     }
 
     @Override
-    public void realizarDefensa() {
-        this.setDefendiendo(true);
-        this.setEnergia(this.getEnergiaMax());
-    }
-
-    @Override
     public void usarHabilidad(IEntidad objetivo) {
         if (this.getHabilidad() == null || !this.getHabilidad().sePuedeUsar(this)) return;
         this.setEnergia(this.getEnergia() - this.getHabilidad().getCostoEnergia());
