@@ -167,6 +167,10 @@ public class EntidadView extends JPanel {
         	
         	String pathDefendiendo = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-defend.png";
         	animaciones.put(ANIMACIONES.DEFENDER, recortarSprite(pathDefendiendo, 1, 1));
+        	
+        	// Por ahora la animación de usar habilidad es solo para Alumnos
+        	String pathHabilidad = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-super.png";
+        	animaciones.put(ANIMACIONES.USAR_HABILIDAD, recortarSprite(pathHabilidad, 1, 1));
         }
         
     }
