@@ -169,6 +169,14 @@ public abstract class Entidad implements IEntidad {
         }
     }
 	
+	@Override
+	public void resetearParaBatalla() {
+		this.vida = this.vidaMax;
+		this.energia = 10;
+		this.defendiendo = false;
+		this.efectosActivos.clear();
+	}
+	
 	// Getters y setters
 	public String getNombre() {
 		return nombre;

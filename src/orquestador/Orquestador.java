@@ -46,6 +46,13 @@ public class Orquestador implements IOrquestador {
 
     @Override
     public void iniciarBatalla(Equipo alumnos, Batalla batalla) {
+        // Resetear stats de combate antes de empezar
+        for (Entidad alumno : alumnos.getEntidades()) {
+            alumno.resetearParaBatalla();
+        }
+        
+        batalla.resetearEnemigos();
+        
         this.alumnos = alumnos;
         this.batalla = batalla;
         this.indiceAlumno = 0;

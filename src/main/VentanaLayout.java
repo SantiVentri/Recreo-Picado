@@ -99,15 +99,13 @@ public class VentanaLayout extends JFrame {
 		cl.show(mainPanel, "KIOSKO");
 	}
 	
-	// Empezar batalla
 	public void empezarBatalla(Batalla batalla) {
-        partidaActual.resetearEquipo();
-        Orquestador.getInstance().iniciarBatalla(partidaActual.getAlumnos(), batalla);
-        batallaPanel.removeAll();
-        batallaPanel.cargarPanel();
-        batallaPanel.cargarEntidades();
-        cl.show(mainPanel, "BATALLA");
-    }
+	    Orquestador.getInstance().iniciarBatalla(partidaActual.getAlumnos(), batalla);
+	    batallaPanel.removeAll();
+	    batallaPanel.cargarPanel();
+	    batallaPanel.cargarEntidades();
+	    cl.show(mainPanel, "BATALLA");
+	}
 	
 	// Getter
     public Partida getPartida() {

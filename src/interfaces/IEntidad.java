@@ -19,4 +19,5 @@ public interface IEntidad {
 	void aumentarEnergia();
 	void recibirDanoVeneno(int cantidad); 
 	void procesarEfectos();
+	void resetearParaBatalla();
 }

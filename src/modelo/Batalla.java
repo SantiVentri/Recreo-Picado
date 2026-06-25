@@ -17,6 +17,13 @@ public class Batalla {
 		this.estado = ESTADO_BATALLA.BLOQUEADA;
 	}
 	
+	public void resetearEnemigos() {
+		for (Entidad enemigo : enemigos.getEntidades()) {
+			enemigo.resetearParaBatalla();
+		}
+	}
+	
+	// Getters y setters
 	public int getId() {
 		return id;
 	}
