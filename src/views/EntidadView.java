@@ -158,13 +158,17 @@ public class EntidadView extends JPanel {
         String pathMuerto = "src/resources/sprites/dead.png";
         animaciones.put(ANIMACIONES.MUERTO, recortarSprite(pathMuerto, 1, 1));
         
-        String pathCurado = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-heal.png";
-        if (entidad instanceof Alumno) {
-        	animaciones.put(ANIMACIONES.CURADO, recortarSprite(pathCurado, 1, 1));
-        }
-        
         String pathEnvenenado = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-poison.png";
         animaciones.put(ANIMACIONES.ENVENENADO, recortarSprite(pathEnvenenado, 1, 1));
+        
+        if (entidad instanceof Alumno) {
+        	String pathCurado = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-heal.png";
+        	animaciones.put(ANIMACIONES.CURADO, recortarSprite(pathCurado, 1, 1));
+        	
+        	String pathDefendiendo = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-defend.png";
+        	animaciones.put(ANIMACIONES.DEFENDER, recortarSprite(pathDefendiendo, 1, 1));
+        }
+        
     }
 
     /**
@@ -181,8 +185,8 @@ public class EntidadView extends JPanel {
         final int wOrig = getWidth();
         final int hOrig = getHeight();
 
-        // Expandir SOLAMENTE si la acción es ATACAR
-        if (accion == ANIMACIONES.ATACAR) {
+        // Expandir SOLAMENTE si la acción es ATACAR o USAR_HABILIDAD
+        if (accion == ANIMACIONES.ATACAR || accion == ANIMACIONES.USAR_HABILIDAD) {
             if (mirandoIzquierda) {
                 setBounds(xOrig - EXTRA_ANCHO_ATAQUE, yOrig, wOrig + EXTRA_ANCHO_ATAQUE, hOrig);
             } else {
@@ -200,7 +204,7 @@ public class EntidadView extends JPanel {
                     setEstadoActual(ANIMACIONES.IDLE);
                     
                     // Restaurar bounds originales SOLAMENTE si expandimos
-                    if (accion == ANIMACIONES.ATACAR) {
+                    if (accion == ANIMACIONES.ATACAR || accion == ANIMACIONES.USAR_HABILIDAD) {
                         setBounds(xOrig, yOrig, wOrig, hOrig);
                     }
                     
