@@ -10,8 +10,10 @@ public interface IEntidad {
 	void realizarDefensa();
 	void usarHabilidad(IEntidad objetivo);
 	void usarItem(Item item);
-	void agregarItem(Item item);
-	void quitarItem(Item item);
+	void equiparArma(Arma arma);
+	void desequiparArma();
+	void equiparArmadura(Armadura armadura);
+	void desequiparArmadura();
 	void aplicarEfecto(Efecto efecto);
 	void quitarEfecto(Efecto efecto);
 	void aumentarVida(int cantidad);

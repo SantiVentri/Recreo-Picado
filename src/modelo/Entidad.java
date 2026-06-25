@@ -21,7 +21,8 @@ public abstract class Entidad implements IEntidad {
 
 	// Atributos de items y efectos
 	private List<Efecto> efectosActivos;
-	private List<Item> itemsEquipados;
+	private Arma armaEquipada;
+	private Armadura armaduraEquipada;
 	
 	public interface EntidadListener {
 		void onAtacado();
@@ -45,7 +46,8 @@ public abstract class Entidad implements IEntidad {
 		this.habilidad = habilidad;
 		
 		this.efectosActivos = new ArrayList<Efecto>();
-		this.itemsEquipados = new ArrayList<Item>();
+		this.armaEquipada = null;
+		this.armaduraEquipada = null;
 	}
 
 	private int calcularDano(int daño) {
@@ -91,19 +93,23 @@ public abstract class Entidad implements IEntidad {
 	}
 	
 	@Override
-	public void agregarItem(Item item) {
-		if (this.itemsEquipados.size() < 3) {
-			this.itemsEquipados.add(item);				
-		} else {
-			System.out.println("Error: Inventario de personaje lleno");
-		}
+	public void equiparArma(Arma arma) {
+		this.armaEquipada = arma;
 	}
-
+	
 	@Override
-	public void quitarItem(Item item) {
-		if (this.itemsEquipados.contains(item)) {
-			this.itemsEquipados.remove(item);
-		}
+	public void desequiparArma() {
+		this.armaEquipada = null;
+	}
+	
+	@Override
+	public void equiparArmadura(Armadura armadura) {
+		this.armaduraEquipada = armadura;
+	}
+	
+	@Override
+	public void desequiparArmadura() {
+		this.armaduraEquipada = null;
 	}
 	
 	@Override
@@ -244,6 +250,14 @@ public abstract class Entidad implements IEntidad {
 	
 	public Habilidad getHabilidad() {
 		return habilidad;
+	}
+	
+	public Arma getArmaEquipada() {
+		return armaEquipada;
+	}
+	
+	public Armadura getArmaduraEquipada() {
+		return armaduraEquipada;
 	}
 	
 	public List<Efecto> getEfectosActivos() {
