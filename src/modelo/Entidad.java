@@ -91,7 +91,7 @@ public abstract class Entidad implements IEntidad {
 	@Override
 	public final void realizarDefensa() {
 		this.defendiendo = true;
-		this.energia += 20;
+		this.energia = Math.min(this.energia + 20, this.energiaMax);
 		if (this.listener != null) {
 			this.listener.onDefendiendo();
 		}
