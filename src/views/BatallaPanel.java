@@ -17,15 +17,14 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import enums.ACCIONES;
-import enums.ANIMACIONES;
 import main.VentanaLayout;
 import modelo.Curandera;
 import modelo.Entidad;
 import orquestador.Orquestador;
 
 public class BatallaPanel extends JPanel {
-	
-	private CharacterOrderPanel characterOrderPanel;
+
+    private CharacterOrderPanel characterOrderPanel;
     private VentanaLayout ventana;
 
     // Estado de selección de objetivo
@@ -41,6 +40,8 @@ public class BatallaPanel extends JPanel {
     private List<JLabel> flechasEnemigos = new ArrayList<>();
 
     // Botones
+    private EntidadView viewActual;
+
     private JButton btnAtacar;
     private JButton btnDefender;
     private JButton btnHabilidad;
@@ -77,7 +78,7 @@ public class BatallaPanel extends JPanel {
         btnDefender.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Orquestador.getInstance().ejecutarTurno(ACCIONES.DEFENDER, null, null);
-                avanzarTurno();
+                onAccionIniciada();
             }
         });
         panelBotones.add(btnDefender);
@@ -125,15 +126,9 @@ public class BatallaPanel extends JPanel {
             tamañoReal.height
         );
         add(panelBotones);
-        
+
         characterOrderPanel = new CharacterOrderPanel();
-
-        characterOrderPanel.setBounds(
-                -15,
-                -35,
-                270,
-                190);
-
+        characterOrderPanel.setBounds(-15, -35, 270, 190);
         add(characterOrderPanel);
     }
 
@@ -158,7 +153,7 @@ public class BatallaPanel extends JPanel {
 
         // ALUMNOS — se agregan de atrás hacia adelante (índice mayor = más adelante = encima)
         for (int i = alumnos.size() - 1; i >= 0; i--) {
-        	EntidadView ev = new EntidadView(alumnos.get(i));
+            EntidadView ev = new EntidadView(alumnos.get(i));
             ev.setMostrarHUD(true);
             ev.setMirandoIzquierda(false);
             ev.setBounds(alumnoBaseX - i * pasoX, baseY + i * pasoY, evAncho, evAlto);
@@ -180,7 +175,7 @@ public class BatallaPanel extends JPanel {
         for (int i = 0; i < enemigos.size(); i++) {
             final int idx = i;
 
-        	EntidadView ev = new EntidadView(enemigos.get(i));
+            EntidadView ev = new EntidadView(enemigos.get(i));
             ev.setMostrarHUD(true);
             ev.setMirandoIzquierda(true);
             int evX = enemigoBaseX + i * pasoX;
@@ -202,21 +197,10 @@ public class BatallaPanel extends JPanel {
                     ocultarFlechas();
                     indiceObjetivoActual = idx;
 
-                    int idxAtacante = Orquestador.getInstance().getIndiceAlumnoActual();
-                    final EntidadView viewAtacante = (idxAtacante >= 0 && idxAtacante < viewsAlumnos.size())
-                        ? viewsAlumnos.get(idxAtacante) : null;
-
                     Orquestador.getInstance().ejecutarTurno(accionPendiente, objetivo, null);
                     esperandoObjetivo = false;
                     accionPendiente   = null;
-                    setBotonesHabilitados(false);
-
-                    if (viewAtacante != null) {
-                        viewAtacante.reproducirAnimacionAccion(ANIMACIONES.ATACAR);
-                        esperarFinAnimacion(viewAtacante);
-                    } else {
-                        avanzarTurno();
-                    }
+                    onAccionIniciada();
                 }
             });
 
@@ -258,9 +242,9 @@ public class BatallaPanel extends JPanel {
             add(viewsEnemigos.get(i));
             add(flechaArr[i]);
         }
-        
-        setBotonesHabilitados(true);
 
+        setBotonesHabilitados(true);
+        actualizarViewActual();
         revalidate();
         repaint();
     }
@@ -278,12 +262,16 @@ public class BatallaPanel extends JPanel {
     //
     // Timer de 16ms que chequea si la animación terminó.
     // Cuando estaAnimandoAtaque() devuelve false, detiene el timer y avanza el turno.
+    private void onAccionIniciada() {
+        setBotonesHabilitados(false);
+        esperarFinAnimacion(viewActual);
+    }
 
-    private void esperarFinAnimacion(final EntidadView atacante) {
+    private void esperarFinAnimacion(final EntidadView entidadView) {
         Timer timerEspera = new Timer(16, null);
         timerEspera.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (!atacante.estaAnimandoAccion()) {
+                if (!entidadView.estaAnimandoAccion()) {
                     timerEspera.stop();
                     avanzarTurno();
                 }
@@ -318,20 +306,10 @@ public class BatallaPanel extends JPanel {
     
     // ─── USAR HABILIDAD SIN SELECCIÓN DE OBJETIVO ───────────────────────────────
     
+
     private void usarHabilidadSinObjetivo() {
-        int idxAtacante = Orquestador.getInstance().getIndiceAlumnoActual();
-        final EntidadView viewAtacante = (idxAtacante >= 0 && idxAtacante < viewsAlumnos.size())
-            ? viewsAlumnos.get(idxAtacante) : null;
-
-        setBotonesHabilitados(false);
         Orquestador.getInstance().ejecutarTurno(ACCIONES.USAR_HABILIDAD, null, null);
-
-        if (viewAtacante != null) {
-            viewAtacante.reproducirAnimacionAccion(ANIMACIONES.ATACAR);
-            esperarFinAnimacion(viewAtacante);
-        } else {
-            avanzarTurno();
-        }
+        onAccionIniciada();
     }
 
     // ─── FLUJO DE TURNOS ──────────────────────────────────────────────────────
@@ -345,8 +323,8 @@ public class BatallaPanel extends JPanel {
         }
 
         Orquestador.getInstance().proximoTurno();
+        actualizarViewActual();
         characterOrderPanel.repaint();
-
         actualizarVistas();
 
         if (Orquestador.getInstance().batallaTerminada()) {
@@ -361,19 +339,8 @@ public class BatallaPanel extends JPanel {
             timerPreAtaque.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     timerPreAtaque.stop();
-
-                    int idxEnemigo = Orquestador.getInstance().getIndiceEnemigoActual();
-                    final EntidadView viewEnemigo = (idxEnemigo >= 0 && idxEnemigo < viewsEnemigos.size())
-                        ? viewsEnemigos.get(idxEnemigo) : null;
-
                     Orquestador.getInstance().ejecutarTurnoEnemigo();
-
-                    if (viewEnemigo != null) {
-                        viewEnemigo.reproducirAnimacionAccion(ANIMACIONES.ATACAR);
-                        esperarFinAnimacion(viewEnemigo);
-                    } else {
-                        avanzarTurno();
-                    }
+                    esperarFinAnimacion(viewActual);
                 }
             });
             timerPreAtaque.setRepeats(false);
@@ -394,23 +361,33 @@ public class BatallaPanel extends JPanel {
     }
 
     // ─── ACTUALIZAR VISTAS ────────────────────────────────────────────────────
+    private void actualizarViewActual() {
+        Entidad entidadActual = Orquestador.getInstance().getEntidadActual();
+        viewActual = null;
+        List<EntidadView> lista = Orquestador.getInstance().esTurnoDeAlumno()
+            ? viewsAlumnos : viewsEnemigos;
+        for (EntidadView ev : lista) {
+            if (ev.getEntidad() == entidadActual) {
+                viewActual = ev;
+                break;
+            }
+        }
+    }
 
     private void actualizarVistas() {
         List<Entidad> alumnos  = Orquestador.getInstance().getAlumnos().getEntidades();
         List<Entidad> enemigos = Orquestador.getInstance().getBatalla().getEnemigos().getEntidades();
 
         for (int i = 0; i < viewsAlumnos.size() && i < alumnos.size(); i++) {
-        	viewsAlumnos.get(i).repaint();
+            viewsAlumnos.get(i).repaint();
         }
         for (int i = 0; i < viewsEnemigos.size() && i < enemigos.size(); i++) {
-        	viewsEnemigos.get(i).repaint();
-
+            viewsEnemigos.get(i).repaint();
         }
     }
 
     private void setBotonesHabilitados(boolean habilitado) {
         if (!habilitado) {
-            // Si hay que deshabilitar todo (turno enemigo o animación)
             if (btnAtacar != null) btnAtacar.setEnabled(false);
             if (btnDefender != null) btnDefender.setEnabled(false);
             if (btnHabilidad != null) btnHabilidad.setEnabled(false);
@@ -418,29 +395,19 @@ public class BatallaPanel extends JPanel {
         } else {
             // Si es el turno del alumno, habilitamos según su energía
             Entidad actual = Orquestador.getInstance().getEntidadActual();
-            
             if (actual != null) {
                 int energiaActual = actual.getEnergia();
-
-                if (btnAtacar != null) {
-                    btnAtacar.setEnabled(energiaActual >= 10);
-                }
-                
-                if (btnDefender != null) {
-                    btnDefender.setEnabled(true);
-                }
-                
+                if (btnAtacar != null) btnAtacar.setEnabled(energiaActual >= 10);
+                if (btnDefender != null) btnDefender.setEnabled(true);
                 if (btnHabilidad != null) {
                     if (actual.getHabilidad() != null) {
-                        int costoHabilidad = actual.getHabilidad().getCostoEnergia();
-                        btnHabilidad.setEnabled(energiaActual >= costoHabilidad);
+                        btnHabilidad.setEnabled(energiaActual >= actual.getHabilidad().getCostoEnergia());
                     } else {
                         btnHabilidad.setEnabled(false);
                     }
                 }
             }
         }
-
         if (characterOrderPanel != null) characterOrderPanel.repaint();
     }
 
