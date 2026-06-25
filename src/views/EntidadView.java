@@ -70,15 +70,29 @@ public class EntidadView extends JPanel {
         
         if (this.entidad != null) {
             this.entidad.setListener(new Entidad.EntidadListener() {
-                @Override
-                public void onCurado() {
-                    // Cuando la entidad avisa que se curó, activamos el sprite
-                    reproducirAnimacionAccion(ANIMACIONES.CURADO);
-                }
+				@Override
+				public void onAtacando() {
+					reproducirAnimacionAccion(ANIMACIONES.ATACAR);
+				}
+
+				@Override
+				public void onDefendiendo() {
+					reproducirAnimacionAccion(ANIMACIONES.DEFENDER);
+				}
+
+				@Override
+				public void onUsandoHabilidad() {
+					reproducirAnimacionAccion(ANIMACIONES.USAR_HABILIDAD);
+				}
 
 				@Override
 				public void onAtacado() {
 					reproducirAnimacionAccion(ANIMACIONES.ATACADO);
+				}
+
+				@Override
+				public void onCurado() {
+					reproducirAnimacionAccion(ANIMACIONES.CURADO);
 				}
 
 				@Override

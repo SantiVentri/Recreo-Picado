@@ -25,10 +25,13 @@ public abstract class Entidad implements IEntidad {
 	private Armadura armaduraEquipada;
 	
 	public interface EntidadListener {
+		void onAtacando();
+		void onDefendiendo();
+		void onUsandoHabilidad();
 		void onAtacado();
-        void onCurado();
-        void onEnvenenado();
-    }
+		void onCurado();
+		void onEnvenenado();
+	}
 	
 	private transient EntidadListener listener;
 	
@@ -72,20 +75,36 @@ public abstract class Entidad implements IEntidad {
 	}
 
 	@Override
-	public void realizarAtaque(IEntidad objetivo) {
+	public final void realizarAtaque(IEntidad objetivo) {
 		this.defendiendo = false;
-		this.energia -= 10;
-		objetivo.recibirDano(this.ataque);
+		this.setEnergia(this.getEnergia() - 10);
+		objetivo.recibirDano(calcularDanoAtaque());
+		if (this.listener != null) {
+			this.listener.onAtacando();
+		}
+	}
+
+	protected int calcularDanoAtaque() {
+		return this.ataque;
 	}
 
 	@Override
-	public void realizarDefensa() {
+	public final void realizarDefensa() {
 		this.defendiendo = true;
 		this.energia += 20;
+		if (this.listener != null) {
+			this.listener.onDefendiendo();
+		}
 	}
 
 	@Override
 	public abstract void usarHabilidad(IEntidad objetivo);
+
+	protected void notificarUsandoHabilidad() {
+		if (this.listener != null) {
+			this.listener.onUsandoHabilidad();
+		}
+	}
 
 	@Override
 	public void usarItem(Item item) {
