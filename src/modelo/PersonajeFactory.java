@@ -26,8 +26,8 @@ public class PersonajeFactory {
     public static Secuaz crearSecuazBasico(int numeroBatalla) {
     	String nombre;
     	switch (numeroBatalla) {
-    		case 2: nombre = "Secuaz de la enfermería"; break;
-    		case 3: nombre = "Secuaz del patio"; break;
+    		case 2: nombre = "Secuaz Enfermera"; break;
+    		case 3: nombre = "Secuaz Patio"; break;
     		case 4: nombre = "Secuaz del director"; break;
     		default: nombre = "Secuaz"; break;
     	}
