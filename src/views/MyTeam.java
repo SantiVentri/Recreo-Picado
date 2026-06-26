@@ -1,7 +1,7 @@
 package views;
 
 import javax.swing.JPanel;
-import main.VentanaLayout;
+
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

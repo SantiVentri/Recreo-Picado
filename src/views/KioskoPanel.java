@@ -3,7 +3,6 @@ package views;
 import javax.swing.*;
 import java.awt.*;
 
-import main.VentanaLayout;
 import modelo.Item;
 import modelo.Kiosko;
 import modelo.Equipo;

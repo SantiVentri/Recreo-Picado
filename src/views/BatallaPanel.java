@@ -17,7 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import enums.ACCIONES;
-import main.VentanaLayout;
 import modelo.Curandera;
 import modelo.Entidad;
 import orquestador.Orquestador;

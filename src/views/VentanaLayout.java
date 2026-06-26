@@ -1,4 +1,4 @@
-package main;
+package views;
 
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -10,8 +10,6 @@ import modelo.Kiosko;
 import modelo.Partida;
 import modelo.Repositorio;
 import orquestador.Orquestador;
-import views.*;
-
 import utils.ReproductorMusica;
 
 public class VentanaLayout extends JFrame {

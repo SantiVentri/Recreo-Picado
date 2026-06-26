@@ -6,7 +6,6 @@ import java.util.List;
 import javax.swing.*;
 
 import enums.ESTADO_BATALLA;
-import main.VentanaLayout;
 import modelo.Batalla;
 
 public class LevelsPanel extends JPanel {

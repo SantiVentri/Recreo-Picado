@@ -8,8 +8,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import main.VentanaLayout;
-
 public class WelcomePanel extends JPanel {
     private Image imagenFondo;
     private JButton btnEmpezar;

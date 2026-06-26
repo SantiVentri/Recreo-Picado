@@ -6,7 +6,6 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import main.VentanaLayout;
 
 public class Jugador1 extends JPanel {
 

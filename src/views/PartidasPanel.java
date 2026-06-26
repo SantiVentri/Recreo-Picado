@@ -3,7 +3,6 @@ package views;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import main.VentanaLayout;
 
 public class PartidasPanel extends JPanel {
 	
