@@ -7,7 +7,9 @@ public class BatallaFactory {
 		Equipo enemigos = new Equipo();
 		enemigos.agregarEntidad(PersonajeFactory.crearJefe1());
 		
-		Batalla nivel1 = new Batalla(enemigos, "Baño");
+		Recompensa recompensa = RecompensaFactory.crearRecompensa1();
+		
+		Batalla nivel1 = new Batalla(enemigos, "Baño", recompensa);
 		nivel1.setEstado(ESTADO_BATALLA.PENDIENTE);
 		return nivel1;
 	}
@@ -17,7 +19,9 @@ public class BatallaFactory {
 		enemigos.agregarEntidad(PersonajeFactory.crearJefe2());
 		enemigos.agregarEntidad(PersonajeFactory.crearSecuazBasico(2));
 		
-		return new Batalla(enemigos, "Enfermeria");
+		Recompensa recompensa = RecompensaFactory.crearRecompensa2();
+		
+		return new Batalla(enemigos, "Enfermeria", recompensa);
 	}
 	
 	public static Batalla crearNivel3() {
@@ -26,7 +30,9 @@ public class BatallaFactory {
 		enemigos.agregarEntidad(PersonajeFactory.crearJefe3());
 		enemigos.agregarEntidad(PersonajeFactory.crearSecuazBasico(3));
 		
-		return new Batalla(enemigos, "Patio");
+		Recompensa recompensa = RecompensaFactory.crearRecompensa3();
+		
+		return new Batalla(enemigos, "Patio", recompensa);
 	}
 	
 	public static Batalla crearNivel4() {
@@ -36,6 +42,8 @@ public class BatallaFactory {
 		// enemigos.agregarEntidad(PersonajeFactory.crearSecuazBasico(4));
 		// enemigos.agregarEntidad(PersonajeFactory.crearSecuazBasico(4));
 		
-		return new Batalla(enemigos, "Direccion");
+		Recompensa recompensa = RecompensaFactory.crearRecompensa4();
+		
+		return new Batalla(enemigos, "Direccion", recompensa);
 	}
 }

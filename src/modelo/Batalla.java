@@ -9,12 +9,14 @@ public class Batalla {
 	private Equipo enemigos;
 	private String nombreArena;
 	private ESTADO_BATALLA estado;
+	private Recompensa recompensa;
 	
-	public Batalla(Equipo enemigos, String nombreArena) {
+	public Batalla(Equipo enemigos, String nombreArena, Recompensa recompensa) {
 		this.id = contador++;
 		this.enemigos = enemigos;
 		this.nombreArena = nombreArena;
 		this.estado = ESTADO_BATALLA.BLOQUEADA;
+		this.recompensa = recompensa;
 	}
 	
 	public void resetearEnemigos() {
@@ -42,5 +44,9 @@ public class Batalla {
 
 	public String getNombreArena() {
 		return nombreArena;
+	}
+	
+	public Recompensa getRecompensa() {
+		return recompensa;
 	}
 }
