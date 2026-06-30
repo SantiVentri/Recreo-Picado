@@ -193,7 +193,17 @@ public class Orquestador implements IOrquestador {
 
         int indice = (int) (Math.random() * objetivosVivos.size());
         Entidad objetivo = objetivosVivos.get(indice);
-        enemigo.realizarAtaque(objetivo);
+        
+        // Si tiene la energia suficiente, usa su habilidad
+        if (enemigo.getEnergia() >= enemigo.getHabilidad().getCostoEnergia()) {
+        	enemigo.usarHabilidad(objetivo);
+        } else if (enemigo.getEnergia() > 10) {
+        	// Si el enemigo puede atacar, ataca
+        	enemigo.realizarAtaque(objetivo);
+        } else {
+        	// Sino, se defiende para aumentar su energia
+        	enemigo.realizarDefensa();
+        }
 
         List<Entidad> atacados = new ArrayList<Entidad>();
         atacados.add(objetivo);
