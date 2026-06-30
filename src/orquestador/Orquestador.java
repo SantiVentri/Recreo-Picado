@@ -11,6 +11,7 @@ import modelo.Entidad;
 import modelo.Equipo;
 import modelo.Item;
 import modelo.Repositorio;
+import modelo.Secuaz;
 
 public class Orquestador implements IOrquestador {
     private static Orquestador instancia;
@@ -194,8 +195,8 @@ public class Orquestador implements IOrquestador {
         int indice = (int) (Math.random() * objetivosVivos.size());
         Entidad objetivo = objetivosVivos.get(indice);
         
-        // Si tiene la energia suficiente, usa su habilidad
-        if (enemigo.getEnergia() >= enemigo.getHabilidad().getCostoEnergia()) {
+        // Si el enemigo no es un Secuaz y tiene la energia suficiente, usa su habilidad
+        if (!(enemigo instanceof Secuaz) && enemigo.getEnergia() >= enemigo.getHabilidad().getCostoEnergia()) {
         	enemigo.usarHabilidad(objetivo);
         } else if (enemigo.getEnergia() > 10) {
         	// Si el enemigo puede atacar, ataca
