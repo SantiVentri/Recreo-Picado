@@ -8,11 +8,13 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import modelo.Entidad;
 import modelo.Repositorio;
+import views.InventarioView;
 public class Jugador4 extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private Image imagenFondo;
     private EntidadView entidadView;
+    private InventarioView inventario;
 
     public Jugador4(VentanaLayout ventana) {
 
@@ -35,7 +37,7 @@ public class Jugador4 extends JPanel {
         add(entidadView);
         
         //inventario
-        InventarioView inventario = new InventarioView(guerrero);
+        inventario = new InventarioView(guerrero);
         inventario.setBounds(470, 80, 300, 450);
         add(inventario);
 
@@ -53,6 +55,12 @@ public class Jugador4 extends JPanel {
 
         add(botonExit);
     }
+    public void refrescarInventario() {
+        if (inventario != null) {
+            inventario.actualizar();
+        }
+    }
+
 
     @Override
     protected void paintComponent(Graphics g) {

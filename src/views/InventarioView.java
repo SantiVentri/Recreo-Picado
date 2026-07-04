@@ -1,6 +1,6 @@
 package views;
 
-import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -13,7 +13,14 @@ import modelo.Repositorio;
 
 public class InventarioView extends JPanel {
 
+	
+	private static final int COLUMNAS = 4;
+    private static final int FILAS = 5;
+    private static final int TAMANIO_CELDA = 65; // celda cuadrada (ancho = alto)
+    private static final int ESPACIADO = 8;
+    
     private Entidad personaje;
+    
 
     public InventarioView(Entidad personaje) {
     	 System.out.println("Se creó InventarioView");
@@ -21,7 +28,7 @@ public class InventarioView extends JPanel {
 
         setOpaque(false);
 
-        setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        setLayout(new GridLayout (FILAS, COLUMNAS,ESPACIADO, ESPACIADO));
 
         cargarItems();
     }
@@ -34,7 +41,7 @@ public class InventarioView extends JPanel {
                 Repositorio.getInstance()
                            .getPartidaActual()
                            .getInventario();
-
+        System.out.println("InventarioView leyendo lista con " + inventario.size() + " items");
         for(Item item : inventario) {
 
         	ItemView vista = new ItemView(item,70,70,false);

@@ -1,6 +1,6 @@
 package views;
 
-import java.awt.Color;
+
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -44,7 +44,7 @@ public class Jugador1 extends JPanel {
         
         
         inventario = new InventarioView(mago);
-        inventario.setBounds(470, 80, 300, 450);
+        inventario.setBounds(405, 115, 284, 357);
         add(inventario);
 
         // --- BOTÓN VOLVER ---
