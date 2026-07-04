@@ -44,7 +44,7 @@ public class Jugador1 extends JPanel {
         
         
         inventario = new InventarioView(mago);
-        inventario.setBounds(405, 115, 284, 357);
+        inventario.setBounds(505, 115, 284, 357);
         add(inventario);
 
         // --- BOTÓN VOLVER ---

@@ -17,7 +17,8 @@ public class InventarioView extends JPanel {
 	private static final int COLUMNAS = 4;
     private static final int FILAS = 5;
     private static final int TAMANIO_CELDA = 65; // celda cuadrada (ancho = alto)
-    private static final int ESPACIADO = 8;
+    private static final int ESPACIADO_X = 3;
+    private static final int ESPACIADO_Y = 2; 
     
     private Entidad personaje;
     
@@ -28,7 +29,7 @@ public class InventarioView extends JPanel {
 
         setOpaque(false);
 
-        setLayout(new GridLayout (FILAS, COLUMNAS,ESPACIADO, ESPACIADO));
+        setLayout(null);
 
         cargarItems();
     }
@@ -41,10 +42,11 @@ public class InventarioView extends JPanel {
                 Repositorio.getInstance()
                            .getPartidaActual()
                            .getInventario();
-        System.out.println("InventarioView leyendo lista con " + inventario.size() + " items");
+        
+        int indice = 0;
         for(Item item : inventario) {
 
-        	ItemView vista = new ItemView(item,70,70,false);
+        	ItemView vista = new ItemView(item ,TAMANIO_CELDA, TAMANIO_CELDA,false);
 
         	// Si este personaje tiene equipado este objeto,
         	// dibuja el borde verde.
@@ -53,8 +55,14 @@ public class InventarioView extends JPanel {
         	}
 
         	vista.setClickListener(i -> seleccionarItem(i));
+        	int fila = indice / COLUMNAS;
+        	int columna = indice % COLUMNAS;
+        	int x = columna * (TAMANIO_CELDA + ESPACIADO_X);
+        	int y = fila * (TAMANIO_CELDA + ESPACIADO_Y);
+        	vista.setBounds(x, y, TAMANIO_CELDA, TAMANIO_CELDA);
 
         	add(vista);
+        	indice++;
         }
 
         revalidate();
