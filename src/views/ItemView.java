@@ -30,7 +30,7 @@ public class ItemView extends JPanel {
 
     private BufferedImage imagenItem;
     private ClickListener clickListener;
-
+    private boolean seleccionado = false;
     // --- Constructor completo ---
     public ItemView(Item item, int anchoIcono, int altoIcono, boolean mostrarInfo) {
         this.item = item;
@@ -81,6 +81,14 @@ public class ItemView extends JPanel {
     public Item getItem() {
         return item;
     }
+    public boolean isSeleccionado() {
+        return seleccionado;
+    }
+
+    public void setSeleccionado(boolean seleccionado) {
+        this.seleccionado = seleccionado;
+        repaint();
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -113,6 +121,18 @@ public class ItemView extends JPanel {
             g2.fillRect(xIcono, yIcono, ladoIcono, ladoIcono);
             g2.setColor(Color.WHITE);
             g2.drawString("?", centroX - 4, yIcono + ladoIcono / 2);
+        }
+        if (seleccionado) {
+            g2.setColor(Color.GREEN);
+            g2.setStroke(new BasicStroke(3));
+
+            g2.drawRoundRect(
+                    xIcono - 3,
+                    yIcono - 3,
+                    ladoIcono + 6,
+                    ladoIcono + 6,
+                    10,
+                    10);
         }
 
         // --- NOMBRE + PRECIO (opcional) ---

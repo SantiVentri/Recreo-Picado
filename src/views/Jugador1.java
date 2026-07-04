@@ -1,5 +1,6 @@
 package views;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -7,11 +8,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import modelo.Entidad;
+import modelo.Repositorio;
+import views.InventarioView;
 public class Jugador1 extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private Image imagenFondo;
     private EntidadView entidadView;
+    private InventarioView inventario;
 
     public Jugador1(VentanaLayout ventana) {
 
@@ -23,10 +28,24 @@ public class Jugador1 extends JPanel {
 
         setLayout(null);
 
+     // Obtener el mago de la partida
+        Entidad mago = Repositorio.getInstance()
+                .getPartidaActual()
+                .getAlumnos()
+                .getEntidadPorNombre("Mago");
+
         // --- ENTIDAD VIEW ---
-        entidadView = new EntidadView("Mago", 2f);
+        entidadView = new EntidadView(mago, false);
+        entidadView.setEscala(2f);
         entidadView.setBounds(60, 80, 400, 500);
         add(entidadView);
+
+        // --- INVENTARIO ---
+        
+        
+        inventario = new InventarioView(mago);
+        inventario.setBounds(470, 80, 300, 450);
+        add(inventario);
 
         // --- BOTÓN VOLVER ---
         ImageIcon iconoOriginal = new ImageIcon("src/resources/Volver-atras.png");
@@ -41,6 +60,11 @@ public class Jugador1 extends JPanel {
         botonExit.addActionListener(e -> ventana.verEquipo());
 
         add(botonExit);
+    }
+    public void refrescarInventario() {
+        if (inventario != null) {
+            inventario.actualizar();
+        }
     }
 
     @Override

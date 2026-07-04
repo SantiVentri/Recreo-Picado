@@ -113,21 +113,49 @@ public abstract class Entidad implements IEntidad {
 	
 	@Override
 	public void equiparArma(Arma arma) {
+		
+		//si ya tiene un arma equipada, la libera
+		if (this.armaEquipada != null) {
+			this.armaEquipada.setEquipadoPor(null);
+		}
+		//equipa el arma a ese jugador
 		this.armaEquipada = arma;
+		if (arma != null) {
+			arma.setEquipadoPor(this);
+		}
 	}
+	
 	
 	@Override
 	public void desequiparArma() {
+		
+		if (this.armaEquipada != null) { 
+			this.armaEquipada.setEquipadoPor(null);
+		}
 		this.armaEquipada = null;
 	}
 	
 	@Override
 	public void equiparArmadura(Armadura armadura) {
+		
+		if (this.armaduraEquipada != null) {
+			this.armaduraEquipada.setEquipadoPor(null);
+		}
+		
 		this.armaduraEquipada = armadura;
+		
+		if (armadura != null) {
+			armadura.setEquipadoPor(this);
+		}
 	}
 	
 	@Override
 	public void desequiparArmadura() {
+		
+		if (this.armaduraEquipada != null) {
+			this.armaduraEquipada.setEquipadoPor(null);
+			
+		}
 		this.armaduraEquipada = null;
 	}
 	

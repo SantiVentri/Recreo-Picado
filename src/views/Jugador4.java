@@ -6,7 +6,8 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
+import modelo.Entidad;
+import modelo.Repositorio;
 public class Jugador4 extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -23,10 +24,20 @@ public class Jugador4 extends JPanel {
 
         setLayout(null);
 
-        // --- ENTIDAD VIEW ---
-        entidadView = new EntidadView("Guerrero", 2f);
+        Entidad guerrero = Repositorio.getInstance()
+                .getPartidaActual()
+                .getAlumnos()
+                .getEntidadPorNombre("Guerrero");
+
+        entidadView = new EntidadView(guerrero, false);
+        entidadView.setEscala(2f);
         entidadView.setBounds(60, 80, 400, 500);
         add(entidadView);
+        
+        //inventario
+        InventarioView inventario = new InventarioView(guerrero);
+        inventario.setBounds(470, 80, 300, 450);
+        add(inventario);
 
         // --- BOTÓN VOLVER ---
         ImageIcon iconoOriginal = new ImageIcon("src/resources/Volver-atras.png");

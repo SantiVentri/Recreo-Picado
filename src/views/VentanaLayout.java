@@ -79,6 +79,10 @@ public class VentanaLayout extends JFrame {
 	
 	public void verJugador1() {
 		cl.show(mainPanel, "JUGADOR1");
+		 batallaPanel.repaint();
+
+		    // IMPORTANTE
+		    ((Jugador1) obtenerPanel("JUGADOR1")).refrescarInventario();
 	}
 	
 	public void verJugador2() {
