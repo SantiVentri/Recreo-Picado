@@ -40,7 +40,7 @@ public class Jugador3 extends JPanel {
         
         //inventario
         inventario = new InventarioView(curandera);
-        inventario.setBounds(470, 80, 300, 450);
+        inventario.setBounds(505, 115, 284, 357);
         add(inventario);
 
         // --- BOTÓN VOLVER ---

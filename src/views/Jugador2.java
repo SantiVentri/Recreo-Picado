@@ -39,7 +39,7 @@ public class Jugador2 extends JPanel {
         
         //add inventario
         inventario = new InventarioView(arquero);
-        inventario.setBounds(470, 80, 300, 450);
+        inventario.setBounds(505, 115, 284, 357);
         add(inventario);
 
         // --- BOTÓN VOLVER ---

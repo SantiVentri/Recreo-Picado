@@ -38,7 +38,7 @@ public class Jugador4 extends JPanel {
         
         //inventario
         inventario = new InventarioView(guerrero);
-        inventario.setBounds(470, 80, 300, 450);
+        inventario.setBounds(505, 115, 284, 357);
         add(inventario);
 
         // --- BOTÓN VOLVER ---
