@@ -21,4 +21,9 @@ public class Armadura extends Item {
     public String getTipo() { return tipo; }
     public int getVidaBonus() { return vidaBonus; }
     public int getDefensaBonus() { return defensaBonus; }
+    
+    @Override
+    public Armadura clonar() {
+        return new Armadura(nombre, descripcion, valor, tipo, vidaBonus, defensaBonus, rutaImagen);
+    }
 }

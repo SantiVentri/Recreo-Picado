@@ -23,4 +23,10 @@ public class Pocion extends Item {
     public int getCantidadCuracion() { return cantidadCuracion; }
     public int getCantidadMana() { return cantidadMana; }
     public EFECTOS getEfecto() { return efecto; }
+    
+    @Override
+    public Pocion clonar() {
+        return new Pocion(nombre, descripcion, valor, cantidadCuracion, cantidadMana, efecto, rutaImagen);
+    }
 }
+

@@ -71,28 +71,33 @@ public class InventarioView extends JPanel {
 
     private void seleccionarItem(Item item) {
 
-        if(item instanceof Arma) {
+    	if(item instanceof Arma) {
 
             Arma arma = (Arma)item;
 
-            if(arma.getEquipadoPor() == null ||
-               arma.getEquipadoPor() == personaje) {
+            if(arma.getEquipadoPor() == personaje) {
+                // Ya la tenía puesta este personaje: al tocarla de nuevo, se la saca.
+                personaje.desequiparArma();
+
+            } else if(arma.getEquipadoPor() == null) {
 
                 personaje.equiparArma(arma);
             }
         }
 
-        if(item instanceof Armadura) {
+    	if(item instanceof Armadura) {
 
             Armadura armadura = (Armadura)item;
 
-            if(armadura.getEquipadoPor() == null ||
-               armadura.getEquipadoPor() == personaje) {
+            if(armadura.getEquipadoPor() == personaje) {
+                // Ya la tenía puesta este personaje: al tocarla de nuevo, se la saca.
+                personaje.desequiparArmadura();
+
+            } else if(armadura.getEquipadoPor() == null) {
 
                 personaje.equiparArmadura(armadura);
             }
         }
-
         cargarItems();
     }
     

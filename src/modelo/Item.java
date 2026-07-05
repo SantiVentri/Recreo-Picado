@@ -24,4 +24,5 @@ public abstract class Item {
     	this.equipadoPor = equipadoPor;
     }
     public abstract void usar();
+    public abstract Item clonar();
 }

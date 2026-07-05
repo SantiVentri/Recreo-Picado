@@ -49,7 +49,7 @@ public class Kiosko {
         	Repositorio.getInstance().getPartidaActual().quitarPesos(costoTotal);
             
             // Agrega el ítem al inventario de la partida
-            Repositorio.getInstance().getPartidaActual().agregarItem(item);
+            Repositorio.getInstance().getPartidaActual().agregarItem(item.clonar());
             
             // Compra exitosa
             return true;
