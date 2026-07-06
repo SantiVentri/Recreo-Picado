@@ -4,29 +4,24 @@ import enums.EFECTOS;
 
 public class Pocion extends Item {
     private int cantidadCuracion;
-    private int cantidadMana; 
+    private int cantidadEnergia; 
     private EFECTOS efecto;
 
     // Constructor
-    public Pocion(String nombre, String descripcion, int valor, int cantidadCuracion, int cantidadMana, EFECTOS efecto, String rutaImagen) {
+    public Pocion(String nombre, String descripcion, int valor, int cantidadCuracion, int cantidadEnergia, EFECTOS efecto, String rutaImagen) {
         super(nombre, descripcion, valor, rutaImagen);
         this.cantidadCuracion = cantidadCuracion;
-        this.cantidadMana = cantidadMana;
+        this.cantidadEnergia = cantidadEnergia;
         this.efecto = efecto;
     }
 
-    @Override
-    public void usar() {
-        System.out.println("Usando poción: " + nombre);
-    }
-
     public int getCantidadCuracion() { return cantidadCuracion; }
-    public int getCantidadMana() { return cantidadMana; }
+    public int getCantidadEnergia() { return cantidadEnergia; }
     public EFECTOS getEfecto() { return efecto; }
     
     @Override
     public Pocion clonar() {
-        return new Pocion(nombre, descripcion, valor, cantidadCuracion, cantidadMana, efecto, rutaImagen);
+        return new Pocion(nombre, descripcion, valor, cantidadCuracion, cantidadEnergia, efecto, rutaImagen);
     }
 }
 
