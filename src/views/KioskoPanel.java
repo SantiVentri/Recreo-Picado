@@ -241,8 +241,6 @@ public class KioskoPanel extends JPanel {
         boolean exito = kioskoLogico.comprarItem(itemSeleccionado, equipo);
 
         if (exito) {
-        	 System.out.println("COMPRA OK. Inventario ahora tiene: " 
-        		        + Repositorio.getInstance().getPartidaActual().getInventario().size() + " items");
             lblPesos.setText("Pesos de la Party: $" + (Repositorio.getInstance().getPartidaActual().getPesos()));
             JOptionPane.showMessageDialog(
                 this,

@@ -24,7 +24,6 @@ public class InventarioView extends JPanel {
     
 
     public InventarioView(Entidad personaje) {
-    	 System.out.println("Se creó InventarioView");
         this.personaje = personaje;
 
         setOpaque(false);
