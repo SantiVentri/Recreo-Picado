@@ -83,6 +83,7 @@ public abstract class Alumno extends Entidad {
 			armadura.setEquipadoPor(this);
 			super.setVidaMax(super.getVidaMax() + armadura.getVidaBonus());
 			super.setDefensa(super.getDefensa() + armadura.getDefensaBonus());
+			super.setVelocidad(super.getVelocidad() + armaduraEquipada.getVelocidadBonus());
 		}
 	}
 
@@ -91,6 +92,7 @@ public abstract class Alumno extends Entidad {
 		if (this.armaduraEquipada != null) {
 			super.setVidaMax(super.getVidaMax() - armaduraEquipada.getVidaBonus());
 			super.setDefensa(super.getDefensa() - armaduraEquipada.getDefensaBonus());
+			super.setVelocidad(super.getVelocidad() - armaduraEquipada.getVelocidadBonus());
 			this.armaduraEquipada.setEquipadoPor(null);
 		}
 		this.armaduraEquipada = null;

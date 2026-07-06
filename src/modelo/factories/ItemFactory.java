@@ -73,31 +73,31 @@ public class ItemFactory {
     // ==========================================
 
     public static Armadura crearGuantes() {
-        return new Armadura("Guantes de lana", "Protegen un poco del frío y de golpes", 30, "Manos", 0, 5, "src/resources/items/guantes.png");
+        return new Armadura("Guantes de lana", "Protegen un poco del frío y de golpes", 30, "Manos", 0, 5, 0, "src/resources/items/guantes.png");
     }
 
     public static Armadura crearTopper() {
         // "Topper" lógicamente es calzado, se cambia "Torso" por "Pies"
-        return new Armadura("Zapatillas Topper", "Comodidad para correr más rápido", 60, "Pies", 10, 8, "src/resources/items/topper.png");
+        return new Armadura("Zapatillas Topper", "Comodidad para correr más rápido", 60, "Pies", 10, 8, 5, "src/resources/items/topper.png");
     }
 
     public static Armadura crearBotines() {
-        return new Armadura("Botines con tapones", "Patadas más fuertes y protección", 110, "Pies", 15, 12, "src/resources/items/botines.png");
+        return new Armadura("Botines con tapones", "Patadas más fuertes y protección", 110, "Pies", 15, 12, 20, "src/resources/items/botines.png");
     }
 
     public static Armadura crearGuardapolvo() {
-        return new Armadura("Guardapolvo Blanco", "Resiste manchas de tinta y golpes leves", 100, "Torso", 25, 15, "src/resources/items/guardapolvo.png");
+        return new Armadura("Guardapolvo Blanco", "Resiste manchas de tinta y golpes leves", 100, "Torso", 25, 15, 0, "src/resources/items/guardapolvo.png");
     }
     
     public static Armadura crearCamisetaDyJ() {
-        return new Armadura("Camiseta D&J", "Te da la fuerza de Varela", 150, "Torso", 40, 20, "src/resources/items/camiseta-dyj.png");
+        return new Armadura("Camiseta D&J", "Te da la fuerza de Varela", 150, "Torso", 40, 20, 0, "src/resources/items/camiseta-dyj.png");
     }
     
     public static Armadura crearCamisetaSeleccion() {
-        return new Armadura("Camiseta de la Selección", "Tiene 3 estrellas, defensa legendaria", 250, "Torso", 60, 35, "src/resources/items/camiseta-seleccion.png");
+        return new Armadura("Camiseta de la Selección", "Tiene 3 estrellas, defensa legendaria", 250, "Torso", 60, 35, 0, "src/resources/items/camiseta-seleccion.png");
     }
 
     public static Armadura crearCamperaEgresados() {
-        return new Armadura("Campera de Egresados", "Armadura definitiva inquebrantable", 500, "Torso", 100, 60, "src/resources/items/campera-egresados.png");
+        return new Armadura("Campera de Egresados", "Armadura definitiva inquebrantable", 500, "Torso", 100, 60, -10, "src/resources/items/campera-egresados.png");
     }
 }
