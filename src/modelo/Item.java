@@ -23,6 +23,5 @@ public abstract class Item {
     public void setEquipadoPor(Entidad equipadoPor) {
     	this.equipadoPor = equipadoPor;
     }
-    public abstract void usar();
     public abstract Item clonar();
 }

@@ -13,11 +13,6 @@ public class Armadura extends Item {
         this.defensaBonus = defensaBonus;
     }
 
-    @Override
-    public void usar() {
-        System.out.println("Equipando armadura: " + nombre);
-    }
-
     public String getTipo() { return tipo; }
     public int getVidaBonus() { return vidaBonus; }
     public int getDefensaBonus() { return defensaBonus; }

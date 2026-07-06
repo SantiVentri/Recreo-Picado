@@ -11,11 +11,6 @@ public class Arma extends Item {
         this.danioBase = danioBase;
     }
 
-    @Override
-    public void usar() {
-        System.out.println("Equipando arma: " + nombre);
-    }
-
     public String getTipo() { return tipo; }
     public int getDanioBase() { return danioBase; }
     
