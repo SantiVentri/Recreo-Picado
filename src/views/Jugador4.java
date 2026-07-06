@@ -15,6 +15,7 @@ public class Jugador4 extends JPanel {
     private Image imagenFondo;
     private EntidadView entidadView;
     private InventarioView inventario;
+    private StatsPanel stats;
 
     public Jugador4(VentanaLayout ventana) {
 
@@ -26,6 +27,7 @@ public class Jugador4 extends JPanel {
 
         setLayout(null);
 
+        // Obtener el guerrero de la partida
         Entidad guerrero = Repositorio.getInstance()
                 .getPartidaActual()
                 .getAlumnos()
@@ -36,10 +38,15 @@ public class Jugador4 extends JPanel {
         entidadView.setBounds(60, 80, 400, 500);
         add(entidadView);
         
-        //inventario
+        // --- INVENTARIO ---
         inventario = new InventarioView(guerrero);
         inventario.setBounds(505, 115, 284, 357);
         add(inventario);
+        
+        // --- PANEL DE STATS ---
+        stats = new StatsPanel(guerrero);
+        stats.setBounds(15, 355, 220, 200);
+        add(stats);
 
         // --- BOTÓN VOLVER ---
         ImageIcon iconoOriginal = new ImageIcon("src/resources/Volver-atras.png");

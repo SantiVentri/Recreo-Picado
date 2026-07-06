@@ -36,6 +36,10 @@ public abstract class Alumno extends Entidad {
     	return xp;
     }
     
+    public int getXpPorNivel() {
+    	return XP_POR_NIVEL;
+    }
+    
     public int getNivel() {
     	return nivel;
     }

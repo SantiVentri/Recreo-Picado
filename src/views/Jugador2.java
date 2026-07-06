@@ -8,7 +8,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import modelo.Entidad;
 import modelo.Repositorio;
-import views.InventarioView;
 
 public class Jugador2 extends JPanel {
 
@@ -16,6 +15,7 @@ public class Jugador2 extends JPanel {
     private Image imagenFondo;
     private EntidadView entidadView;
     private InventarioView inventario;
+    private StatsPanel stats;
 
     public Jugador2(VentanaLayout ventana) {
 
@@ -27,6 +27,7 @@ public class Jugador2 extends JPanel {
 
         setLayout(null);
 
+        // Obtener el arquero de la partida
         Entidad arquero = Repositorio.getInstance()
                 .getPartidaActual()
                 .getAlumnos()
@@ -37,10 +38,15 @@ public class Jugador2 extends JPanel {
         entidadView.setBounds(60, 80, 400, 500);
         add(entidadView);
         
-        //add inventario
+        // --- INVENTARIO ---
         inventario = new InventarioView(arquero);
         inventario.setBounds(505, 115, 284, 357);
         add(inventario);
+        
+        // --- PANEL DE STATS ---
+        stats = new StatsPanel(arquero);
+        stats.setBounds(15, 355, 220, 200);
+        add(stats);
 
         // --- BOTÓN VOLVER ---
         ImageIcon iconoOriginal = new ImageIcon("src/resources/Volver-atras.png");

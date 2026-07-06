@@ -8,7 +8,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import modelo.Entidad;
 import modelo.Repositorio;
-import views.InventarioView;
 
 public class Jugador3 extends JPanel {
 
@@ -16,6 +15,7 @@ public class Jugador3 extends JPanel {
     private Image imagenFondo;
     private EntidadView entidadView;
     private InventarioView inventario;
+    private StatsPanel stats;
 
     public Jugador3(VentanaLayout ventana) {
 
@@ -27,21 +27,26 @@ public class Jugador3 extends JPanel {
 
         setLayout(null);
 
+        // Obtener la curandera de la partida
         Entidad curandera = Repositorio.getInstance()
                 .getPartidaActual()
                 .getAlumnos()
                 .getEntidadPorNombre("Curandera");
-        
-        //entidad view
+
         entidadView = new EntidadView(curandera, false);
         entidadView.setEscala(2f);
         entidadView.setBounds(60, 80, 400, 500);
         add(entidadView);
         
-        //inventario
+        // --- INVENTARIO ---
         inventario = new InventarioView(curandera);
         inventario.setBounds(505, 115, 284, 357);
         add(inventario);
+        
+        // --- PANEL DE STATS ---
+        stats = new StatsPanel(curandera);
+        stats.setBounds(15, 355, 220, 200);
+        add(stats);
 
         // --- BOTÓN VOLVER ---
         ImageIcon iconoOriginal = new ImageIcon("src/resources/Volver-atras.png");

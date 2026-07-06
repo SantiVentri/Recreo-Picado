@@ -10,13 +10,14 @@ import javax.swing.JPanel;
 
 import modelo.Entidad;
 import modelo.Repositorio;
-import views.InventarioView;
+
 public class Jugador1 extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private Image imagenFondo;
     private EntidadView entidadView;
     private InventarioView inventario;
+    private StatsPanel stats;
 
     public Jugador1(VentanaLayout ventana) {
 
@@ -28,7 +29,7 @@ public class Jugador1 extends JPanel {
 
         setLayout(null);
 
-     // Obtener el mago de la partida
+        // Obtener el mago de la partida
         Entidad mago = Repositorio.getInstance()
                 .getPartidaActual()
                 .getAlumnos()
@@ -41,11 +42,14 @@ public class Jugador1 extends JPanel {
         add(entidadView);
 
         // --- INVENTARIO ---
-        
-        
         inventario = new InventarioView(mago);
         inventario.setBounds(505, 115, 284, 357);
         add(inventario);
+        
+        // --- PANEL DE STATS ---
+        stats = new StatsPanel(mago);
+        stats.setBounds(15, 355, 220, 200);
+        add(stats);
 
         // --- BOTÓN VOLVER ---
         ImageIcon iconoOriginal = new ImageIcon("src/resources/Volver-atras.png");
@@ -61,9 +65,14 @@ public class Jugador1 extends JPanel {
 
         add(botonExit);
     }
+    
     public void refrescarInventario() {
         if (inventario != null) {
             inventario.actualizar();
+        }
+        
+        if (stats != null) {
+            stats.actualizar();
         }
     }
 
