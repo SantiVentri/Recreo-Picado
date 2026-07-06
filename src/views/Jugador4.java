@@ -6,9 +6,9 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import modelo.Entidad;
+import modelo.Alumno;
 import modelo.Repositorio;
-import views.InventarioView;
+
 public class Jugador4 extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -28,7 +28,7 @@ public class Jugador4 extends JPanel {
         setLayout(null);
 
         // Obtener el guerrero de la partida
-        Entidad guerrero = Repositorio.getInstance()
+        Alumno guerrero = (Alumno) Repositorio.getInstance()
                 .getPartidaActual()
                 .getAlumnos()
                 .getEntidadPorNombre("Guerrero");

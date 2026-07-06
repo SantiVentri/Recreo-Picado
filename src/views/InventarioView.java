@@ -5,9 +5,9 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import modelo.Alumno;
 import modelo.Arma;
 import modelo.Armadura;
-import modelo.Entidad;
 import modelo.Item;
 import modelo.Repositorio;
 
@@ -20,10 +20,10 @@ public class InventarioView extends JPanel {
     private static final int ESPACIADO_X = 3;
     private static final int ESPACIADO_Y = 2; 
     
-    private Entidad personaje;
+    private Alumno personaje;
     
 
-    public InventarioView(Entidad personaje) {
+    public InventarioView(Alumno personaje) {
         this.personaje = personaje;
 
         setOpaque(false);

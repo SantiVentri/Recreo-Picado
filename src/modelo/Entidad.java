@@ -2,7 +2,6 @@ package modelo;
 
 import java.util.*;
 
-import enums.EFECTOS;
 import interfaces.IEntidad;
 
 public abstract class Entidad implements IEntidad {
@@ -20,10 +19,8 @@ public abstract class Entidad implements IEntidad {
 	private int defensa;
 	private Habilidad habilidad;
 
-	// Atributos de items y efectos
+	// Eefectos
 	private List<Efecto> efectosActivos;
-	private Arma armaEquipada;
-	private Armadura armaduraEquipada;
 	
 	public interface EntidadListener {
 		void onAtacando();
@@ -50,8 +47,6 @@ public abstract class Entidad implements IEntidad {
 		this.habilidad = habilidad;
 		
 		this.efectosActivos = new ArrayList<Efecto>();
-		this.armaEquipada = null;
-		this.armaduraEquipada = null;
 	}
 
 	private int calcularDano(int daño) {
@@ -105,71 +100,6 @@ public abstract class Entidad implements IEntidad {
 		if (this.listener != null) {
 			this.listener.onUsandoHabilidad();
 		}
-	}
-
-	@Override
-	public void usarItem(Pocion pocion) {
-		if (pocion.getEfecto() == EFECTOS.CURACION) {
-			this.vida = Math.min(this.vidaMax, this.vida + pocion.getCantidadCuracion());
-		} else if (pocion.getEfecto() == EFECTOS.ENERGIA) {
-			this.energia = Math.min(this.energiaMax, this.energia + pocion.getCantidadEnergia());
-		}
-	}
-	
-	@Override
-	public void equiparArma(Arma arma) {
-
-		// Si ya tiene un arma equipada, la libera y revierte su bonus
-		if (this.armaEquipada != null) {
-			desequiparArma();
-		}
-		// Equipa el arma nueva y aplica su bonus de ataque
-		this.armaEquipada = arma;
-		if (arma != null) {
-			arma.setEquipadoPor(this);
-			this.ataque += arma.getDanioBase();
-		}
-	}
-
-
-	@Override
-	public void desequiparArma() {
-
-		if (this.armaEquipada != null) {
-			this.ataque -= this.armaEquipada.getDanioBase();
-			this.armaEquipada.setEquipadoPor(null);
-		}
-		this.armaEquipada = null;
-	}
-	
-	@Override
-	public void equiparArmadura(Armadura armadura) {
-
-		// Si ya tiene una armadura equipada, la libera y revierte su bonus
-		if (this.armaduraEquipada != null) {
-			desequiparArmadura();
-		}
-
-		this.armaduraEquipada = armadura;
-
-		if (armadura != null) {
-			armadura.setEquipadoPor(this);
-			this.vidaMax += armadura.getVidaBonus();
-			this.vida += armadura.getVidaBonus();
-			this.defensa += armadura.getDefensaBonus();
-		}
-	}
-
-	@Override
-	public void desequiparArmadura() {
-
-		if (this.armaduraEquipada != null) {
-			this.vidaMax -= this.armaduraEquipada.getVidaBonus();
-			this.vida = Math.min(this.vida, this.vidaMax);
-			this.defensa -= this.armaduraEquipada.getDefensaBonus();
-			this.armaduraEquipada.setEquipadoPor(null);
-		}
-		this.armaduraEquipada = null;
 	}
 	
 	@Override
@@ -226,6 +156,11 @@ public abstract class Entidad implements IEntidad {
 		this.energia = Math.min(this.energia + 15, this.energiaMax);
 	}
 	
+	// Método igual pero con parámetro de cantidad específica
+	public void aumentarEnergia(int valor) {
+		this.energia = Math.min(this.energia + valor, this.energiaMax);
+	}
+	
 	@Override
 	public void recibirDanoVeneno(int cantidad) {
         this.vida -= cantidad;
@@ -258,6 +193,7 @@ public abstract class Entidad implements IEntidad {
 
 	public void setVidaMax(int vidaMax) {
 		this.vidaMax = vidaMax;
+		this.vida = vidaMax; // Cuando actualizo la vida máxima, aumento la vida también
 	}
 
 	public int getEnergia() {
@@ -310,14 +246,6 @@ public abstract class Entidad implements IEntidad {
 	
 	public Habilidad getHabilidad() {
 		return habilidad;
-	}
-	
-	public Arma getArmaEquipada() {
-		return armaEquipada;
-	}
-	
-	public Armadura getArmaduraEquipada() {
-		return armaduraEquipada;
 	}
 	
 	public List<Efecto> getEfectosActivos() {

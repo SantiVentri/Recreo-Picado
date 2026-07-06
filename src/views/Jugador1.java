@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import modelo.Entidad;
+import modelo.Alumno;
 import modelo.Repositorio;
 
 public class Jugador1 extends JPanel {
@@ -30,7 +30,7 @@ public class Jugador1 extends JPanel {
         setLayout(null);
 
         // Obtener el mago de la partida
-        Entidad mago = Repositorio.getInstance()
+        Alumno mago = (Alumno) Repositorio.getInstance()
                 .getPartidaActual()
                 .getAlumnos()
                 .getEntidadPorNombre("Mago");

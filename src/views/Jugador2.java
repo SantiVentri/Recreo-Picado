@@ -6,7 +6,8 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import modelo.Entidad;
+
+import modelo.Alumno;
 import modelo.Repositorio;
 
 public class Jugador2 extends JPanel {
@@ -28,7 +29,7 @@ public class Jugador2 extends JPanel {
         setLayout(null);
 
         // Obtener el arquero de la partida
-        Entidad arquero = Repositorio.getInstance()
+        Alumno arquero = (Alumno) Repositorio.getInstance()
                 .getPartidaActual()
                 .getAlumnos()
                 .getEntidadPorNombre("Arquero");

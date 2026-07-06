@@ -6,7 +6,8 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import modelo.Entidad;
+
+import modelo.Alumno;
 import modelo.Repositorio;
 
 public class Jugador3 extends JPanel {
@@ -28,7 +29,7 @@ public class Jugador3 extends JPanel {
         setLayout(null);
 
         // Obtener la curandera de la partida
-        Entidad curandera = Repositorio.getInstance()
+        Alumno curandera = (Alumno) Repositorio.getInstance()
                 .getPartidaActual()
                 .getAlumnos()
                 .getEntidadPorNombre("Curandera");
