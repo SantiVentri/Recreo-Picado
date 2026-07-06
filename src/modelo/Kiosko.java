@@ -41,7 +41,7 @@ public class Kiosko {
         return itemsDisponibles;
     }
 
-    public boolean comprarItem(Item item, Equipo equipo) {
+    public boolean comprarItem(Item item) {
         int costoTotal = item.getValor();
 
         // Valida si hay plata suficiente

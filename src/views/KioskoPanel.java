@@ -67,7 +67,7 @@ public class KioskoPanel extends JPanel {
         hud.setOpaque(false);
         hud.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
         
-        lblPesos = new JLabel("💰 Pesos de la Party: $" + Repositorio.getInstance().getPartidaActual().getPesos());
+        lblPesos = new JLabel("Pesos de la Party: $" + Repositorio.getInstance().getPartidaActual().getPesos());
         lblPesos.setFont(new Font("Arial", Font.BOLD, 26));
         lblPesos.setForeground(Color.WHITE);
         hud.add(lblPesos);
@@ -237,8 +237,7 @@ public class KioskoPanel extends JPanel {
     private void ejecutarCompra() {
         if (itemSeleccionado == null) return;
 
-        Equipo equipo = Repositorio.getInstance().getPartidaActual().getAlumnos();
-        boolean exito = kioskoLogico.comprarItem(itemSeleccionado, equipo);
+        boolean exito = kioskoLogico.comprarItem(itemSeleccionado);
 
         if (exito) {
             lblPesos.setText("Pesos de la Party: $" + (Repositorio.getInstance().getPartidaActual().getPesos()));
