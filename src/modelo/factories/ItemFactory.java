@@ -9,9 +9,10 @@ public class ItemFactory {
     // ==========================================
     // POCIONES (Curación y Maná)
     // ==========================================
+	// Nombre, Descripción, precio, cantidad curación, cantidad energía, efecto/tipo, imagen 
     
     public static Pocion crearMielcita() {
-        return new Pocion("Mielcita", "Pequeño subidón de azúcar", 15, 20, 10, EFECTOS.CURACION, "src/resources/items/mielcita.png");
+        return new Pocion("Mielcita", "Pequeño subidón de azúcar", 15, 0, 10, EFECTOS.CURACION, "src/resources/items/mielcita.png");
     }
 
     public static Pocion crearBaggio() {
@@ -19,7 +20,7 @@ public class ItemFactory {
     }
 
     public static Pocion crearTita() {
-        return new Pocion("Tita", "Un clásico que levanta el ánimo", 40, 50, 10, EFECTOS.CURACION, "src/resources/items/Tita.png");
+        return new Pocion("Tita", "Un clásico que levanta el ánimo", 40, 50, 0, EFECTOS.CURACION, "src/resources/items/Tita.png");
     }
 
     public static Pocion crearAlfajor() {
@@ -27,11 +28,11 @@ public class ItemFactory {
     }
     
     public static Pocion crearCocacola() {
-        return new Pocion("Coca-Cola", "Recupera vida y da energía", 80, 80, 40, EFECTOS.CURACION, "src/resources/items/cocacola.png");
+        return new Pocion("Coca-Cola", "Recupera vida y da energía", 80, -10, 40, EFECTOS.CURACION, "src/resources/items/cocacola.png");
     }
 
     public static Pocion crearManaos() {
-        return new Pocion("Manaos", "Restauración total, pero de dudosa procedencia", 120, 150, 50, EFECTOS.CURACION, "src/resources/items/manaos.png");
+        return new Pocion("Manaos", "Restauración total, pero de dudosa procedencia", 120, -40, 60, EFECTOS.CURACION, "src/resources/items/manaos.png");
     }
 
     // ==========================================
