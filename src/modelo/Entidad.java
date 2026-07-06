@@ -2,6 +2,7 @@ package modelo;
 
 import java.util.*;
 
+import enums.EFECTOS;
 import interfaces.IEntidad;
 
 public abstract class Entidad implements IEntidad {
@@ -107,8 +108,12 @@ public abstract class Entidad implements IEntidad {
 	}
 
 	@Override
-	public void usarItem(Item item) {
-		item.usar(this);
+	public void usarItem(Pocion pocion) {
+		if (pocion.getEfecto() == EFECTOS.CURACION) {
+			this.vida = Math.min(this.vidaMax, this.vida + pocion.getCantidadCuracion());
+		} else if (pocion.getEfecto() == EFECTOS.ENERGIA) {
+			this.energia = Math.min(this.energiaMax, this.energia + pocion.getCantidadEnergia());
+		}
 	}
 	
 	@Override
