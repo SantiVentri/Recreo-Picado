@@ -19,6 +19,7 @@ import javax.swing.Timer;
 import enums.ACCIONES;
 import modelo.Curandera;
 import modelo.Entidad;
+import modelo.Pocion;
 import orquestador.Orquestador;
 
 public class BatallaPanel extends JPanel {
@@ -40,11 +41,11 @@ public class BatallaPanel extends JPanel {
 
     // Botones
     private EntidadView viewActual;
-
-    private JButton btnAtacar;
-    private JButton btnDefender;
-    private JButton btnHabilidad;
-    private JButton btnHuir;
+    private JButton btnAtacar, btnDefender, btnHabilidad, btnItem, btnHuir;
+    
+    // Popup de inventario (pociones) usado por el botón "Usar Item"
+    private InventarioBatallaView inventarioBatallaView;
+    private JPanel overlayInventario;
 
     // Tamaño de la flecha renderizada
     private static final int FLECHA_W = 48;
@@ -98,6 +99,15 @@ public class BatallaPanel extends JPanel {
         });
         panelBotones.add(btnHabilidad);
 
+        btnItem = new JButton("Usar Item");
+        btnItem.setPreferredSize(new Dimension(120, 42));
+        btnItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                abrirInventarioBatalla();
+            }
+        });
+        panelBotones.add(btnItem);
+
         btnHuir = new JButton("Huir");
         btnHuir.setPreferredSize(new Dimension(120, 42));
         btnHuir.addActionListener(new ActionListener() {
@@ -129,6 +139,26 @@ public class BatallaPanel extends JPanel {
         characterOrderPanel = new CharacterOrderPanel();
         characterOrderPanel.setBounds(-15, -35, 270, 190);
         add(characterOrderPanel);
+        
+        // --- OVERLAY + INVENTARIO DE POCIONES ---
+        overlayInventario = new JPanel();
+        overlayInventario.setOpaque(false);
+        overlayInventario.setVisible(false);
+        overlayInventario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                cerrarInventarioBatalla();
+            }
+        });
+        add(overlayInventario);
+
+        inventarioBatallaView = new InventarioBatallaView();
+        inventarioBatallaView.setVisible(false);
+        inventarioBatallaView.setClickListener(new InventarioBatallaView.ClickListener() {
+            public void onPocionSeleccionada(Pocion pocion) {
+                usarPocionSeleccionada(pocion);
+            }
+        });
+        add(inventarioBatallaView);
     }
 
     public void cargarEntidades() {
@@ -311,8 +341,47 @@ public class BatallaPanel extends JPanel {
         onAccionIniciada();
     }
 
-    // ─── FLUJO DE TURNOS ──────────────────────────────────────────────────────
+    // ─── USAR ITEM (POCIONES) ─────────────────────────────────────────────────
 
+    private void abrirInventarioBatalla() {
+        inventarioBatallaView.actualizar();
+
+        int invAncho = 600;
+        int invAlto = 420;
+        int x = (getWidth() - invAncho) / 2;
+        int y = (getHeight() - invAlto) / 2;
+        inventarioBatallaView.setBounds(x, y, invAncho, invAlto);
+        overlayInventario.setBounds(0, 0, getWidth(), getHeight());
+
+        // Nos aseguramos de que quede por encima de todo (entidades, flechas, etc.)
+        setComponentZOrder(overlayInventario, 0);
+        setComponentZOrder(inventarioBatallaView, 0);
+
+        overlayInventario.setVisible(true);
+        inventarioBatallaView.setVisible(true);
+    }
+
+    private void cerrarInventarioBatalla() {
+        if (overlayInventario != null) overlayInventario.setVisible(false);
+        if (inventarioBatallaView != null) inventarioBatallaView.setVisible(false);
+    }
+
+    private void usarPocionSeleccionada(Pocion pocion) {
+        int respuesta = JOptionPane.showConfirmDialog(
+            ventana,
+            "¿Querés usar " + pocion.getNombre() + "?",
+            "Confirmar acción",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+        );
+        if (respuesta == JOptionPane.YES_OPTION) {
+            cerrarInventarioBatalla();
+            Orquestador.getInstance().ejecutarTurno(ACCIONES.USAR_ITEM, null, pocion);
+            onAccionIniciada();
+        }
+    }
+
+    // ─── FLUJO DE TURNOS ──────────────────────────────────────────────────────
     private void avanzarTurno() {
         actualizarVistas();
 
@@ -390,6 +459,8 @@ public class BatallaPanel extends JPanel {
             if (btnAtacar != null) btnAtacar.setEnabled(false);
             if (btnDefender != null) btnDefender.setEnabled(false);
             if (btnHabilidad != null) btnHabilidad.setEnabled(false);
+            if (btnItem != null) btnItem.setEnabled(false);
+            cerrarInventarioBatalla();
             ocultarFlechas();
         } else {
             // Si es el turno del alumno, habilitamos según su energía
@@ -405,6 +476,7 @@ public class BatallaPanel extends JPanel {
                         btnHabilidad.setEnabled(false);
                     }
                 }
+                if (btnItem != null) btnItem.setEnabled(true);
             }
         }
         if (characterOrderPanel != null) characterOrderPanel.repaint();

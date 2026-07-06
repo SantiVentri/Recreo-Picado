@@ -6,12 +6,7 @@ import java.util.List;
 
 import enums.ACCIONES;
 import interfaces.IOrquestador;
-import modelo.Batalla;
-import modelo.Entidad;
-import modelo.Equipo;
-import modelo.Item;
-import modelo.Repositorio;
-import modelo.Secuaz;
+import modelo.*;
 
 public class Orquestador implements IOrquestador {
     private static Orquestador instancia;
@@ -168,6 +163,14 @@ public class Orquestador implements IOrquestador {
             } else {
                 if (objetivo != null) afectados.add((Entidad) objetivo);
             }
+
+        } else if (accion.equals(ACCIONES.USAR_ITEM)) {
+            if (item instanceof Pocion && e instanceof Alumno) {
+                Pocion pocion = (Pocion) item;
+                ((Alumno) e).usarItem(pocion);
+                Repositorio.getInstance().getPartidaActual().quitarItem(item);
+            }
+            afectados.add(e);
         }
 
         return afectados;
