@@ -52,6 +52,10 @@ public class InventarioView extends JPanel {
         	if(item.getEquipadoPor() == personaje) {
         	    vista.setSeleccionado(true);
         	}
+        	// Si lo tiene equipado OTRO personaje, se muestra bloqueado con candado.
+        	else if(item.getEquipadoPor() != null) {
+        	    vista.setBloqueado(true);
+        	}
 
         	vista.setClickListener(i -> seleccionarItem(i));
         	int fila = indice / COLUMNAS;

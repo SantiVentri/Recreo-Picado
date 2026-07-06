@@ -20,6 +20,16 @@ public class ItemView extends JPanel {
     public interface ClickListener {
         void onClick(Item item);
     }
+    
+    private static BufferedImage imagenCandado;
+    static {
+        try {
+            imagenCandado = ImageIO.read(new File("src/resources/Candado.png"));
+        } catch (IOException e) {
+            System.err.println("No se pudo cargar la imagen del candado");
+            imagenCandado = null;
+        }
+    }
 
     private final Item item;
     private final boolean mostrarInfo; // si se dibuja nombre + precio debajo del ícono
@@ -31,6 +41,7 @@ public class ItemView extends JPanel {
     private BufferedImage imagenItem;
     private ClickListener clickListener;
     private boolean seleccionado = false;
+    private boolean bloqueado = false;
     // --- Constructor completo ---
     public ItemView(Item item, int anchoIcono, int altoIcono, boolean mostrarInfo) {
         this.item = item;
@@ -90,6 +101,16 @@ public class ItemView extends JPanel {
         repaint();
     }
 
+    /** Se marca como bloqueado si está siendo equipado por otro alumno */
+    public void setBloqueado(boolean bloqueado) {
+        this.bloqueado = bloqueado;
+        repaint();
+    }
+
+    public boolean isBloqueado() {
+        return bloqueado;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -122,6 +143,7 @@ public class ItemView extends JPanel {
             g2.setColor(Color.WHITE);
             g2.drawString("?", centroX - 4, yIcono + ladoIcono / 2);
         }
+
         if (seleccionado) {
             g2.setColor(Color.GREEN);
             g2.setStroke(new BasicStroke(3));
@@ -133,6 +155,10 @@ public class ItemView extends JPanel {
                     ladoIcono + 6,
                     10,
                     10);
+        }
+
+        if (bloqueado) {
+            dibujarCandado(g2, xIcono, yIcono, ladoIcono);
         }
 
         // --- NOMBRE + PRECIO (opcional) ---
@@ -170,5 +196,12 @@ public class ItemView extends JPanel {
 
         g2.setColor(colorTexto);
         g2.drawString(texto, x, y);
+    }
+
+    /** Dibuja una imagen del candado si está bloqueado. */
+    private void dibujarCandado(Graphics2D g2, int xIcono, int yIcono, int ladoIcono) {
+        if (imagenCandado == null) return;
+
+        g2.drawImage(imagenCandado, xIcono, yIcono, ladoIcono, ladoIcono, this);
     }
 }
