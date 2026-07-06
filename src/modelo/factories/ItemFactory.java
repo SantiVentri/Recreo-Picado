@@ -1,5 +1,8 @@
-package modelo;
+package modelo.factories;
 import enums.EFECTOS;
+import modelo.Arma;
+import modelo.Armadura;
+import modelo.Pocion;
 
 public class ItemFactory {
     

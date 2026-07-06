@@ -1,5 +1,7 @@
 package modelo;
 
+import modelo.factories.ItemFactory;
+
 public class Kiosko {
 
     // El catálogo de objetos a vender

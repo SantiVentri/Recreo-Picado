@@ -1,6 +1,7 @@
-package modelo;
+package modelo.factories;
 
 import enums.EFECTOS;
+import modelo.Efecto;
 
 public class EfectoFactory {
     public static Efecto crearVeneno() {

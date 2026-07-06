@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import enums.ESTADO_BATALLA;
+import modelo.factories.BatallaFactory;
+import modelo.factories.PersonajeFactory;
 
 public class Partida {
 	private static int contador = 0;

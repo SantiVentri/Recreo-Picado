@@ -1,6 +1,9 @@
-package modelo;
+package modelo.factories;
 
 import enums.ESTADO_BATALLA;
+import modelo.Batalla;
+import modelo.Equipo;
+import modelo.Recompensa;
 
 public class BatallaFactory {
 	public static Batalla crearNivel1() {

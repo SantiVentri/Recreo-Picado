@@ -1,4 +1,13 @@
-package modelo;
+package modelo.factories;
+
+import modelo.Arquero;
+import modelo.Curandera;
+import modelo.Guerrero;
+import modelo.Habilidad;
+import modelo.Jefe;
+import modelo.JefeFinal;
+import modelo.Mago;
+import modelo.Secuaz;
 
 public class PersonajeFactory {
 	// Alumnos

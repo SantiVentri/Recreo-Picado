@@ -1,4 +1,9 @@
-package modelo;
+package modelo.factories;
+
+import modelo.Arma;
+import modelo.Armadura;
+import modelo.Pocion;
+import modelo.Recompensa;
 
 public class RecompensaFactory {
 	private static Pocion pocionAleatoria() {
