@@ -113,23 +113,25 @@ public abstract class Entidad implements IEntidad {
 	
 	@Override
 	public void equiparArma(Arma arma) {
-		
-		//si ya tiene un arma equipada, la libera
+
+		// Si ya tiene un arma equipada, la libera y revierte su bonus
 		if (this.armaEquipada != null) {
-			this.armaEquipada.setEquipadoPor(null);
+			desequiparArma();
 		}
-		//equipa el arma a ese jugador
+		// Equipa el arma nueva y aplica su bonus de ataque
 		this.armaEquipada = arma;
 		if (arma != null) {
 			arma.setEquipadoPor(this);
+			this.ataque += arma.getDanioBase();
 		}
 	}
-	
-	
+
+
 	@Override
 	public void desequiparArma() {
-		
-		if (this.armaEquipada != null) { 
+
+		if (this.armaEquipada != null) {
+			this.ataque -= this.armaEquipada.getDanioBase();
 			this.armaEquipada.setEquipadoPor(null);
 		}
 		this.armaEquipada = null;
@@ -137,24 +139,30 @@ public abstract class Entidad implements IEntidad {
 	
 	@Override
 	public void equiparArmadura(Armadura armadura) {
-		
+
+		// Si ya tiene una armadura equipada, la libera y revierte su bonus
 		if (this.armaduraEquipada != null) {
-			this.armaduraEquipada.setEquipadoPor(null);
+			desequiparArmadura();
 		}
-		
+
 		this.armaduraEquipada = armadura;
-		
+
 		if (armadura != null) {
 			armadura.setEquipadoPor(this);
+			this.vidaMax += armadura.getVidaBonus();
+			this.vida += armadura.getVidaBonus();
+			this.defensa += armadura.getDefensaBonus();
 		}
 	}
-	
+
 	@Override
 	public void desequiparArmadura() {
-		
+
 		if (this.armaduraEquipada != null) {
+			this.vidaMax -= this.armaduraEquipada.getVidaBonus();
+			this.vida = Math.min(this.vida, this.vidaMax);
+			this.defensa -= this.armaduraEquipada.getDefensaBonus();
 			this.armaduraEquipada.setEquipadoPor(null);
-			
 		}
 		this.armaduraEquipada = null;
 	}
