@@ -6,6 +6,8 @@ import javax.swing.Timer;
 import enums.ANIMACIONES;
 import modelo.Alumno;
 import modelo.Entidad;
+import modelo.Jefe;
+import modelo.JefeFinal;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -161,16 +163,19 @@ public class EntidadView extends JPanel {
         String pathEnvenenado = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-poison.png";
         animaciones.put(ANIMACIONES.ENVENENADO, recortarSprite(pathEnvenenado, 1, 1));
         
+        String pathDefendiendo = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-defend.png";
+    	animaciones.put(ANIMACIONES.DEFENDER, recortarSprite(pathDefendiendo, 1, 1));
+    	
+    	// Solamente los alumnos y los jefes pueden usar habilidades
+    	if (entidad instanceof Alumno || entidad instanceof Jefe || entidad instanceof JefeFinal) {
+    		String pathHabilidad = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-super.png";
+        	animaciones.put(ANIMACIONES.USAR_HABILIDAD, recortarSprite(pathHabilidad, 1, 1));
+    	}
+        
+    	// Por ahora la animación de curación es solo para Alumnos
         if (entidad instanceof Alumno) {
         	String pathCurado = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-heal.png";
         	animaciones.put(ANIMACIONES.CURADO, recortarSprite(pathCurado, 1, 1));
-        	
-        	String pathDefendiendo = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-defend.png";
-        	animaciones.put(ANIMACIONES.DEFENDER, recortarSprite(pathDefendiendo, 1, 1));
-        	
-        	// Por ahora la animación de usar habilidad es solo para Alumnos
-        	String pathHabilidad = "src/resources/sprites/" + nombreFormateado + "/" + nombreFormateado + "-super.png";
-        	animaciones.put(ANIMACIONES.USAR_HABILIDAD, recortarSprite(pathHabilidad, 1, 1));
         }
         
     }
