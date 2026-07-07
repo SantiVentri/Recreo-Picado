@@ -38,13 +38,14 @@ public abstract class Alumno extends Entidad {
     }
     
     // Items (Pociones, Armas y Armaduras)
-	public void usarItem(Pocion pocion) {
-		if (pocion.getEfecto() == EFECTOS.CURACION) {
-			super.aumentarVida(pocion.getCantidadCuracion());;
-		} else if (pocion.getEfecto() == EFECTOS.ENERGIA) {
-			super.aumentarEnergia(pocion.getCantidadEnergia());
-		}
-	}
+    public void usarItem(Pocion pocion) {
+        if (pocion.getCantidadCuracion() > 0) {
+            super.aumentarVida(pocion.getCantidadCuracion());
+        }
+        if (pocion.getCantidadEnergia() > 0) {
+            super.aumentarEnergia(pocion.getCantidadEnergia());
+        }
+    }
 	
 	public void equiparArma(Arma arma) {
 
