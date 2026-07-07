@@ -201,7 +201,7 @@ public class Orquestador implements IOrquestador {
         // Si el enemigo no es un Secuaz y tiene la energia suficiente, usa su habilidad
         if (!(enemigo instanceof Secuaz) && enemigo.getEnergia() >= enemigo.getHabilidad().getCostoEnergia()) {
         	enemigo.usarHabilidad(objetivo);
-        } else if (enemigo.getEnergia() > 10) {
+        } else if (enemigo.getEnergia() > 15) {
         	// Si el enemigo puede atacar, ataca
         	enemigo.realizarAtaque(objetivo);
         } else {
