@@ -11,7 +11,7 @@ import orquestador.Orquestador;
 
 public class CharacterOrderPanel extends JPanel {
 
-    private Image fondo, mago, arquero, guerrero, curandera, jefa1, jefa2, jefe3, jefeFinal;
+    private Image fondo, mago, arquero, guerrero, curandera, jefa1, jefa2, secuaz1, jefe3, secuaz2, jefeFinal, secuaz3;
     
     public CharacterOrderPanel() {
         setOpaque(false);
@@ -22,23 +22,31 @@ public class CharacterOrderPanel extends JPanel {
         curandera = new ImageIcon(getClass().getResource("/resources/turnos/CuranderaPanel.png")).getImage();
         jefa1 = new ImageIcon(getClass().getResource("/resources/turnos/JefaDelBañoPanel.png")).getImage();
         jefa2 = new ImageIcon(getClass().getResource("/resources/turnos/EnfermeraPanel.png")).getImage();
+        secuaz1 = new ImageIcon(getClass().getResource("/resources/turnos/SecuazEnfermeraPanel.png")).getImage();
         jefe3 = new ImageIcon(getClass().getResource("/resources/turnos/ProfesorEDPanel.png")).getImage();
+        secuaz2 = new ImageIcon(getClass().getResource("/resources/turnos/SecuazPatioPanel.png")).getImage();
         jefeFinal = new ImageIcon(getClass().getResource("/resources/turnos/DirectorPanel.png")).getImage();
+        secuaz3 = new ImageIcon(getClass().getResource("/resources/turnos/SecuazNerdPanel.png")).getImage();
     }
 
     private Image obtenerImagen(Entidad entidad) {
         String nombre = entidad.getNombre();
 
-        // Imágenes de panel
-        if (nombre.equalsIgnoreCase("Mago")) return mago;
-        if (nombre.equalsIgnoreCase("Arquero")) return arquero;
-        if (nombre.equalsIgnoreCase("Guerrero")) return guerrero;
-        if (nombre.equalsIgnoreCase("Curandera")) return curandera;
-        if (nombre.equalsIgnoreCase("Jefa del Baño")) return jefa1;
-        if (nombre.equalsIgnoreCase("Enfermera")) return jefa2;
-        if (nombre.equalsIgnoreCase("Profesor ED")) return jefe3;
-        if (nombre.equalsIgnoreCase("Director")) return jefeFinal;
-        return null;
+     // Imágenes de panel
+        switch (nombre.toLowerCase()) {
+            case "mago": return mago;
+            case "arquero": return arquero;
+            case "guerrero": return guerrero;
+            case "curandera": return curandera;
+            case "jefa del baño": return jefa1;
+            case "enfermera": return jefa2;
+            case "secuaz enfermera": return secuaz1;
+            case "profesor ed": return jefe3;
+            case "secuaz patio": return secuaz2;
+            case "director": return jefeFinal;
+            case "secuaz nerd": return secuaz3;
+            default: return null;
+        }
     }
 
     @Override
