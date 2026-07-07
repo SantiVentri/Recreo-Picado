@@ -40,10 +40,10 @@ public class BatallaFactory {
 	
 	public static Batalla crearNivel4() {
 		Equipo enemigos = new Equipo();
-		// enemigos.agregarEntidad(PersonajeFactory.crearSecuazBasico(4));
+		enemigos.agregarEntidad(PersonajeFactory.crearSecuazBasico(4));
 		enemigos.agregarEntidad(PersonajeFactory.crearJefeFinal());
-		// enemigos.agregarEntidad(PersonajeFactory.crearSecuazBasico(4));
-		// enemigos.agregarEntidad(PersonajeFactory.crearSecuazBasico(4));
+		enemigos.agregarEntidad(PersonajeFactory.crearSecuazBasico(4));
+		enemigos.agregarEntidad(PersonajeFactory.crearSecuazBasico(4));
 		
 		Recompensa recompensa = RecompensaFactory.crearRecompensa4();
 		

@@ -37,7 +37,7 @@ public class PersonajeFactory {
     	switch (numeroBatalla) {
     		case 2: nombre = "Secuaz Enfermera"; break;
     		case 3: nombre = "Secuaz Patio"; break;
-    		case 4: nombre = "Secuaz del director"; break;
+    		case 4: nombre = "Secuaz Nerd"; break;
     		default: nombre = "Secuaz"; break;
     	}
         return new Secuaz(nombre, 50, 40, 7, 12, 2, null);
