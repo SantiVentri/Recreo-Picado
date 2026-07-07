@@ -1,8 +1,9 @@
 package modelo;
 
+import java.util.List;
+
 import enums.EFECTOS;
 import interfaces.IEntidad;
-import orquestador.Orquestador;
 
 /**
  * Enemigo final. El más poderoso del juego.
@@ -21,7 +22,7 @@ public class JefeFinal extends Entidad {
     }
 
     @Override
-    public void usarHabilidad(IEntidad objetivo) {
+    public void usarHabilidad(IEntidad objetivo, List<Entidad> alumnos, List<Entidad> enemigos) {
         Habilidad hab = this.getHabilidad();
         if (hab == null || !hab.sePuedeUsar(this)) return;
 
@@ -30,7 +31,7 @@ public class JefeFinal extends Entidad {
         int dano = (int)(hab.getPotencia() * 2);
 
         if (hab.getEfecto() != null && hab.getEfecto().getTipo() == EFECTOS.ATAQUE_MULTIPLE) {
-            for (Entidad alumno : Orquestador.getInstance().getAlumnos().getEntidades()) {
+            for (Entidad alumno : alumnos) {
                 if (alumno.estaVivo()) {
                     alumno.recibirDano(dano);
                 }

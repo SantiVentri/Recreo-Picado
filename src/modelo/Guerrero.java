@@ -4,7 +4,6 @@ import java.util.List;
 
 import enums.EFECTOS;
 import interfaces.IEntidad;
-import orquestador.Orquestador;
 
 public class Guerrero extends Alumno {
     private int fuerza;
@@ -20,12 +19,11 @@ public class Guerrero extends Alumno {
     }
 
     @Override
-    public void usarHabilidad(IEntidad objetivo) {
+    public void usarHabilidad(IEntidad objetivo, List<Entidad> alumnos, List<Entidad> enemigos) {
         if (this.getHabilidad() == null || !this.getHabilidad().sePuedeUsar(this)) return;
         this.setEnergia(this.getEnergia() - this.getHabilidad().getCostoEnergia());
         int dano = this.getHabilidad().getPotencia() + fuerza;
         if (this.getHabilidad().getEfecto() != null && this.getHabilidad().getEfecto().getTipo() == EFECTOS.ATAQUE_MULTIPLE) {
-            List<Entidad> enemigos = Orquestador.getInstance().getBatalla().getEnemigos().getEntidades();
             for (int i = 0; i < enemigos.size(); i++) {
                 if (enemigos.get(i).estaVivo()) {
                     enemigos.get(i).recibirDano(dano);

@@ -1,5 +1,7 @@
 package modelo;
 
+import java.util.List;
+
 import interfaces.IEntidad;
 
 public class Secuaz extends Entidad {
@@ -9,5 +11,5 @@ public class Secuaz extends Entidad {
     }
 
     @Override
-    public void usarHabilidad(IEntidad objetivo) { }
+    public void usarHabilidad(IEntidad objetivo, List<Entidad> alumnos, List<Entidad> enemigos) { }
 }

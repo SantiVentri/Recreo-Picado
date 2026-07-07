@@ -154,7 +154,8 @@ public class Orquestador implements IOrquestador {
             e.realizarDefensa();
 
         } else if (accion.equals(ACCIONES.USAR_HABILIDAD)) {
-            e.usarHabilidad(objetivo);
+            e.usarHabilidad(objetivo, alumnos.getEntidades(), batalla.getEnemigos().getEntidades());
+            
             // Si fue ataque múltiple, todos los enemigos vivos fueron afectados
             if (objetivo == null || esHabilidadMultiple(e)) {
                 for (Entidad enemigo : batalla.getEnemigos().getEntidades()) {

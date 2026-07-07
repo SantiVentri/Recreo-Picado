@@ -1,8 +1,9 @@
 package modelo;
 
+import java.util.List;
+
 import enums.EFECTOS;
 import interfaces.IEntidad;
-import orquestador.Orquestador;
 
 public class Jefe extends Entidad {
 
@@ -16,7 +17,7 @@ public class Jefe extends Entidad {
     }
 
     @Override
-    public void usarHabilidad(IEntidad objetivo) {
+    public void usarHabilidad(IEntidad objetivo, List<Entidad> alumnos, List<Entidad> enemigos) {
         Habilidad hab = this.getHabilidad();
         if (hab == null || !hab.sePuedeUsar(this)) return;
 
@@ -24,11 +25,8 @@ public class Jefe extends Entidad {
         this.setEnergia(this.getEnergia() - hab.getCostoEnergia());
 
         if (hab.getEfecto() != null && hab.getEfecto().getTipo() == EFECTOS.ATAQUE_MULTIPLE) {
-            // Ataque múltiple de verdad: golpea a TODOS los alumnos vivos, no solo al objetivo
-            for (Entidad alumno : Orquestador.getInstance().getAlumnos().getEntidades()) {
-                if (alumno.estaVivo()) {
-                    alumno.recibirDano(hab.getPotencia());
-                }
+            for (Entidad alumno : alumnos) {
+                if (alumno.estaVivo()) alumno.recibirDano(hab.getPotencia());
             }
         } else {
             objetivo.recibirDano(hab.getPotencia());

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import interfaces.IEntidad;
-import orquestador.Orquestador;
 
 public class Curandera extends Alumno {
     private int amistad;
@@ -23,16 +22,15 @@ public class Curandera extends Alumno {
      * Curación: le restaura vida al objetivo alumno usando la potencia de la habilidad + amistad.
      */
     @Override
-    public void usarHabilidad(IEntidad objetivo) {
+    public void usarHabilidad(IEntidad objetivo, List<Entidad> alumnos, List<Entidad> enemigos) {
         Habilidad hab = this.getHabilidad();
         if (hab == null || !hab.sePuedeUsar(this)) return;
 
         this.setDefendiendo(false);
         this.setEnergia(this.getEnergia() - hab.getCostoEnergia());
         
-        // Se asigna un objetivo aleatorio entre los alumnos vivos
         List<Entidad> alumnosVivos = new ArrayList<Entidad>();
-        for (Entidad a : Orquestador.getInstance().getAlumnos().getEntidades()) {
+        for (Entidad a : alumnos) {
             if (a.estaVivo()) alumnosVivos.add(a);
         }
 

@@ -94,7 +94,7 @@ public abstract class Entidad implements IEntidad {
 	}
 
 	@Override
-	public abstract void usarHabilidad(IEntidad objetivo);
+	public abstract void usarHabilidad(IEntidad objetivo, List<Entidad> aliados, List<Entidad> enemigos);
 
 	protected void notificarUsandoHabilidad() {
 		if (this.listener != null) {

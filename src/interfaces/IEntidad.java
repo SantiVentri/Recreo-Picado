@@ -1,5 +1,7 @@
 package interfaces;
 
+import java.util.List;
+
 import modelo.*;
 
 public interface IEntidad {
@@ -8,7 +10,7 @@ public interface IEntidad {
 	
 	void realizarAtaque(IEntidad objetivo);
 	void realizarDefensa();
-	void usarHabilidad(IEntidad objetivo);
+	void usarHabilidad(IEntidad objetivo, List<Entidad> alumnos, List<Entidad> enemigos);
 	void aplicarEfecto(Efecto efecto);
 	void quitarEfecto(Efecto efecto);
 	void aumentarVida(int cantidad);

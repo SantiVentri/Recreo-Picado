@@ -1,5 +1,7 @@
 package modelo;
 
+import java.util.List;
+
 import interfaces.IEntidad;
 
 public class Arquero extends Alumno {
@@ -20,7 +22,7 @@ public class Arquero extends Alumno {
      * Si la habilidad tiene efecto (ej. sangrado), lo aplica al objetivo.
      */
     @Override
-    public void usarHabilidad(IEntidad objetivo) {
+    public void usarHabilidad(IEntidad objetivo, List<Entidad> alumnos, List<Entidad> enemigos) {
         Habilidad hab = this.getHabilidad();
         if (hab == null || !hab.sePuedeUsar(this)) return;
 
