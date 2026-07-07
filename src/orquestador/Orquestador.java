@@ -155,7 +155,6 @@ public class Orquestador implements IOrquestador {
 
         } else if (accion.equals(ACCIONES.USAR_HABILIDAD)) {
             e.usarHabilidad(objetivo, alumnos.getEntidades(), batalla.getEnemigos().getEntidades());
-            
             // Si fue ataque múltiple, todos los enemigos vivos fueron afectados
             if (objetivo == null || esHabilidadMultiple(e)) {
                 for (Entidad enemigo : batalla.getEnemigos().getEntidades()) {
@@ -201,7 +200,7 @@ public class Orquestador implements IOrquestador {
         
         // Si el enemigo no es un Secuaz y tiene la energia suficiente, usa su habilidad
         if (!(enemigo instanceof Secuaz) && enemigo.getEnergia() >= enemigo.getHabilidad().getCostoEnergia()) {
-        	enemigo.usarHabilidad(objetivo);
+        	enemigo.usarHabilidad(objetivo, alumnos.getEntidades(), batalla.getEnemigos().getEntidades());
         } else if (enemigo.getEnergia() > 15) {
         	// Si el enemigo puede atacar, ataca
         	enemigo.realizarAtaque(objetivo);
@@ -269,26 +268,72 @@ public class Orquestador implements IOrquestador {
 
     public List<Entidad> getTurnosCompletos() {
         List<Entidad> resultado = new ArrayList<>();
-        
-        int totalAlumnos = turnosAlumnos.size();
-        int totalEnemigos = turnosEnemigos.size();
-        
-        for (int i = 0; i < 6; i++) {
-            if (turnoAlumno) {
-                if (i % 2 == 0) {
-                    resultado.add(turnosAlumnos.get((indiceAlumno + (i/2)) % totalAlumnos));
-                } else {
-                    resultado.add(turnosEnemigos.get((indiceEnemigo + (i/2)) % totalEnemigos));
+
+        boolean hayAlumnoVivo = hayVivo(turnosAlumnos);
+        boolean hayEnemigoVivo = hayVivo(turnosEnemigos);
+
+        // indiceAlumno/indiceEnemigo solo se garantizan vivos para el lado
+        // que está jugando en este momento; el otro lado puede haber quedado
+        // apuntando a alguien que murió mientras no era su turno, así que
+        // hay que revalidar antes de arrancar la simulación.
+        int idxAlumno = hayAlumnoVivo ? primerVivoDesde(turnosAlumnos, indiceAlumno) : indiceAlumno;
+        int idxEnemigo = hayEnemigoVivo ? primerVivoDesde(turnosEnemigos, indiceEnemigo) : indiceEnemigo;
+        boolean esTurnoAlumno = turnoAlumno;
+
+        for (int i = 0; i < 6 && (hayAlumnoVivo || hayEnemigoVivo); i++) {
+            if (esTurnoAlumno) {
+                if (hayAlumnoVivo) {
+                    resultado.add(turnosAlumnos.get(idxAlumno));
+                    idxAlumno = siguienteVivo(turnosAlumnos, idxAlumno);
                 }
             } else {
-                if (i % 2 == 0) {
-                    resultado.add(turnosEnemigos.get((indiceEnemigo + (i/2)) % totalEnemigos));
-                } else {
-                    resultado.add(turnosAlumnos.get((indiceAlumno + (i/2)) % totalAlumnos));
+                if (hayEnemigoVivo) {
+                    resultado.add(turnosEnemigos.get(idxEnemigo));
+                    idxEnemigo = siguienteVivo(turnosEnemigos, idxEnemigo);
                 }
             }
+            esTurnoAlumno = !esTurnoAlumno;
         }
         return resultado;
+    }
+
+    private boolean hayVivo(List<Entidad> turnos) {
+        for (Entidad e : turnos) {
+            if (e.estaVivo()) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Devuelve indiceInicial si esa entidad sigue viva; si no, avanza hasta
+     * encontrar la próxima viva. Misma lógica que avanzarAlumnoVivo/avanzarEnemigoVivo,
+     * pero sin mutar el estado real del Orquestador (se usa solo para predecir la cola).
+     */
+    private int primerVivoDesde(List<Entidad> turnos, int indiceInicial) {
+        int total = turnos.size();
+        int idx = indiceInicial;
+        int intentos = 0;
+        while (!turnos.get(idx).estaVivo() && intentos < total) {
+            idx = (idx + 1) % total;
+            intentos++;
+        }
+        return idx;
+    }
+
+    /**
+     * Igual que avanzarAlumnoVivo/avanzarEnemigoVivo: busca el siguiente vivo
+     * a partir del índice actual. Si solo queda uno vivo en la lista, siempre
+     * vuelve a caer en ese mismo (así se repite en el panel, como pasa en el juego real).
+     */
+    private int siguienteVivo(List<Entidad> turnos, int indiceActual) {
+        int total = turnos.size();
+        int siguiente = (indiceActual + 1) % total;
+        int intentos = 0;
+        while (!turnos.get(siguiente).estaVivo() && intentos < total) {
+            siguiente = (siguiente + 1) % total;
+            intentos++;
+        }
+        return siguiente;
     }
 
     public int getIndiceAlumnoActual() {
