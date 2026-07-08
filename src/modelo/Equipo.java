@@ -21,10 +21,6 @@ public class Equipo {
         }
     }
     
-    public void quitarEntidad(Entidad entidad) {
-        entidades.remove(entidad);
-    }
-    
     public Entidad getEntidadPorNombre(String nombre) {
         for (Entidad entidad : entidades) {
             if (entidad.getNombre().equalsIgnoreCase(nombre)) {
