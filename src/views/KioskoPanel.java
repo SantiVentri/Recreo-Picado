@@ -53,6 +53,16 @@ public class KioskoPanel extends JPanel {
         cardLayout.show(contenedor, VISTA_CATALOGO);
     }
 
+    // Actualiza los pesos de la party en el HUD
+    public void actualizar() {
+        if (lblPesos != null) {
+            int pesosActuales = Repositorio.getInstance().getPartidaActual().getPesos();
+            lblPesos.setText("Pesos de la Party: $" + pesosActuales);
+        }
+        revalidate();
+        repaint();
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

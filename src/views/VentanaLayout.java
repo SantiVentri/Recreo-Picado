@@ -56,7 +56,7 @@ public class VentanaLayout extends JFrame {
 		agregarPanel(new Jugador3(this), "JUGADOR3");
 		agregarPanel(new Jugador4(this), "JUGADOR4");
 		mainPanel.add(new LevelsPanel(this, partidaActual.getBatallas()), "NIVELES");
-		mainPanel.add(new KioskoPanel(this), "KIOSKO");
+		agregarPanel(new KioskoPanel(this), "KIOSKO");
 		batallaPanel = new BatallaPanel(this);
 		mainPanel.add(batallaPanel, "BATALLA");
 		
@@ -113,8 +113,12 @@ public class VentanaLayout extends JFrame {
 		((Jugador4) obtenerPanel("JUGADOR4")).refrescarInventario();
 	}
 	
+	
 	public void verKiosko() {
-		cl.show(mainPanel, "KIOSKO");
+    	cl.show(mainPanel, "KIOSKO");
+		
+		// Actualiza los pesos del Kiosko antes de mostrarlo
+		((KioskoPanel) obtenerPanel("KIOSKO")).actualizar();
 	}
 	
 	public void empezarBatalla(Batalla batalla) {

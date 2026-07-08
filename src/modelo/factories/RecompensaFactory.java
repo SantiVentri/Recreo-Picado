@@ -4,6 +4,7 @@ import modelo.Arma;
 import modelo.Armadura;
 import modelo.Pocion;
 import modelo.Recompensa;
+import modelo.Repositorio;
 
 public class RecompensaFactory {
 	private static Pocion pocionAleatoria() {
@@ -58,5 +59,19 @@ public class RecompensaFactory {
 
 	public static Recompensa crearRecompensa4() {
 	    return new Recompensa(700, 4000, pocionAleatoria(), armaAleatoria(), armaduraAleatoria());
+	}
+
+
+	public static Recompensa obtenerRecompensaPorBatalla(modelo.Batalla batalla) {
+		java.util.List<modelo.Batalla> batallas = Repositorio.getInstance().getPartidaActual().getBatallas();
+		int indice = batallas.indexOf(batalla);
+		
+		return switch (indice) {
+			case 0 -> crearRecompensa1();
+			case 1 -> crearRecompensa2();
+			case 2 -> crearRecompensa3();
+			case 3 -> crearRecompensa4();
+			default -> crearRecompensa1();
+		};
 	}
 }

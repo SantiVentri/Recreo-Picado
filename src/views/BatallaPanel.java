@@ -20,7 +20,9 @@ import enums.ACCIONES;
 import modelo.Curandera;
 import modelo.Entidad;
 import modelo.Pocion;
+import modelo.Repositorio;
 import orquestador.Orquestador;
+
 
 public class BatallaPanel extends JPanel {
 
@@ -46,6 +48,8 @@ public class BatallaPanel extends JPanel {
     // Popup de inventario (pociones) usado por el botón "Usar Item"
     private InventarioBatallaView inventarioBatallaView;
     private JPanel overlayInventario;
+    private ResultadoBatallaView resultadoBatallaView;
+    private JPanel overlayResultado;
 
     // Tamaño de la flecha renderizada
     private static final int FLECHA_W = 48;
@@ -159,6 +163,28 @@ public class BatallaPanel extends JPanel {
             }
         });
         add(inventarioBatallaView);
+
+        // --- OVERLAY + PANEL DE RESULTADO DE BATALLA ---
+        overlayResultado = new JPanel();
+        overlayResultado.setOpaque(false);
+        overlayResultado.setVisible(false);
+        add(overlayResultado);
+
+        resultadoBatallaView = new ResultadoBatallaView();
+        resultadoBatallaView.setVisible(false);
+        resultadoBatallaView.setClickListener(new ResultadoBatallaView.ClickListener() {
+            public void onContinuar() {
+                cerrarResultadoBatalla();
+                // Recién aquí al presionar Continuar cerramos la batalla y cambiamos de pantalla
+                if (Orquestador.getInstance().alumnosGanaron()) {
+                    Orquestador.getInstance().terminarBatalla();
+                } else {
+                    Orquestador.getInstance().reiniciar();
+                }
+                ventana.verNiveles();
+            }
+        });
+        add(resultadoBatallaView);
     }
 
     public void cargarEntidades() {
@@ -420,12 +446,61 @@ public class BatallaPanel extends JPanel {
 
     private void finalizarBatalla() {
         setBotonesHabilitados(false);
-        if (Orquestador.getInstance().alumnosGanaron()) {
-            Orquestador.getInstance().terminarBatalla();
-        } else {
-            Orquestador.getInstance().reiniciar();
+        boolean ganaron = Orquestador.getInstance().alumnosGanaron();
+        modelo.Recompensa recompensa = null;
+
+        if (ganaron) {
+            //Identifica la batalla que acabamos de ganar
+            modelo.Batalla batallaActual = Orquestador.getInstance().getBatalla();
+            
+            //Pide la recompensa
+            recompensa = modelo.factories.RecompensaFactory.obtenerRecompensaPorBatalla(batallaActual);
+            
+            //Otorga el oro 
+            Repositorio.getInstance().getPartidaActual().recibirPesos(recompensa.getOro());
+            
+            //Agrega los ítems obtenidos al inventario de la partida
+            for (modelo.Item item : recompensa.getItems()) {
+                if (item != null) {
+                    Repositorio.getInstance().getPartidaActual().agregarItem(item);
+                }
+            }
+            
+            
+            for (modelo.Entidad alumno : Orquestador.getInstance().getAlumnos().getEntidades()) {
+                if (alumno instanceof modelo.Alumno) {
+                    ((modelo.Alumno) alumno).recibirXp(recompensa.getXp());
+                }
+            }
+            recompensa.setReclamada();
         }
-        ventana.verNiveles();
+
+        //Muestra el cartel de Victoria o Derrota
+        mostrarPanelResultado(ganaron, recompensa);
+    }
+
+        private void mostrarPanelResultado(boolean victoria, modelo.Recompensa recompensa) {
+        resultadoBatallaView.configurar(victoria, recompensa);
+        int resAncho = 520;
+        int resAlto = 380;
+        int x = (getWidth() - resAncho) / 2;
+        int y = (getHeight() - resAlto) / 2;
+        
+        resultadoBatallaView.setBounds(x, y, resAncho, resAlto);
+        overlayResultado.setBounds(0, 0, getWidth(), getHeight());
+        
+        // Colocarmos por encima de la ventana actual
+        setComponentZOrder(overlayResultado, 0);
+        setComponentZOrder(resultadoBatallaView, 0);
+
+        overlayResultado.setVisible(true);
+        resultadoBatallaView.setVisible(true);
+        repaint();
+    }
+
+    private void cerrarResultadoBatalla() {
+        if (overlayResultado != null) overlayResultado.setVisible(false);
+        if (resultadoBatallaView != null) resultadoBatallaView.setVisible(false);
     }
 
     // ─── ACTUALIZAR VISTAS ────────────────────────────────────────────────────
@@ -498,4 +573,5 @@ public class BatallaPanel extends JPanel {
             System.out.println("No se encontró la arena: " + nombreArena);
         }
     }
+
 }
