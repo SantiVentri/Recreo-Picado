@@ -475,6 +475,9 @@ public class BatallaPanel extends JPanel {
             recompensa.setReclamada();
         }
 
+        // Se guarda el progreso de la partida tanto si se ganó como si se perdió la batalla
+        Repositorio.getInstance().guardarPartidaActual();
+        
         //Muestra el cartel de Victoria o Derrota
         mostrarPanelResultado(ganaron, recompensa);
     }
@@ -501,6 +504,9 @@ public class BatallaPanel extends JPanel {
     private void cerrarResultadoBatalla() {
         if (overlayResultado != null) overlayResultado.setVisible(false);
         if (resultadoBatallaView != null) resultadoBatallaView.setVisible(false);
+        // Tras cerrar el panel de resultado, navegar a la vista de niveles (preserva intención de feature/guardado)
+        if (ventana != null) ventana.verNiveles();
+
     }
 
     // ─── ACTUALIZAR VISTAS ────────────────────────────────────────────────────

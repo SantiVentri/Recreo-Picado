@@ -1,10 +1,13 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.*;
 
 import interfaces.IEntidad;
 
-public abstract class Entidad implements IEntidad {
+public abstract class Entidad implements IEntidad, Serializable {
+	private static final long serialVersionUID = 1L;
+
 	// Atributos básicos
 	private final String nombre;
 	private int vida;

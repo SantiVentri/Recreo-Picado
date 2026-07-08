@@ -1,9 +1,12 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recompensa {
+public class Recompensa implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private int oro;
 	private int xp;
 	private boolean reclamada;

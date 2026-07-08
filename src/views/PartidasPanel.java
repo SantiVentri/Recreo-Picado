@@ -4,11 +4,13 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import modelo.Partida;
+import modelo.Repositorio;
+
 public class PartidasPanel extends JPanel {
 	
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	
-	private JButton botonSeleccionado = null;
     private Image imagenFondo;
     
     public PartidasPanel (VentanaLayout ventana) {    	
@@ -25,47 +27,99 @@ private static final long serialVersionUID = 1L;
     private void configurarInicioPartida(VentanaLayout ventana) {
     	setLayout(null);
     	
-    	//Imagen de nueva Partida
-    	ImageIcon iconoOriginal = new ImageIcon("src/resources/Nueva-partida.png");
-    	Image imageEscalada = iconoOriginal.getImage().getScaledInstance(270, 240, Image.SCALE_SMOOTH);
-    	ImageIcon iconoPartidaNueva = new ImageIcon(imageEscalada);
-    	JButton botonPartidaNueva = new JButton(iconoPartidaNueva);
+    	boolean hayGuardado = Repositorio.getInstance().hayPartidaGuardada();
     	
-    	//tamaño de boton de nueva partida 
+    	//Tamaño y posicion unicos, centrados en el panel, para el boton
+    	//"grande" que corresponda mostrar: Nueva Partida (si no hay guardado)
+    	//o Cargar Partida (si hay guardado). Solo se dibuja uno de los dos.
+    	int anchoBoton = 270, altoBoton = 240;
+    	int xBoton = (1000 - anchoBoton) / 2;
+    	int yBoton = 230;
     	
-    	botonPartidaNueva.setBounds(290, 230, 270, 240);
+    	if (!hayGuardado) {
+    		//Imagen de nueva Partida
+    		ImageIcon iconoOriginal = new ImageIcon("src/resources/Nueva-partida.png");
+    		Image imageEscalada = iconoOriginal.getImage().getScaledInstance(anchoBoton, altoBoton, Image.SCALE_SMOOTH);
+    		ImageIcon iconoPartidaNueva = new ImageIcon(imageEscalada);
+    		JButton botonPartidaNueva = new JButton(iconoPartidaNueva);
+    		
+    		botonPartidaNueva.setBounds(xBoton, yBoton, anchoBoton, altoBoton);
+    		
+    		//Sacar borde y fondo
+    		botonPartidaNueva.setBorderPainted(false);
+    		botonPartidaNueva.setContentAreaFilled(false);
+    		botonPartidaNueva.setFocusPainted(false);
+    		
+    		//Accion al hacer click
+    		botonPartidaNueva.addActionListener(e -> ventana.iniciarNuevaPartida());
+    		
+    		add(botonPartidaNueva);
+    		return;
+    	}
     	
-    	//Sacar borde y fondo
-    	botonPartidaNueva.setBorderPainted(false);
-    	botonPartidaNueva.setContentAreaFilled(false);
-    	botonPartidaNueva.setFocusPainted(false);
-    	
-    	//Accion al hacer click
-    	botonPartidaNueva.addActionListener(e -> ventana.verMenu());
-    	
-    	add(botonPartidaNueva);
-    	
-    	//Imagen partida cargada 
-    	
-    	ImageIcon iconoOriginal2 = new ImageIcon("src/resources/Partida-Cargada.png");
-    	Image imagenEscalada2 = iconoOriginal2.getImage().getScaledInstance(290,270, Image.SCALE_SMOOTH);
+    	//Hay una partida guardada: se muestra unicamente el boton de Cargar Partida,
+    	//en el mismo lugar y con el mismo tamaño que tendria el de Nueva Partida.
+    	ImageIcon iconoOriginal2 = new ImageIcon("src/resources/Partida-cargada.png");
+    	Image imagenEscalada2 = iconoOriginal2.getImage().getScaledInstance(anchoBoton, altoBoton, Image.SCALE_SMOOTH);
     	ImageIcon iconoPartidaCargada = new ImageIcon (imagenEscalada2);
     	JButton botonPartidaCargada = new JButton(iconoPartidaCargada);
     	
-    	//tamaño de boton de partida cargada
-    	
-    	botonPartidaCargada.setBounds(530,210,290,270);
+    	botonPartidaCargada.setBounds(xBoton, yBoton, anchoBoton, altoBoton);
     	
     	//sacar borde y fondo
     	botonPartidaCargada.setBorderPainted(false);
     	botonPartidaCargada.setContentAreaFilled(false);
     	botonPartidaCargada.setFocusPainted(false);
     	
-    	//Accion al hacer click 
-    	botonPartidaCargada.addActionListener(e -> ventana.verMenu());
+    	//El texto se dibuja centrado, encima de la imagen, en vez de al costado
+    	botonPartidaCargada.setHorizontalTextPosition(SwingConstants.CENTER);
+    	botonPartidaCargada.setVerticalTextPosition(SwingConstants.CENTER);
+    	botonPartidaCargada.setHorizontalAlignment(SwingConstants.CENTER);
+    	botonPartidaCargada.setVerticalAlignment(SwingConstants.CENTER);
+    	botonPartidaCargada.setForeground(new Color(25, 40, 100));
+    	botonPartidaCargada.setFont(new Font("Arial", Font.BOLD, 18));
+    	botonPartidaCargada.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    	
+    	Partida partidaGuardada = Repositorio.getInstance().leerPartidaGuardada();
+    	int nivel = (partidaGuardada != null) ? partidaGuardada.getNivelActual() : 1;
+    	botonPartidaCargada.setText("<html><div style='text-align:center'>Cargar<br>Partida<br>Nivel " + nivel + "</div></html>");
+    	botonPartidaCargada.addActionListener(e -> ventana.cargarPartidaGuardada());
     	
     	add(botonPartidaCargada);
     	
+    	//Boton de "Borrar partida", centrado horizontalmente en la pantalla,
+    	//justo debajo del post-it.
+    	int borrarAncho = 170;
+    	int borrarAlto = (int) Math.round(borrarAncho / 2.0274);
+    	int xBorrar = (1000 - borrarAncho) / 2;
+    	int yBorrar = yBoton + altoBoton + 8;
+    	
+    	ImageIcon iconoBorrar = new ImageIcon("src/resources/Borrar-partida.png");
+    	Image imagenBorrarEscalada = iconoBorrar.getImage().getScaledInstance(borrarAncho, borrarAlto, Image.SCALE_SMOOTH);
+    	JButton botonBorrarPartida = new JButton(new ImageIcon(imagenBorrarEscalada));
+    	
+    	botonBorrarPartida.setBounds(xBorrar, yBorrar, borrarAncho, borrarAlto);
+    	botonBorrarPartida.setBorderPainted(false);
+    	botonBorrarPartida.setContentAreaFilled(false);
+    	botonBorrarPartida.setFocusPainted(false);
+    	botonBorrarPartida.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    	botonBorrarPartida.setToolTipText("Borrar partida guardada");
+    	botonBorrarPartida.addActionListener(e -> confirmarBorrado(ventana));
+    	
+    	add(botonBorrarPartida);
+    }
+    
+    private void confirmarBorrado(VentanaLayout ventana) {
+    	int opcion = JOptionPane.showConfirmDialog(
+    			this,
+    			"¿Seguro que queres borrar la partida guardada?\nEsta accion no se puede deshacer.",
+    			"Borrar partida guardada",
+    			JOptionPane.YES_NO_OPTION,
+    			JOptionPane.WARNING_MESSAGE);
+    	
+    	if (opcion == JOptionPane.YES_OPTION) {
+    		ventana.borrarPartidaGuardada();
+    	}
     }
     
     @Override
@@ -75,8 +129,5 @@ private static final long serialVersionUID = 1L;
         if (imagenFondo != null) {
             g.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
         }
-    }   
+    }
 }
-
-
-

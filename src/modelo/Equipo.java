@@ -1,9 +1,12 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Equipo {
+public class Equipo implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private List<Entidad> entidades;
     private final int cantidadMaxima = 4;
     

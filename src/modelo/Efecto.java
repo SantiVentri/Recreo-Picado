@@ -1,8 +1,12 @@
 package modelo;
 
+import java.io.Serializable;
+
 import enums.EFECTOS;
 
-public class Efecto {
+public class Efecto implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String nombre;
     private String descripcion;
     private EFECTOS tipo;

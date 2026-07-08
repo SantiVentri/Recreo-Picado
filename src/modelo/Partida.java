@@ -1,5 +1,6 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,9 @@ import enums.ESTADO_BATALLA;
 import modelo.factories.BatallaFactory;
 import modelo.factories.PersonajeFactory;
 
-public class Partida {
+public class Partida implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private static int contador = 0;
 	
 	private final int id;
@@ -107,5 +110,21 @@ public class Partida {
 				return;
 			}
 		}
+	}
+	
+	/**
+	 * Devuelve el nivel en el que se encuentra el jugador dentro de esta partida,
+	 * es decir, la cantidad de batallas ya ganadas + 1 (o la última si ya las ganó todas).
+	 * Se usa para mostrar el progreso en la pantalla de "Cargar partida".
+	 */
+	public int getNivelActual() {
+		int ganadas = 0;
+		for (Batalla b : batallas) {
+			if (b.getEstado() == ESTADO_BATALLA.VICTORIA) {
+				ganadas++;
+			}
+		}
+		
+		return Math.min(ganadas + 1, batallas.size());
 	}
 }

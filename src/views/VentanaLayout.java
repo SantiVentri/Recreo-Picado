@@ -4,12 +4,9 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import modelo.Batalla;
-import modelo.Kiosko;
 import modelo.Partida;
 import modelo.Repositorio;
 import orquestador.Orquestador;
@@ -34,13 +31,18 @@ public class VentanaLayout extends JFrame {
 		musica = new ReproductorMusica();
 	    musica.reproducir("src/resources/himno-instrumental.wav");
 		
-		Repositorio.getInstance().crearPartida();
-	    
 		cargarVentana();
 		
 		setVisible(true);
 	}
 	
+	/**
+	 * Construye (o reconstruye) todas las pantallas del juego.
+	 * Las pantallas de "INICIO" y "PARTIDAS" no dependen de que exista una partida.
+	 * Las pantallas de juego propiamente dichas (menú, equipo, niveles, kiosko, batalla)
+	 * solo se arman cuando ya hay una partida actual (nueva o cargada), para evitar
+	 * mostrar datos de una partida vieja o inexistente.
+	 */
 	public void cargarVentana() {
 		cl = new CardLayout();
 		mainPanel = new JPanel(cl);
@@ -49,19 +51,54 @@ public class VentanaLayout extends JFrame {
 		
 		mainPanel.add(new WelcomePanel(this), "INICIO");
 		mainPanel.add(new PartidasPanel(this), "PARTIDAS");
-		mainPanel.add(new MenuPanel(this), "MENU");
-		mainPanel.add(new MyTeam(this), "EQUIPO");
-		agregarPanel(new Jugador1(this), "JUGADOR1");
-		agregarPanel(new Jugador2(this), "JUGADOR2");
-		agregarPanel(new Jugador3(this), "JUGADOR3");
-		agregarPanel(new Jugador4(this), "JUGADOR4");
-		mainPanel.add(new LevelsPanel(this, partidaActual.getBatallas()), "NIVELES");
-		agregarPanel(new KioskoPanel(this), "KIOSKO");
-		batallaPanel = new BatallaPanel(this);
-		mainPanel.add(batallaPanel, "BATALLA");
+		
+		if (partidaActual != null) {
+			mainPanel.add(new MenuPanel(this), "MENU");
+			mainPanel.add(new MyTeam(this), "EQUIPO");
+			agregarPanel(new Jugador1(this), "JUGADOR1");
+			agregarPanel(new Jugador2(this), "JUGADOR2");
+			agregarPanel(new Jugador3(this), "JUGADOR3");
+			agregarPanel(new Jugador4(this), "JUGADOR4");
+			mainPanel.add(new LevelsPanel(this, partidaActual.getBatallas()), "NIVELES");
+			mainPanel.add(new KioskoPanel(this), "KIOSKO");
+			batallaPanel = new BatallaPanel(this);
+			mainPanel.add(batallaPanel, "BATALLA");
+		}
 		
 		cl.show(mainPanel, "INICIO");
+		
+		getContentPane().removeAll();
 		add(mainPanel);
+		revalidate();
+		repaint();
+	}
+	
+	/**
+	 * Se llama cuando el jugador elige "Nueva partida" en la pantalla de selección.
+	 * Crea una partida desde cero y reconstruye las pantallas de juego para que
+	 * queden asociadas a esa partida nueva.
+	 */
+	public void iniciarNuevaPartida() {
+		Repositorio.getInstance().crearPartida();
+		cargarVentana();
+		verMenu();
+	}
+	
+	/**
+	 * Se llama cuando el jugador elige "Cargar partida". Si existe una partida
+	 * guardada en disco, la lee, la deja como partida actual y reconstruye las
+	 * pantallas de juego para que reflejen el progreso guardado.
+	 */
+	public void cargarPartidaGuardada() {
+		Partida guardada = Repositorio.getInstance().leerPartidaGuardada();
+		
+		if (guardada == null) {
+			return;
+		}
+		
+		Repositorio.getInstance().cargarPartida(guardada);
+		cargarVentana();
+		verMenu();
 	}
 	
 	private void agregarPanel(JPanel panel, String nombre) {
@@ -76,6 +113,17 @@ public class VentanaLayout extends JFrame {
 	// Navegación
 	public void verPartidas() {
 		cl.show(mainPanel, "PARTIDAS");
+	}
+	
+	/**
+	 * Se llama cuando el jugador confirma borrar la partida guardada desde la
+	 * pantalla de selección. Borra el archivo de guardado y refresca la
+	 * pantalla para que el botón de cargar partida quede deshabilitado de nuevo.
+	 */
+	public void borrarPartidaGuardada() {
+		Repositorio.getInstance().borrarPartidaGuardada();
+		cargarVentana();
+		verPartidas();
 	}
 	
 	public void verMenu() {

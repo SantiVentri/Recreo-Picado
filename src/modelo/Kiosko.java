@@ -53,6 +53,9 @@ public class Kiosko {
             // Agrega el ítem al inventario de la partida
             Repositorio.getInstance().getPartidaActual().agregarItem(item.clonar());
             
+            // Se guarda el progreso de la partida tras la compra
+            Repositorio.getInstance().guardarPartidaActual();
+            
             // Compra exitosa
             return true;
         }

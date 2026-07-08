@@ -31,3 +31,6 @@ Thumbs.db
 *.log
 
 oracleJdk-26/
+
+# --- Guardado ---
+saves/

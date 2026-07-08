@@ -1,8 +1,12 @@
 package modelo;
 
+import java.io.Serializable;
+
 import enums.ESTADO_BATALLA;
 
-public class Batalla {
+public class Batalla implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private static int contador = 0;
 	
 	private final int id;
