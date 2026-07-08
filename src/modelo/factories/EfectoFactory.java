@@ -5,7 +5,7 @@ import modelo.Efecto;
 
 public class EfectoFactory {
     public static Efecto crearVeneno() {
-        return new Efecto("Veneno", "Envenena al objetivo, quitándole vida durante 3 turnos", EFECTOS.VENENO, 3, 8);
+        return new Efecto("Veneno", "Envenena al objetivo, quitándole vida durante 3 turnos", EFECTOS.VENENO, 3, 15);
     }
     
     public static Efecto crearCuracion() {
