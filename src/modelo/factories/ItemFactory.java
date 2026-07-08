@@ -28,11 +28,11 @@ public class ItemFactory {
     }
     
     public static Pocion crearCocacola() {
-        return new Pocion("Coca-Cola", "Recupera vida y da energía", 80, -10, 40, EFECTOS.CURACION, "src/resources/items/cocacola.png");
+        return new Pocion("Coca-Cola", "Recupera energía, pero baja un poco de vida", 80, -10, 40, EFECTOS.CURACION, "src/resources/items/cocacola.png");
     }
 
     public static Pocion crearManaos() {
-        return new Pocion("Manaos", "Restauración total, pero de dudosa procedencia", 120, -40, 60, EFECTOS.CURACION, "src/resources/items/manaos.png");
+        return new Pocion("Manaos", "Recupera mucha energía, pero baja mucha vida", 120, -40, 80, EFECTOS.CURACION, "src/resources/items/manaos.png");
     }
 
     // ==========================================
