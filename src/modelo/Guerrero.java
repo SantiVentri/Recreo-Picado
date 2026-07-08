@@ -18,6 +18,9 @@ public class Guerrero extends Alumno {
         return this.getAtaque() + (fuerza / 2);
     }
 
+    /*
+     * La habilidad del guerrero golpea a todos los enemigos vivos
+     */
     @Override
     public void usarHabilidad(IEntidad objetivo, List<Entidad> alumnos, List<Entidad> enemigos) {
         if (this.getHabilidad() == null || !this.getHabilidad().sePuedeUsar(this)) return;

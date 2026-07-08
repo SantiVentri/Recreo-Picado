@@ -1,7 +1,11 @@
 package modelo;
 
-import enums.EFECTOS;
-
+/*
+ * La clase alumno extiende a Entidad. Es una clase abstracta
+ * intermedia entre Entidad y las clases como Mago, Arquero, etc.
+ * Permite que los alumnos puedan tener niveles, xp, armas y armaduras
+ * mientras que los enemigos no pueden.
+ */
 public abstract class Alumno extends Entidad {
 
     private static final int XP_POR_NIVEL = 100;

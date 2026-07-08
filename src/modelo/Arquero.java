@@ -18,8 +18,8 @@ public class Arquero extends Alumno {
     }
 
     /**
-     * Lluvia de flechas: potencia basada en la habilidad + puntería del arquero.
-     * Si la habilidad tiene efecto (ej. sangrado), lo aplica al objetivo.
+     * La habilidad del Arquero es lanzar una bola de papel que envenena al
+     * enemigo objetivo por 3 turnos.
      */
     @Override
     public void usarHabilidad(IEntidad objetivo, List<Entidad> alumnos, List<Entidad> enemigos) {

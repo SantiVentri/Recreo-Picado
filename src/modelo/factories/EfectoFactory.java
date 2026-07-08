@@ -3,6 +3,10 @@ package modelo.factories;
 import enums.EFECTOS;
 import modelo.Efecto;
 
+/*
+ * Permite crear todos los tipos de efectos que se pueden usar
+ * tanto en items como habilidades
+ */
 public class EfectoFactory {
     public static Efecto crearVeneno() {
         return new Efecto("Veneno", "Envenena al objetivo, quitándole vida durante 3 turnos", EFECTOS.VENENO, 3, 15);

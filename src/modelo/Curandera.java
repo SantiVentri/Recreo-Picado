@@ -19,7 +19,8 @@ public class Curandera extends Alumno {
     }
  
     /**
-     * Curación: le restaura vida al objetivo alumno usando la potencia de la habilidad + amistad.
+     * La habilidad de la curandera aumenta la vida del alumno vivo con menos vida.
+     * Puede ser que ese alumno con menos vida sea la propia curandera.
      */
     @Override
     public void usarHabilidad(IEntidad objetivo, List<Entidad> alumnos, List<Entidad> enemigos) {

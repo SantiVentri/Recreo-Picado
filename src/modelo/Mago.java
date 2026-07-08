@@ -18,6 +18,9 @@ public class Mago extends Alumno {
         return this.getAtaque() + (inteligencia / 2);
     }
 
+    /*
+     * La habilidad del Mago ataca a todos los enemigos al mismo tiempo.
+     */
     @Override
     public void usarHabilidad(IEntidad objetivo, List<Entidad> alumnos, List<Entidad> enemigos) {
         Habilidad hab = this.getHabilidad();

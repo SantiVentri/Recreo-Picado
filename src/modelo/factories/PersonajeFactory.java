@@ -9,6 +9,11 @@ import modelo.JefeFinal;
 import modelo.Mago;
 import modelo.Secuaz;
 
+/*
+ * Permite crear todos los personajes del juego
+ * incluyendo alumnos, jefes y secuaces. A cada
+ * uno se le asignan stats y su habilidad
+ */
 public class PersonajeFactory {
 	// Alumnos
     public static Mago crearMago() {

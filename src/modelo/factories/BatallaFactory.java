@@ -5,6 +5,9 @@ import modelo.Batalla;
 import modelo.Equipo;
 import modelo.Recompensa;
 
+/*
+ * Crea los niveles con sus enemigos, arena y recompensa determinados
+ */
 public class BatallaFactory {
 	public static Batalla crearNivel1() {
 		Equipo enemigos = new Equipo();

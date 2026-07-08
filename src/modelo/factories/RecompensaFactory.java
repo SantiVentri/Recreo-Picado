@@ -1,11 +1,20 @@
 package modelo.factories;
 
-import modelo.Arma;
-import modelo.Armadura;
-import modelo.Pocion;
-import modelo.Recompensa;
-import modelo.Repositorio;
+import java.util.List;
 
+import modelo.*;
+
+/*
+ *  Permite crear las recompensas de los niveles
+ *  
+ *  Cada nivel tiene una recompensa mayor en oro y xp en relación
+ *  con su anterior nivel.
+ *  
+ *  Cada recompensa contiene 3 items:
+ *  - Poción aleatoria
+ *  - Arma aleatoria
+ *  - Armadura aleatoria
+ */
 public class RecompensaFactory {
 	private static Pocion pocionAleatoria() {
 	    int i = (int) (Math.random() * 6);
@@ -62,8 +71,8 @@ public class RecompensaFactory {
 	}
 
 
-	public static Recompensa obtenerRecompensaPorBatalla(modelo.Batalla batalla) {
-		java.util.List<modelo.Batalla> batallas = Repositorio.getInstance().getPartidaActual().getBatallas();
+	public static Recompensa obtenerRecompensaPorBatalla(Batalla batalla) {
+		List<Batalla> batallas = Repositorio.getInstance().getPartidaActual().getBatallas();
 		int indice = batallas.indexOf(batalla);
 		
 		return switch (indice) {
