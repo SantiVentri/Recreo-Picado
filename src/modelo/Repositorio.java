@@ -16,7 +16,9 @@ public class Repositorio {
 	
 	private Partida partidaActual;
 	
-	private Repositorio() { }
+	private Repositorio() {
+		partidaActual = null;
+	}
 	
 	public static Repositorio getInstance() {
 		if (instancia == null) {
@@ -32,6 +34,7 @@ public class Repositorio {
 	 */
 	public void crearPartida() {
 		this.partidaActual = new Partida();
+		this.guardarPartidaActual();
 	}
 	
 	/**
