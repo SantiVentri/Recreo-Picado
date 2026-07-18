@@ -50,7 +50,7 @@ public class VentanaLayout extends JFrame {
 		partidaActual = Repositorio.getInstance().getPartidaActual();
 		
 		mainPanel.add(new WelcomePanel(this), "INICIO");
-		mainPanel.add(new PartidasPanel(this), "PARTIDAS");
+		agregarPanel(new PartidasPanel(this), "PARTIDAS");
 		
 		if (partidaActual != null) {
 			mainPanel.add(new MenuPanel(this), "MENU");
@@ -112,6 +112,8 @@ public class VentanaLayout extends JFrame {
 	
 	// Navegación
 	public void verPartidas() {
+		((PartidasPanel) obtenerPanel("PARTIDAS")).refrescar();
+		cl.show(mainPanel, "PARTIDAS");
 		cl.show(mainPanel, "PARTIDAS");
 	}
 	

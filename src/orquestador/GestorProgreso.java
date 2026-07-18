@@ -9,6 +9,7 @@ public class GestorProgreso {
     public void registrarVictoria(Batalla batallaJugada) {
         Partida partida = Repositorio.getInstance().getPartidaActual();
         partida.desbloquearProximaBatalla(batallaJugada);
+        Repositorio.getInstance().guardarPartidaActual();
     }
 
     // Devuelve la próxima batalla disponible para jugar (o null si no hay)

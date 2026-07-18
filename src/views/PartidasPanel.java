@@ -12,8 +12,11 @@ public class PartidasPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
     private Image imagenFondo;
+    private VentanaLayout ventana;
     
     public PartidasPanel (VentanaLayout ventana) {    	
+    	this.ventana = ventana;
+    	
     	try {
             imagenFondo = new ImageIcon("src/resources/Seleccionar-batalla.png").getImage();
             
@@ -21,6 +24,18 @@ public class PartidasPanel extends JPanel {
             System.out.println("Error: No se encontró la imagen de fondo.");
         }
     	 configurarInicioPartida(ventana);
+    }
+    
+    /**
+     * Reconstruye el contenido del panel para reflejar el estado actual
+     * de la partida guardada en disco (por ejemplo, el nivel alcanzado).
+     * Se llama cada vez que se vuelve a mostrar esta pantalla.
+     */
+    public void refrescar() {
+    	removeAll();
+    	configurarInicioPartida(ventana);
+    	revalidate();
+    	repaint();
     }
     
     
