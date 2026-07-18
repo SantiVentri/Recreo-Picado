@@ -17,10 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import enums.ACCIONES;
-import modelo.Curandera;
-import modelo.Entidad;
-import modelo.Pocion;
-import modelo.Repositorio;
+import modelo.*;
+import orquestador.GestorRecompensas;
 import orquestador.Orquestador;
 
 
@@ -37,6 +35,9 @@ public class BatallaPanel extends JPanel {
     // Referencias a EntidadViews
     private List<EntidadView> viewsAlumnos  = new ArrayList<>();
     private List<EntidadView> viewsEnemigos = new ArrayList<>();
+    
+    // Gestor de recompensas
+    private GestorRecompensas gestorRecompensas;
 
     // Flechas flotantes sobre alumnos y enemigos
     private List<JLabel> flechasAlumnos = new ArrayList<>();
@@ -61,6 +62,7 @@ public class BatallaPanel extends JPanel {
     public BatallaPanel(VentanaLayout ventana) {
         this.ventana = ventana;
         setLayout(null);
+        gestorRecompensas = new GestorRecompensas();
     }
 
     // ─── CARGA INICIAL ────────────────────────────────────────────────────────
@@ -502,33 +504,17 @@ public class BatallaPanel extends JPanel {
 
     private void finalizarBatalla() {
         setBotonesHabilitados(false);
+ 
         boolean ganaron = Orquestador.getInstance().alumnosGanaron();
-        modelo.Recompensa recompensa = null;
-
-        if (ganaron) {
-            modelo.Batalla batallaActual = Orquestador.getInstance().getBatalla();
-            recompensa = modelo.factories.RecompensaFactory.obtenerRecompensaPorBatalla(batallaActual);
-            Repositorio.getInstance().getPartidaActual().recibirPesos(recompensa.getOro());
-            
-            for (modelo.Item item : recompensa.getItems()) {
-                if (item != null) {
-                    Repositorio.getInstance().getPartidaActual().agregarItem(item);
-                }
-            }
-            
-            for (modelo.Entidad alumno : Orquestador.getInstance().getAlumnos().getEntidades()) {
-                if (alumno instanceof modelo.Alumno) {
-                    ((modelo.Alumno) alumno).recibirXp(recompensa.getXp());
-                }
-            }
-            recompensa.setReclamada();
-        }
-
-        Repositorio.getInstance().guardarPartidaActual();
+        Batalla batallaActual = Orquestador.getInstance().getBatalla();
+        Equipo alumnos = Orquestador.getInstance().getAlumnos();
+ 
+        Recompensa recompensa = gestorRecompensas.procesarResultado(ganaron, batallaActual, alumnos);
+ 
         mostrarPanelResultado(ganaron, recompensa);
     }
 
-    private void mostrarPanelResultado(boolean victoria, modelo.Recompensa recompensa) {
+    private void mostrarPanelResultado(boolean victoria, Recompensa recompensa) {
         resultadoBatallaView.configurar(victoria, recompensa);
         int resAncho = 520;
         int resAlto = 380;

@@ -32,4 +32,20 @@ public class Equipo implements Serializable {
         }
         return null;
     }
+    
+    public boolean estaDerrotado() {
+    	for (Entidad e : entidades) {
+    		if (e.estaVivo()) {
+    			return false;
+    		}
+    	}
+    	
+    	return true;
+    }
+    
+    public void resetearParaBatalla() {
+        for (Entidad entidad : entidades) {
+            entidad.resetearParaBatalla();
+        }
+    }
 }

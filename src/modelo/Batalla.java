@@ -23,12 +23,6 @@ public class Batalla implements Serializable {
 		this.recompensa = recompensa;
 	}
 	
-	public void resetearEnemigos() {
-		for (Entidad enemigo : enemigos.getEntidades()) {
-			enemigo.resetearParaBatalla();
-		}
-	}
-	
 	// Getters y setters
 	public int getId() {
 		return id;

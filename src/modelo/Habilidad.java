@@ -30,6 +30,10 @@ public class Habilidad implements Serializable {
     public boolean sePuedeUsar(Entidad entidad) {
         return entidad.getEnergia() >= costoEnergia;
     }
+    
+    public boolean esHabilidadMultiple() {
+        return this.efecto != null && this.efecto.getTipo() == enums.EFECTOS.ATAQUE_MULTIPLE;
+    }
 
     public String getNombre() { return nombre; }
     public String getDescripcion() { return descripcion; }
