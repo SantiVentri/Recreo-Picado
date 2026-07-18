@@ -1,6 +1,5 @@
 package modelo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import interfaces.IEntidad;
@@ -29,20 +28,6 @@ public class Curandera extends Alumno {
 
         this.setDefendiendo(false);
         this.setEnergia(this.getEnergia() - hab.getCostoEnergia());
-        
-        List<Entidad> alumnosVivos = new ArrayList<Entidad>();
-        for (Entidad a : alumnos) {
-            if (a.estaVivo()) alumnosVivos.add(a);
-        }
-
-        if (alumnosVivos.isEmpty()) return;
-
-        objetivo = alumnosVivos.get(0);
-        for (Entidad alumno : alumnosVivos) {
-            if (alumno.getVida() < ((Entidad) objetivo).getVida()) {
-                objetivo = alumno;
-            }
-        }
 
         int curacion = hab.getPotencia() + amistad;
         objetivo.aumentarVida(curacion);

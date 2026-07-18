@@ -38,7 +38,8 @@ public class BatallaPanel extends JPanel {
     private List<EntidadView> viewsAlumnos  = new ArrayList<>();
     private List<EntidadView> viewsEnemigos = new ArrayList<>();
 
-    // Flechas flotantes sobre cada enemigo (una por enemigo, se muestran/ocultan)
+    // Flechas flotantes sobre alumnos y enemigos
+    private List<JLabel> flechasAlumnos = new ArrayList<>();
     private List<JLabel> flechasEnemigos = new ArrayList<>();
 
     // Botones
@@ -72,7 +73,7 @@ public class BatallaPanel extends JPanel {
         btnAtacar.setPreferredSize(new Dimension(120, 42));
         btnAtacar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                activarSeleccionObjetivo(ACCIONES.ATACAR);
+                activarSeleccionEnemigos(ACCIONES.ATACAR);
             }
         });
         panelBotones.add(btnAtacar);
@@ -93,11 +94,9 @@ public class BatallaPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 Entidad actual = Orquestador.getInstance().getEntidadActual();
                 if (actual instanceof Curandera) {
-                    // Como la Curandera cura a un alumno aleatorio de su propio equipo,
-                    // no requiere que el jugador seleccione un objetivo enemigo
-                    usarHabilidadSinObjetivo();
+                    activarSeleccionAlumnos(ACCIONES.USAR_HABILIDAD);
                 } else {
-                    activarSeleccionObjetivo(ACCIONES.USAR_HABILIDAD);
+                    activarSeleccionEnemigos(ACCIONES.USAR_HABILIDAD);
                 }
             }
         });
@@ -175,7 +174,6 @@ public class BatallaPanel extends JPanel {
         resultadoBatallaView.setClickListener(new ResultadoBatallaView.ClickListener() {
             public void onContinuar() {
                 cerrarResultadoBatalla();
-                // Recién aquí al presionar Continuar cerramos la batalla y cambiamos de pantalla
                 if (Orquestador.getInstance().alumnosGanaron()) {
                     Orquestador.getInstance().terminarBatalla();
                 } else {
@@ -193,6 +191,7 @@ public class BatallaPanel extends JPanel {
 
         viewsAlumnos.clear();
         viewsEnemigos.clear();
+        flechasAlumnos.clear();
         flechasEnemigos.clear();
 
         List<Entidad> alumnos  = Orquestador.getInstance().getAlumnos().getEntidades();
@@ -206,26 +205,79 @@ public class BatallaPanel extends JPanel {
         int evAncho = 140;
         int evAlto = 360;
 
-        // ALUMNOS — se agregan de atrás hacia adelante (índice mayor = más adelante = encima)
-        for (int i = alumnos.size() - 1; i >= 0; i--) {
+        Image imgFlecha = cargarFlecha();
+
+        // ALUMNOS + flechas
+        JLabel[] flechasAlumnosArr = new JLabel[alumnos.size()];
+        for (int i = 0; i < alumnos.size(); i++) {
+            final int idx = i;
             EntidadView ev = new EntidadView(alumnos.get(i));
             ev.setMostrarHUD(true);
             ev.setMirandoIzquierda(false);
-            ev.setBounds(alumnoBaseX - i * pasoX, baseY + i * pasoY, evAncho, evAlto);
+            
+            int evX = alumnoBaseX - i * pasoX;
+            int evY = baseY + i * pasoY;
+            ev.setBounds(evX, evY, evAncho, evAlto);
+
+            ev.setClickListener(new EntidadView.ClickListener() {
+                public void onClick(EntidadView origen, int clickX) {
+                    if (!esperandoObjetivo || accionPendiente != ACCIONES.USAR_HABILIDAD) return;
+                    Entidad objetivo = Orquestador.getInstance().getAlumnos().getEntidades().get(idx);
+                    if (!objetivo.estaVivo()) return;
+
+                    int centro = origen.getWidth() / 2;
+                    if (clickX < centro - 40 || clickX > centro + 40) return;
+
+                    ocultarFlechas();
+                    indiceObjetivoActual = idx;
+
+                    Orquestador.getInstance().ejecutarTurno(accionPendiente, objetivo, null);
+                    esperandoObjetivo = false;
+                    accionPendiente   = null;
+                    onAccionIniciada();
+                }
+            });
+
+            ev.setHoverListener(new EntidadView.HoverListener() {
+                public void onEnter() {
+                    if (!esperandoObjetivo || accionPendiente != ACCIONES.USAR_HABILIDAD) return;
+                    Entidad e = Orquestador.getInstance().getAlumnos().getEntidades().get(idx);
+                    if (!e.estaVivo()) return;
+                    ocultarFlechas();
+                    flechasAlumnos.get(idx).setVisible(true);
+                    indiceObjetivoActual = idx;
+                }
+                public void onExit() {
+                    if (!esperandoObjetivo || accionPendiente != ACCIONES.USAR_HABILIDAD) return;
+                    ocultarFlechas();
+                    flechasAlumnos.get(indiceObjetivoActual).setVisible(true);
+                }
+            });
+
             viewsAlumnos.add(ev);
-            add(ev);
+
+            // Preparar flecha de alumno
+            JLabel lblFlecha = new JLabel();
+            if (imgFlecha != null) {
+                Image flechaEscalada = imgFlecha.getScaledInstance(FLECHA_W, FLECHA_H, Image.SCALE_SMOOTH);
+                lblFlecha.setIcon(new ImageIcon(flechaEscalada));
+            }
+            int flechaX = evX + (140 / 2) - (FLECHA_W / 2);
+            int flechaY = evY - FLECHA_OFFSET_Y;
+            lblFlecha.setBounds(flechaX, flechaY, FLECHA_W, FLECHA_H);
+            lblFlecha.setVisible(false);
+            flechasAlumnos.add(lblFlecha);
+            flechasAlumnosArr[i] = lblFlecha;
         }
-        // Revertir la lista para que el índice coincida con el orden original de alumnos
-        java.util.Collections.reverse(viewsAlumnos);
+
+        // Agregar alumnos al panel de atrás hacia adelante para z-order correcto
+        for (int i = alumnos.size() - 1; i >= 0; i--) {
+            add(viewsAlumnos.get(i));
+            add(flechasAlumnosArr[i]);
+        }
 
         // ENEMIGOS + flechas
-        Image imgFlecha = cargarFlecha();
-
-        // Primero crear todos los views de enemigos (en orden) para tener los listeners correctos,
-        // luego agregarlos al panel de atrás hacia adelante para el z-order correcto.
-        int[] evXArr = new int[enemigos.size()];
-        int[] evYArr = new int[enemigos.size()];
-        JLabel[] flechaArr = new JLabel[enemigos.size()];
+        JLabel[] flechasEnemigosArr = new JLabel[enemigos.size()];
 
         for (int i = 0; i < enemigos.size(); i++) {
             final int idx = i;
@@ -235,13 +287,11 @@ public class BatallaPanel extends JPanel {
             ev.setMirandoIzquierda(true);
             int evX = enemigoBaseX + i * pasoX;
             int evY = baseY + i * pasoY;
-            evXArr[i] = evX;
-            evYArr[i] = evY;
             ev.setBounds(evX, evY, evAncho, evAlto);
 
             ev.setClickListener(new EntidadView.ClickListener() {
                 public void onClick(EntidadView origen, int clickX) {
-                    if (!esperandoObjetivo) return;
+                    if (!esperandoObjetivo || accionPendiente == ACCIONES.USAR_HABILIDAD && Orquestador.getInstance().getEntidadActual() instanceof Curandera) return;
                     Entidad objetivo = Orquestador.getInstance()
                         .getBatalla().getEnemigos().getEntidades().get(idx);
                     if (!objetivo.estaVivo()) return;
@@ -261,7 +311,7 @@ public class BatallaPanel extends JPanel {
 
             ev.setHoverListener(new EntidadView.HoverListener() {
                 public void onEnter() {
-                    if (!esperandoObjetivo) return;
+                    if (!esperandoObjetivo || accionPendiente == ACCIONES.USAR_HABILIDAD && Orquestador.getInstance().getEntidadActual() instanceof Curandera) return;
                     Entidad e = Orquestador.getInstance()
                         .getBatalla().getEnemigos().getEntidades().get(idx);
                     if (!e.estaVivo()) return;
@@ -270,7 +320,7 @@ public class BatallaPanel extends JPanel {
                     indiceObjetivoActual = idx;
                 }
                 public void onExit() {
-                    if (!esperandoObjetivo) return;
+                    if (!esperandoObjetivo || accionPendiente == ACCIONES.USAR_HABILIDAD && Orquestador.getInstance().getEntidadActual() instanceof Curandera) return;
                     ocultarFlechas();
                     flechasEnemigos.get(indiceObjetivoActual).setVisible(true);
                 }
@@ -278,7 +328,7 @@ public class BatallaPanel extends JPanel {
 
             viewsEnemigos.add(ev);
 
-            // Preparar flecha
+            // Preparar flecha de enemigo
             JLabel lblFlecha = new JLabel();
             if (imgFlecha != null) {
                 Image flechaEscalada = imgFlecha.getScaledInstance(FLECHA_W, FLECHA_H, Image.SCALE_SMOOTH);
@@ -289,13 +339,13 @@ public class BatallaPanel extends JPanel {
             lblFlecha.setBounds(flechaX, flechaY, FLECHA_W, FLECHA_H);
             lblFlecha.setVisible(false);
             flechasEnemigos.add(lblFlecha);
-            flechaArr[i] = lblFlecha;
+            flechasEnemigosArr[i] = lblFlecha;
         }
 
-        // Agregar al panel de atrás hacia adelante para z-order correcto
+        // Agregar enemigos al panel de atrás hacia adelante para z-order correcto
         for (int i = enemigos.size() - 1; i >= 0; i--) {
             add(viewsEnemigos.get(i));
-            add(flechaArr[i]);
+            add(flechasEnemigosArr[i]);
         }
 
         setBotonesHabilitados(true);
@@ -314,9 +364,6 @@ public class BatallaPanel extends JPanel {
     }
 
     // ─── ESPERAR FIN DE ANIMACIÓN ──────────────────────────
-    //
-    // Timer de 16ms que chequea si la animación terminó.
-    // Cuando estaAnimandoAtaque() devuelve false, detiene el timer y avanza el turno.
     private void onAccionIniciada() {
         setBotonesHabilitados(false);
         esperarFinAnimacion(viewActual);
@@ -337,13 +384,29 @@ public class BatallaPanel extends JPanel {
 
     // ─── SELECCIÓN DE OBJETIVO ────────────────────────────────────────────────
 
-    private void activarSeleccionObjetivo(ACCIONES accion) {
-        this.accionPendiente   = accion;
+    private void activarSeleccionAlumnos(ACCIONES accion) {
+        this.accionPendiente = accion;
         this.esperandoObjetivo = true;
 
-        List<Entidad> enemigos = Orquestador.getInstance()
-            .getBatalla().getEnemigos().getEntidades();
+        List<Entidad> alumnos = Orquestador.getInstance().getAlumnos().getEntidades();
         ocultarFlechas();
+        
+        for (int i = 0; i < alumnos.size(); i++) {
+            if (alumnos.get(i).estaVivo()) {
+                flechasAlumnos.get(i).setVisible(true);
+                indiceObjetivoActual = i;
+                break;
+            }
+        }
+    }
+    
+    private void activarSeleccionEnemigos(ACCIONES accion) {
+        this.accionPendiente = accion;
+        this.esperandoObjetivo = true;
+
+        List<Entidad> enemigos = Orquestador.getInstance().getBatalla().getEnemigos().getEntidades();
+        ocultarFlechas();
+        
         for (int i = 0; i < enemigos.size(); i++) {
             if (enemigos.get(i).estaVivo()) {
                 flechasEnemigos.get(i).setVisible(true);
@@ -357,14 +420,9 @@ public class BatallaPanel extends JPanel {
         for (int i = 0; i < flechasEnemigos.size(); i++) {
             flechasEnemigos.get(i).setVisible(false);
         }
-    }
-    
-    // ─── USAR HABILIDAD SIN SELECCIÓN DE OBJETIVO ───────────────────────────────
-    
-
-    private void usarHabilidadSinObjetivo() {
-        Orquestador.getInstance().ejecutarTurno(ACCIONES.USAR_HABILIDAD, null, null);
-        onAccionIniciada();
+        for (int i = 0; i < flechasAlumnos.size(); i++) {
+            flechasAlumnos.get(i).setVisible(false);
+        }
     }
 
     // ─── USAR ITEM (POCIONES) ─────────────────────────────────────────────────
@@ -379,7 +437,6 @@ public class BatallaPanel extends JPanel {
         inventarioBatallaView.setBounds(x, y, invAncho, invAlto);
         overlayInventario.setBounds(0, 0, getWidth(), getHeight());
 
-        // Nos aseguramos de que quede por encima de todo (entidades, flechas, etc.)
         setComponentZOrder(overlayInventario, 0);
         setComponentZOrder(inventarioBatallaView, 0);
 
@@ -427,7 +484,6 @@ public class BatallaPanel extends JPanel {
         }
 
         if (!Orquestador.getInstance().esTurnoDeAlumno()) {
-            // Turno del enemigo: esperar 800ms, reproducir animación, luego avanzar
             setBotonesHabilitados(false);
             Timer timerPreAtaque = new Timer(800, null);
             timerPreAtaque.addActionListener(new ActionListener() {
@@ -450,22 +506,15 @@ public class BatallaPanel extends JPanel {
         modelo.Recompensa recompensa = null;
 
         if (ganaron) {
-            //Identifica la batalla que acabamos de ganar
             modelo.Batalla batallaActual = Orquestador.getInstance().getBatalla();
-            
-            //Pide la recompensa
             recompensa = modelo.factories.RecompensaFactory.obtenerRecompensaPorBatalla(batallaActual);
-            
-            //Otorga el oro 
             Repositorio.getInstance().getPartidaActual().recibirPesos(recompensa.getOro());
             
-            //Agrega los ítems obtenidos al inventario de la partida
             for (modelo.Item item : recompensa.getItems()) {
                 if (item != null) {
                     Repositorio.getInstance().getPartidaActual().agregarItem(item);
                 }
             }
-            
             
             for (modelo.Entidad alumno : Orquestador.getInstance().getAlumnos().getEntidades()) {
                 if (alumno instanceof modelo.Alumno) {
@@ -475,14 +524,11 @@ public class BatallaPanel extends JPanel {
             recompensa.setReclamada();
         }
 
-        // Se guarda el progreso de la partida tanto si se ganó como si se perdió la batalla
         Repositorio.getInstance().guardarPartidaActual();
-        
-        //Muestra el cartel de Victoria o Derrota
         mostrarPanelResultado(ganaron, recompensa);
     }
 
-        private void mostrarPanelResultado(boolean victoria, modelo.Recompensa recompensa) {
+    private void mostrarPanelResultado(boolean victoria, modelo.Recompensa recompensa) {
         resultadoBatallaView.configurar(victoria, recompensa);
         int resAncho = 520;
         int resAlto = 380;
@@ -492,7 +538,6 @@ public class BatallaPanel extends JPanel {
         resultadoBatallaView.setBounds(x, y, resAncho, resAlto);
         overlayResultado.setBounds(0, 0, getWidth(), getHeight());
         
-        // Colocarmos por encima de la ventana actual
         setComponentZOrder(overlayResultado, 0);
         setComponentZOrder(resultadoBatallaView, 0);
 
@@ -504,9 +549,7 @@ public class BatallaPanel extends JPanel {
     private void cerrarResultadoBatalla() {
         if (overlayResultado != null) overlayResultado.setVisible(false);
         if (resultadoBatallaView != null) resultadoBatallaView.setVisible(false);
-        // Tras cerrar el panel de resultado, navegar a la vista de niveles (preserva intención de feature/guardado)
         if (ventana != null) ventana.verNiveles();
-
     }
 
     // ─── ACTUALIZAR VISTAS ────────────────────────────────────────────────────
@@ -544,7 +587,6 @@ public class BatallaPanel extends JPanel {
             cerrarInventarioBatalla();
             ocultarFlechas();
         } else {
-            // Si es el turno del alumno, habilitamos según su energía
             Entidad actual = Orquestador.getInstance().getEntidadActual();
             if (actual != null) {
                 int energiaActual = actual.getEnergia();
@@ -579,5 +621,4 @@ public class BatallaPanel extends JPanel {
             System.out.println("No se encontró la arena: " + nombreArena);
         }
     }
-
 }
